@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KO-MAPPER</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/logs.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <!-- 헤더 -->
+    <header>
+      <img
+        src="https://github.com/sangwoorhie/BackEnd/assets/131964697/0c58003f-3027-4e63-9f4d-c870a0411cf7"
+        alt="Logo"
+        class="logo"
+      />
+    </header>
+    <main>
+      <!-- 사이드 바 -->
+      <ul class="sidebar">
+        <li class="first-sidebar">Mission</li>
+        <li class="second-sidebar">
+          <a href="users.html">
+            <i class="fa-solid fa-users" style="margin-right: 10px"></i>
+            Users
+          </a>
+        </li>
+
+        <li class="third-sidebar">
+          <a href="logs.html">
+            <i class="fa-solid fa-door-open" style="margin-right: 10px"></i>
+            Logs
+          </a>
+        </li>
+        <li class="fourth-sidebar"></li>
+      </ul>
+      <!-- 우측 화면 -->
+      <div class="body">
+        <div class="body-top">
+          <div class="body-top-left">Logs</div>
+          <div class="body-top-right">Mission > Logs</div>
+        </div>
+        <div class="body-top-bottom-line"></div>
+
+        <div class="body-bottom">
+          <div class="body-container">
+            <!-- 검색창 -->
+            <div class="search-container">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="조회할 로그 ID를 입력하세요."
+              />
+              <button id="searchButton">
+                <i class="fa-solid fa-search"></i>
+              </button>
+            </div>
+            <!-- 테이블 -->
+            <table id="my-table">
+              <colgroup>
+                <col class="col1" />
+                <col class="col2" />
+                <col class="col3" />
+                <col class="col4" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Date</th>
+                  <th>User IP</th>
+                  <th>User Agent</th>
+                </tr>
+              </thead>
+              <tbody id="log-table-body">
+                <!-- 로그 목록이 들어가는 부분 -->
+              </tbody>
+            </table>
+            <br />
+            <!-- 페이지네이션 -->
+            <div class="pagination">
+              <i class="fa-solid fa-arrow-left"></i>
+              <ol id="numbers"></ol>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- 푸터 -->
+    <footer>Copyright ⓒ 2024 ㈜KO-MAPPER Co.,Ltd rights reserved.</footer>
+    <script src="../js/logs.js"></script>
+  </body>
+</html>

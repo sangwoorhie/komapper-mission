@@ -1,0 +1,3 @@
+nest g res name
+frontend/.gitignore
+npm install concurrently --save
