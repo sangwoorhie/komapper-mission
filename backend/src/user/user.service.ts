@@ -71,6 +71,17 @@ export class UserService {
     }
   }
 
+  // Total 회원 수
+  async getUserCount(): Promise<number> {
+    const query = `SELECT COUNT(*) FROM mission_cst_user`;
+    try {
+      const result = await this.pool.query(query);
+      return parseInt(result.rows[0].count, 10);
+    } catch (error) {
+      throw new Error(`에러가 발생했습니다: ${error.message}`);
+    }
+  }
+
   // 유저 전체목록 조회
   async findAllUsers(page: number, pageSize: number) {
     const offset = (page - 1) * pageSize;

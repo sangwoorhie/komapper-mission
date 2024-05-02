@@ -83,6 +83,20 @@ document
     }
   });
 
+// 로그 Total 수
+document.addEventListener("DOMContentLoaded", function () {
+  fetchTotalLogCount();
+});
+
+function fetchTotalLogCount() {
+  fetch("http://localhost:3000/log/count")
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("totalLogs").textContent += ` ${data}`;
+    })
+    .catch((error) => console.error("에러가 발생했습니다:", error));
+}
+
 // 테이블 하단 페이지네이션
 async function paginateLogs() {
   const rowsPerPage = 10;

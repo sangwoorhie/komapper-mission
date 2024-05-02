@@ -26,6 +26,19 @@ export class LogService {
     }
   }
 
+  // Total 로그 수
+  async getLogCount(): Promise<number> {
+    const query = `
+        SELECT COUNT(*) FROM mission_cst_conn_log;
+      `;
+    try {
+      const result = await this.pool.query(query);
+      return parseInt(result.rows[0].count, 10);
+    } catch (error) {
+      throw new Error(`에러가 발생했습니다: ${error.message}`);
+    }
+  }
+
   // 로그 단일조회
   async getLogById(id: string) {
     const query = `

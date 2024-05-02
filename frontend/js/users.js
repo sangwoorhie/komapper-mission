@@ -276,6 +276,20 @@ $(document).ready(function () {
 //   });
 // });
 
+// 회원 Total 수
+document.addEventListener("DOMContentLoaded", function () {
+  fetchTotalUserCount();
+});
+
+function fetchTotalUserCount() {
+  fetch("http://localhost:3000/user/count")
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("totalUsers").textContent += ` ${data}`;
+    })
+    .catch((error) => console.error("에러가 발생했습니다:", error));
+}
+
 // 사용자 목록을 가져오고 화면에 표시하는 함수
 async function fetchAndDisplayUsers() {
   const userTableBody = document.getElementById("user-table-body");

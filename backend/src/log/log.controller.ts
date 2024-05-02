@@ -5,7 +5,7 @@ import { LogService } from './log.service';
 export class LogController {
   constructor(private readonly logService: LogService) {}
 
-  // 로그 전체조회
+  // 로그 전체조회 (test 성공)
   // GET : http://localhost:3000/log
   // GET : http://localhost:3000/log?page=${page}&pageSize=${pageSize}
   @Get()
@@ -16,7 +16,14 @@ export class LogController {
     return await this.logService.findAllLogs(page, pageSize);
   }
 
-  // 로그 단일조회
+  // Total 로그 수 (test 실패)
+  // GET : http://localhost:3000/log/count
+  @Get('count')
+  async getLogCount(): Promise<number> {
+    return this.logService.getLogCount();
+  }
+
+  // 로그 단일조회 (test 성공)
   // GET : http://localhost:3000/log/id
   @Get('/:id')
   async getLogById(@Param('id') id: string) {

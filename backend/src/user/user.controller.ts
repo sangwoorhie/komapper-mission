@@ -33,6 +33,13 @@ export class UserController {
     return await this.userService.checkId(idcheckDto);
   }
 
+  // Total 회원 수
+  // GET : http://localhost:3000/user/count
+  @Get('count')
+  async getUserCount(): Promise<number> {
+    return this.userService.getUserCount();
+  }
+
   // 유저 전체목록 조회 (test 성공)
   // GET : http://localhost:3000/user
   // GET : http://localhost:3000/user?page=${page}&pageSize=${pageSize}
