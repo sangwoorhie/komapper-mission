@@ -84,18 +84,28 @@ export class UserService {
 
   // 유저 전체목록 조회
   async findAllUsers(page: number, pageSize: number) {
-    const offset = (page - 1) * pageSize;
-    const query = `
-    SELECT id, name, email, phone, organization 
-    FROM mission_cst_user
-    OFFSET $1 LIMIT $2;
-    `;
-    try {
-      const result = await this.pool.query(query, [offset, pageSize]);
-      return result.rows; // 유저 전체목록 반환
-    } catch (error) {
-      throw new Error(`에러가 발생했습니다: ${error.message}`);
-    }
+    const countQuery = `SELECT * FROM mission_cst_user`;
+    const countResult = await this.pool.query(countQuery);
+    const totalUsers = countResult.rows;
+
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = page * pageSize;
+    const totalPages = Math.ceil(totalUsers.length / pageSize);
+    const paginationTotalUsers = totalUsers.slice(startIndex, endIndex);
+
+    return { totalPages, paginationTotalUsers };
+
+    // const query = `
+    // SELECT id, name, email, phone, organization
+    // FROM mission_cst_user
+    // OFFSET $1 LIMIT $2;
+    // `;
+    // try {
+    //   const result = await this.pool.query(query, [startIndex, pageSize]);
+    //   return result.rows; // 유저 전체목록 반환
+    // } catch (error) {
+    //   throw new Error(`에러가 발생했습니다: ${error.message}`);
+    // }
   }
 
   // 단일 유저조회

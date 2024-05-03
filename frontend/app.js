@@ -5,13 +5,6 @@ const path = require("path");
 const app = express();
 const port = 3001;
 
-app.use(
-  cors({
-    origin: "http://52.78.218.195:3000",
-    credentials: true,
-  })
-);
-
 app.use(express.urlencoded({ extended: true }));
 app.use("/", express.static(path.join(__dirname)));
 app.use(express.json());

@@ -1,13 +1,19 @@
+의존성 설치
+npm i
+cd backend npm i
+cd frontend npm i
+
+서버 실행
+루트 디렉토리에서 npm start 후 localhost:3001 실행
+
 Front-end
 사용 스택 : html, js, css
-비고 : Bootstrap등 UI 템플릿 활용 금지
 
 Back-end
 사용 스택 : Nest.js
 
 Database
 사용 스택 : PostgreSQL
-비고 : DB 접속 정보 및 테이블 정보 참고
 SQL 사용
 
 ![image](https://github.com/sangwoorhie/komapper-mission/assets/131964697/ef71f568-45df-4656-a0d7-8421d7f41e1c)

@@ -1,23 +1,15 @@
-// 사이드바 이동
-// const second_sidebar = document.querySelector(".second-sidebar");
-
-// second_sidebar.addEventListener("click", function () {
-//   window.location.href = "users.html";
-// });
-
-// const third_sidebar = document.querySelector(".third-sidebar");
-
-// third_sidebar.addEventListener("click", function () {
-//   window.location.href = "logs.html";
-// });
+// 유저 페이지네이션
+// totalPages, paginationTotalUsers
 
 // 유저 전체조회
 document.addEventListener("DOMContentLoaded", async function () {
   const userTableBody = document.getElementById("user-table-body");
 
-  async function fetchAndDisplayUsers() {
+  async function fetchAndDisplayUsers(page = 1, pageSize = 10) {
     try {
-      const response = await fetch("http://localhost:3000/user");
+      const response = await fetch(
+        `http://localhost:3000/user?page=${page}&pageSize=${pageSize}`
+      );
       const users = await response.json();
       userTableBody.innerHTML = "";
 
@@ -33,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           `;
         userTableBody.appendChild(row);
       });
-      paginateUsers();
+
       // tbody에 추가한 체크박스들을 선택하는 이벤트 리스너 등록
       const checkboxes = document.querySelectorAll(
         'tbody input[type="checkbox"]'
@@ -43,6 +35,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           checkSelectAll();
         });
       });
+      paginateUsers();
     } catch (error) {
       console.error("유저목록 조회중 에러가 발생했습니다:", error);
     }
@@ -232,49 +225,6 @@ $(document).ready(function () {
     });
   });
 });
-
-// 회원삭제
-// document.addEventListener("DOMContentLoaded", function () {
-//   const deleteButton = document.getElementById("deleteButton");
-//   const modal = document.getElementById("deleteModal");
-//   const cancelButton = document.getElementById("cancelButton");
-//   const confirmDeleteButton = document.getElementById("confirmDeleteButton");
-//   const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-
-//   deleteButton.addEventListener("click", function () {
-//     modal.style.display = "block";
-//   });
-
-//   cancelButton.addEventListener("click", function () {
-//     modal.style.display = "none";
-//   });
-
-//   confirmDeleteButton.addEventListener("click", async function () {
-//     modal.style.display = "none";
-//     const checkedUserIds = Array.from(checkboxes)
-//       .filter((checkbox) => checkbox.checked)
-//       .map((checkbox) => checkbox.parentNode.nextElementSibling.textContent);
-
-//     try {
-//       const response = await fetch("http://localhost:3000/user", {
-//         method: "DELETE",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ ids: checkedUserIds }),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error("삭제 요청 실패");
-//       }
-//       console.log("response", response);
-//       alert("사용자가 성공적으로 삭제되었습니다.");
-//       await fetchAndDisplayUsers();
-//     } catch (error) {
-//       console.error("삭제 요청 중 에러가 발생했습니다:", error);
-//     }
-//   });
-// });
 
 // 회원 Total 수
 document.addEventListener("DOMContentLoaded", function () {

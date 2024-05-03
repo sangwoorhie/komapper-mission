@@ -33,7 +33,7 @@ export class UserController {
     return await this.userService.checkId(idcheckDto);
   }
 
-  // Total 회원 수
+  // Total 회원 수 (test 성공)
   // GET : http://localhost:3000/user/count
   @Get('count')
   async getUserCount(): Promise<number> {
@@ -68,7 +68,7 @@ export class UserController {
     return await this.userService.updateUser(id, updateUserDto);
   }
 
-  // 다중 회원 삭제
+  // 다중 회원 삭제 (test 성공)
   // DELETE : http://localhost:3000/user/id
   @Delete()
   async deleteUsers(@Body() deleteUsersDto: DeleteUsersDto) {
