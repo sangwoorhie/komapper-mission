@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,14 +6,50 @@
     <title>KO-MAPPER</title>
     <link rel="stylesheet" href="../css/reset.css" />
     <link rel="stylesheet" href="../css/common.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
-    <header id="header">header</header>
-    <main>
-      <div id="side-bar-left">side-bar-left</div>
-      <div id="main">
-        <div id="m-top">m-top</div>
-        <div id="m-bottom">m-bottom</div>
+    <header id="header">
+      <img src="../image/kmplogo_fit.png" alt="Logo" class="logo" />
+    </header>
+    <main id="main">
+      <div id="side-bar">
+        <div id="first-sidebar">Mission</div>
+        <div id="second-sidebar" class="fa-solid fa-users">Users</div>
+        <div id="third-sidebar" class="fa-solid fa-door-open">Logs</div>
+      </div>
+      <div id="body">
+        <div id="body-top">body-top</div>
+        <div id="body-bottom">
+          body-bottom
+          <br />
+          <br />
+          <br />
+          <div id="container-box">
+            container-box
+            <div id="total-count">Total:</div>
+            <div id="search-container">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="조회할 로그 ID를 입력하세요."
+              />
+              <button id="searchButton">
+                <i class="fa-solid fa-search"></i>
+              </button>
+            </div>
+            <div id="my-table">my-table</div>
+            <div id="delete-area">delete-area</div>
+            <div id="pagination">pagination</div>
+            <div id="register-area">register-area</div>
+          </div>
+        </div>
       </div>
     </main>
     <footer id="footer">footer</footer>
