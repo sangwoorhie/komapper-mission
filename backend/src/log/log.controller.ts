@@ -16,7 +16,7 @@ export class LogController {
     return await this.logService.findAllLogs(page, pageSize);
   }
 
-  // Total 로그 수 (test 실패)
+  // Total 로그 수 (test 성공)
   // GET : http://localhost:3000/log/count
   @Get('count')
   async getLogCount(): Promise<number> {
