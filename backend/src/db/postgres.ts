@@ -3,11 +3,11 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const pool = new Pool({
-  host: process.env.HOST,
-  port: Number(process.env.PORT),
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
+  host: 'www.komapper-ai.com', //process.env.HOST,
+  port: 21199, //Number(process.env.PORT),
+  user: 'dsm_dev', //process.env.USER,
+  password: 'dsm_dev', //process.env.PASSWORD,
+  database: 'dsm_dev', //process.env.DATABASE,
 });
 
 export async function connect() {
