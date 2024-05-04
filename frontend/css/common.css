@@ -5,6 +5,7 @@ body {
   margin: 0;
 }
 
+/* 헤더 */
 #header {
   position: fixed;
   top: 0;
@@ -22,30 +23,22 @@ body {
   max-height: 40%;
 }
 
-#footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background-color: lightgray;
-}
-
 main {
   padding-top: 80px;
   padding-bottom: 80px;
 }
 
+/* 전체 사이드바 */
 #side-bar {
   position: fixed;
   top: 80px;
   left: 0;
   width: 200px;
-  height: calc(100% - 160px); /* header와 footer의 높이를 제외한 공간을 차지 */
+  height: calc(100% - 160px);
   background-color: #3c4b64;
 }
 
-/* first-sidebar는 side-bar의 윗부분에서 너비는 200px, 세로길이는 100px */
+/* 첫번째 사이드바 */
 #first-sidebar {
   position: absolute;
   top: 0px;
@@ -59,7 +52,7 @@ main {
   font-size: 24px;
 }
 
-/* second-sidebar는 first-sidebar보다 50px 아래에 위치하고 너비는 200px, 세로길이는 80px */
+/* 두번째 사이드바 */
 #second-sidebar {
   position: absolute;
   top: 130px;
@@ -85,10 +78,10 @@ main {
   background-color: #303c54;
 }
 
-/* third-sidebar는 second-sidebar 바로 아래에 위치하고 너비와 세로길이는 같음 */
+/* 세번째 사이드바 */
 #third-sidebar {
   position: absolute;
-  top: 210px; /* second-sidebar 아래에 위치 */
+  top: 210px;
   width: 200px;
   height: 80px;
   background-color: #3c4b64;
@@ -107,54 +100,51 @@ main {
   background-color: #303c54;
 }
 
-/* body는 main에서 side-bar가 차지하는 부분의 나머지 영역을 차지 */
 #body {
-  margin-left: 200px; /* side-bar의 너비만큼 여백 추가 */
+  margin-left: 200px;
 }
 
-/* body-top은 body의 상단에 있고 높이는 50px */
 #body-top {
   height: 20px;
-  background-color: lightpink; /* 원하는 배경색으로 변경하세요 */
+  background-color: lightpink;
 }
 
-/* body-bottom은 body에서 body-top이 차지하는 부분의 나머지 영역을 차지 */
 #body-bottom {
-  padding: 10px 10%; /* 좌우 여백은 10%, 상하 여백은 10px */
+  padding: 10px 10%;
 }
 
-/* container-box는 body-bottom의 중앙의 100%를 차지하고 높이는 600px */
+/* 컨테이너 박스 */
 #container-box {
   padding: 10px 5%;
   height: 600px;
-  margin: 0 auto; /* 가운데 정렬 */
-  border: 1px solid #d6d6d6; /* 실선으로 구분 */
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
-  position: relative; /* 가상 요소의 위치 기준점 설정 */
+  margin: 0 auto;
+  border: 2px solid #d6d6d6;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
+/* 컨테이너박스 상단 줄 */
 #container-box::before {
-  content: ""; /* 가상 요소는 content 속성이 필요합니다 */
-  position: absolute; /* 부모 요소인 #container-box에 대해 절대 위치 */
-  top: -20px; /* 상단에서 20px 위에 위치 */
-  left: 0; /* 왼쪽 정렬 */
-  right: 0; /* 오른쪽 정렬 - 이를 통해 가로 너비를 부모와 동일하게 설정 */
-  border-top: 1px solid #d6d6d6; /* 상단에 실선 추가 */
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #d6d6d6;
 }
 
-/* container-box 내부의 줄들 */
-#total-count {
+/* 전체 유저 수 */
+#total-users {
   width: 10%;
-  height: 50px;
+  height: 20px;
   float: left;
-  background-color: lightblue; /* 원하는 배경색으로 변경하세요 */
 }
 
+/* 검색창 */
 #search-container {
   width: 20%;
-  height: 50px;
+  height: 20px;
   float: right;
-  background-color: lightblue; /* 원하는 배경색으로 변경하세요 */
 }
 
 #searchInput::placeholder {
@@ -164,48 +154,227 @@ main {
 .search-container input[type="text"] {
   padding: 6px;
   margin-top: 8px;
+  margin-right: 0;
   font-size: 12px;
   border: none;
 }
 
-.search-container button {
+.search-button {
   padding: 6px 6px;
   margin-top: 8px;
-  margin-left: 5px;
+  margin-left: 0;
   background: #ddd;
   font-size: 12px;
   border: none;
   cursor: pointer;
 }
 
-.search-container button:hover {
+.search-button:hover {
   background: #ccc;
 }
 
+/* 유저 테이블 */
 #my-table {
-  clear: both; /* float 해제 */
+  clear: both;
   width: 100%;
-  height: calc(100% - 100px); /* container-box 높이에서 줄들의 높이 제외 */
-  background-color: lightgray; /* 원하는 배경색으로 변경하세요 */
+  height: calc(100% - 120px);
+  background-color: lightgray;
 }
 
-#delete-area {
+td,
+th {
+  text-align: left;
+  padding: 0.5rem 1rem;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #ccc;
+}
+
+th {
+  background-color: #444;
+  color: #fff;
+}
+
+.col1 {
   width: 10%;
+}
+.col2 {
+  width: 18%;
+}
+.col3 {
+  width: 16%;
+}
+.col4 {
+  width: 20%;
+}
+
+/* 회원 가입 */
+
+#register-button {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 8px;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.input-container {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.input-container label {
+  margin-right: 10px;
+}
+
+.input-container input {
+  flex: 1;
+  padding: 8px;
+}
+
+.input-container button {
+  margin-top: 20px;
+  padding: 6px 12px;
+}
+
+.modal-content button {
+  margin-top: 20px;
+}
+
+/* 회원 삭제 */
+#delete-area {
+  width: 5%;
   height: 50px;
   float: left;
-  background-color: yellow; /* 원하는 배경색으로 변경하세요 */
+  background-color: yellow;
 }
 
+#delete-button {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+#deleteButton:hover {
+  background-color: lightblue;
+}
+
+/* 삭제 모달 */
+/* .modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-container {
+  text-align: center;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirmDeleteButton {
+  background-color: red;
+  color: white;
+}
+
+#cancelButton {
+  background-color: #ccc;
+} */
+
+/* 회원 등록 */
 #register-area {
-  width: 10%;
+  width: 5%;
   height: 50px;
   float: right;
-  background-color: yellow; /* 원하는 배경색으로 변경하세요 */
+  background-color: yellow;
 }
 
+/* 페이지네이션 */
 #pagination {
-  width: 80%;
+  width: 90%;
   height: 50px;
   float: left;
-  background-color: blueviolet; /* 원하는 배경색으로 변경하세요 */
+  background-color: blueviolet;
+}
+
+/* 푸터 */
+#footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

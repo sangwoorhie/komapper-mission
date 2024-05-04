@@ -64,7 +64,7 @@ export class LogService {
       }
       return result.rows[0]; // 단일 로그 반환
     } catch (error) {
-      throw new Error(`에러가 발생했습니다: ${error.message}`);
+      throw new Error(`${error.message}`);
     }
   }
 }

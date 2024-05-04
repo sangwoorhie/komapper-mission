@@ -41,14 +41,20 @@ export class UserController {
   }
 
   // 유저 전체목록 조회 (test 성공)
-  // GET : http://localhost:3000/user
   // GET : http://localhost:3000/user?page=${page}&pageSize=${pageSize}
+  // @Get()
+  // async findAllUsers(
+  //   @Query('page') page: number = 1,
+  //   @Query('pageSize') pageSize: number = 10,
+  // ) {
+  //   return await this.userService.findAllUsers(page, pageSize);
+  // }
+
+  // 페이지네이션 안한 유저 전제목록 조회
+  // GET : http://localhost:3000/user
   @Get()
-  async findAllUsers(
-    @Query('page') page: number = 1,
-    @Query('pageSize') pageSize: number = 10,
-  ) {
-    return await this.userService.findAllUsers(page, pageSize);
+  async getAllUsers() {
+    return await this.userService.getAllUsers();
   }
 
   // 단일 유저조회 (test 성공)

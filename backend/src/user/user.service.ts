@@ -84,17 +84,15 @@ export class UserService {
 
   // 유저 전체목록 조회
   async findAllUsers(page: number, pageSize: number) {
-    const countQuery = `SELECT * FROM mission_cst_user`;
-    const countResult = await this.pool.query(countQuery);
-    const totalUsers = countResult.rows;
-
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = page * pageSize;
-    const totalPages = Math.ceil(totalUsers.length / pageSize);
-    const paginationTotalUsers = totalUsers.slice(startIndex, endIndex);
-
-    return { totalPages, paginationTotalUsers };
-
+    // const countQuery = `SELECT * FROM mission_cst_user`;
+    // const countResult = await this.pool.query(countQuery);
+    // const totalUsers = countResult.rows;
+    // const startIndex = (page - 1) * pageSize;
+    // const endIndex = page * pageSize;
+    // const totalPages = Math.ceil(totalUsers.length / pageSize);
+    // const paginationTotalUsers = totalUsers.slice(startIndex, endIndex);
+    // return { totalPages, paginationTotalUsers };
+    //
     // const query = `
     // SELECT id, name, email, phone, organization
     // FROM mission_cst_user
@@ -121,6 +119,22 @@ export class UserService {
         );
       }
       return result.rows[0]; // 유저 값 반환
+    } catch (error) {
+      throw new Error(`${error.message}`);
+    }
+  }
+
+  // 페이지네이션 안한 유저 전제목록 조회
+  async getAllUsers() {
+    const query = `
+      SELECT id, name, email, phone, organization FROM mission_cst_user;
+    `;
+    try {
+      const result = await this.pool.query(query);
+      if (result.rows.length === 0) {
+        throw new NotFoundException('유저가 존재하지 않습니다.');
+      }
+      return result.rows; // 모든 유저 반환
     } catch (error) {
       throw new Error(`에러가 발생했습니다: ${error.message}`);
     }
