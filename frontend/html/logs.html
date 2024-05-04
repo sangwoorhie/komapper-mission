@@ -15,52 +15,56 @@
     />
   </head>
   <body>
-    <!-- 헤더 -->
-    <header>
+    <header id="header">
       <img src="../image/kmplogo_fit.png" alt="Logo" class="logo" />
     </header>
-    <main>
-      <!-- 사이드 바 -->
-      <ul class="sidebar">
-        <li class="first-sidebar">Mission</li>
-        <li class="second-sidebar">
-          <a href="users.html">
-            <i class="fa-solid fa-users" style="margin-right: 10px"></i>
+    <main id="main">
+      <ul id="side-bar">
+        <li id="first-sidebar">Mission</li>
+        <!-- User 탭 -->
+        <a href="users.html">
+          <i
+            id="second-sidebar"
+            class="fa-solid fa-users"
+            style="margin-right: 10px"
+          >
             Users
-          </a>
-        </li>
+          </i>
+        </a>
 
-        <li class="third-sidebar">
-          <a href="logs.html">
-            <i class="fa-solid fa-door-open" style="margin-right: 10px"></i>
+        <!-- Logs 탭 -->
+        <a href="logs.html">
+          <i
+            id="third-sidebar"
+            class="fa-solid fa-door-open"
+            style="margin-right: 10px"
+          >
             Logs
-          </a>
-        </li>
-        <li class="fourth-sidebar"></li>
+          </i>
+        </a>
       </ul>
-      <!-- 우측 화면 -->
-      <div class="body">
-        <div class="body-top">
-          <div class="body-top-left">Logs</div>
-          <div class="body-top-right">Mission > Logs</div>
-        </div>
-        <div class="body-top-bottom-line"></div>
-        <!-- 로그 수 -->
-        <div id="totalLogs" class="total-logs">Total:</div>
-
-        <div class="body-bottom">
-          <div class="body-container">
+      <div id="body">
+        <div id="body-top">body-top</div>
+        <div id="body-bottom">
+          Logs
+          <br />
+          <br />
+          <br />
+          <div id="container-box">
+            <!-- 로그 수 -->
+            <div id="total-logs" class="total-logs">Total:</div>
             <!-- 검색창 -->
-            <div class="search-container">
+            <div id="search-container">
               <input
                 type="text"
                 id="searchInput"
                 placeholder="조회할 로그 ID를 입력하세요."
               />
-              <button id="searchButton">
+              <button id="search-button">
                 <i class="fa-solid fa-search"></i>
               </button>
             </div>
+            <br />
             <!-- 테이블 -->
             <table id="my-table">
               <colgroup>
@@ -77,26 +81,28 @@
                   <th>User Agent</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="log-table-body">
                 <!-- 로그 목록이 들어가는 부분 -->
-                <!-- <tbody id="log-table-body"> -->
               </tbody>
             </table>
             <br />
+            <!-- 좌측하단 여핵 -->
+            <div id="left-area"></div>
             <!-- 페이지네이션 -->
-            <div class="pagination" id="pagination">
-              <i class="fa-solid fa-arrow-left"></i>
-              <ol id="numbers"></ol>
-              <i class="fa-solid fa-arrow-right"></i>
-            </div>
+            <div id="pagination">pagination</div>
+            <!-- 우측하단 여백 -->
+            <div id="right-area"></div>
           </div>
         </div>
       </div>
     </main>
-    <!-- 푸터 -->
-    <footer>Copyright ⓒ 2024 ㈜KO-MAPPER Co.,Ltd rights reserved.</footer>
+    <footer id="footer">
+      Copyright ⓒ 2024 ㈜KO-MAPPER Co.,Ltd rights reserved.
+    </footer>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../js/logs.js"></script>
   </body>
 </html>
+
+<!-- total-users => total-logs
+user-table-body => log-table-body -->

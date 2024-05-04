@@ -1,15 +1,24 @@
-// 유저 페이지네이션
-// totalPages, paginationTotalUsers
+// ＊ 회원 Total 수 조회
+document.addEventListener("DOMContentLoaded", function () {
+  fetchTotalUserCount();
+});
 
-// 유저 전체조회
+function fetchTotalUserCount() {
+  fetch("http://localhost:3000/user/count")
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("total-users").textContent += ` ${data}`;
+    })
+    .catch((error) => console.error("에러가 발생했습니다:", error));
+}
+
+// ＊ 유저 목록조회 (페이지네이션X)
 document.addEventListener("DOMContentLoaded", async function () {
   const userTableBody = document.getElementById("user-table-body");
 
-  async function fetchAndDisplayUsers(page = 1, pageSize = 10) {
+  async function fetchAndDisplayUsers() {
     try {
-      const response = await fetch(
-        `http://localhost:3000/user?page=${page}&pageSize=${pageSize}`
-      );
+      const response = await fetch("http://localhost:3000/user");
       const users = await response.json();
       userTableBody.innerHTML = "";
 
@@ -25,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           `;
         userTableBody.appendChild(row);
       });
-
+      paginateUsers();
       // tbody에 추가한 체크박스들을 선택하는 이벤트 리스너 등록
       const checkboxes = document.querySelectorAll(
         'tbody input[type="checkbox"]'
@@ -35,7 +44,6 @@ document.addEventListener("DOMContentLoaded", async function () {
           checkSelectAll();
         });
       });
-      paginateUsers();
     } catch (error) {
       console.error("유저목록 조회중 에러가 발생했습니다:", error);
     }
@@ -66,14 +74,15 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 
-// 단일 유저조회
+// ＊ 유저 단일조회
 document
-  .getElementById("searchButton")
+  .getElementById("search-button")
   .addEventListener("click", async function () {
     const searchInput = document.getElementById("searchInput").value.trim(); // 입력된 값 가져오기
 
     // 아무 입력값이 없으면 유저 전체 보여줌.
     if (searchInput == "") {
+      // 유저 전체 보여주는 함수
       await fetchAndDisplayUsers();
       return;
     }
@@ -84,7 +93,9 @@ document
           `http://localhost:3000/user/${searchInput}`
         );
         if (!response.ok) {
-          throw new Error(`서버에서 오류 응답: ${response.status}`);
+          throw new Error(
+            `유저 아이디: ${searchInput}이(가) 존재하지 않습니다.`
+          );
         }
         const user = await response.json();
 
@@ -103,14 +114,17 @@ document
       `;
         userTableBody.appendChild(row);
       } catch (error) {
+        alert(error.message);
         console.error("에러 발생:", error.message);
       }
     }
   });
 
-// 회원가입 모달
+// 페이지네이션
+
+// 회원가입 (모달)
 const modal = document.getElementById("createModal");
-const btn = document.getElementById("registerButton");
+const btn = document.getElementById("register-button");
 const span = document.getElementsByClassName("close")[0];
 
 btn.onclick = function () {
@@ -151,7 +165,7 @@ document
     }
   });
 
-// 모달 내에서 register btn눌렀을 때 실제 유저 생성로직
+// 회원가입
 document
   .getElementById("registerBtn")
   .addEventListener("click", async function () {
@@ -195,9 +209,53 @@ document.getElementById("cancelBtn").onclick = function () {
   modal.style.display = "none";
 };
 
+// 회원삭제 (모달)
 // 회원삭제
+// document.addEventListener("DOMContentLoaded", function () {
+//   const deleteButton = document.getElementById("deleteButton");
+//   const modal = document.getElementById("deleteModal");
+//   const cancelButton = document.getElementById("cancelButton");
+//   const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+//   const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+
+//   deleteButton.addEventListener("click", function () {
+//     modal.style.display = "block";
+//   });
+
+//   cancelButton.addEventListener("click", function () {
+//     modal.style.display = "none";
+//   });
+
+//   confirmDeleteButton.addEventListener("click", async function () {
+//     modal.style.display = "none";
+//     const checkedUserIds = Array.from(checkboxes)
+//       .filter((checkbox) => checkbox.checked)
+//       .map((checkbox) => checkbox.parentNode.nextElementSibling.textContent);
+
+//     try {
+//       const response = await fetch("http://localhost:3000/user", {
+//         method: "DELETE",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ ids: checkedUserIds }),
+//       });
+
+//       if (!response.ok) {
+//         throw new Error("삭제 요청 실패");
+//       }
+//       console.log("response", response);
+//       alert("사용자가 성공적으로 삭제되었습니다.");
+//       await fetchAndDisplayUsers();
+//     } catch (error) {
+//       console.error("삭제 요청 중 에러가 발생했습니다:", error);
+//     }
+//   });
+// });
+
+// 삭제버튼 클릭시
 $(document).ready(function () {
-  $("#deleteButton").click(function () {
+  $("#delete-button").click(function () {
     const selectedUsers = [];
 
     $("tbody input[type='checkbox']:checked").each(function () {
@@ -225,174 +283,3 @@ $(document).ready(function () {
     });
   });
 });
-
-// 회원 Total 수
-document.addEventListener("DOMContentLoaded", function () {
-  fetchTotalUserCount();
-});
-
-function fetchTotalUserCount() {
-  fetch("http://localhost:3000/user/count")
-    .then((response) => response.json())
-    .then((data) => {
-      document.getElementById("totalUsers").textContent += ` ${data}`;
-    })
-    .catch((error) => console.error("에러가 발생했습니다:", error));
-}
-
-// 사용자 목록을 가져오고 화면에 표시하는 함수
-async function fetchAndDisplayUsers() {
-  const userTableBody = document.getElementById("user-table-body");
-  try {
-    const response = await fetch("http://localhost:3000/user");
-    const users = await response.json();
-    userTableBody.innerHTML = "";
-
-    users.forEach((user) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="checkbox" /></td>
-        <td>${user.id}</td>
-        <td>${user.name}</td>
-        <td>${user.email}</td>
-        <td>${user.phone}</td>
-        <td>${user.organization}</td>
-      `;
-      userTableBody.appendChild(row);
-    });
-
-    // tbody에 추가한 체크박스들을 선택하는 이벤트 리스너 등록
-    const checkboxes = document.querySelectorAll(
-      'tbody input[type="checkbox"]'
-    );
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener("change", function () {
-        checkSelectAll();
-      });
-    });
-  } catch (error) {
-    console.error("유저목록 조회중 에러가 발생했습니다:", error);
-  }
-}
-
-// 전체 선택 체크박스 이벤트 리스너 등록
-const selectAllCheckbox = document.getElementById("selectAll");
-selectAllCheckbox.addEventListener("change", function () {
-  const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-  checkboxes.forEach((checkbox) => {
-    checkbox.checked = selectAllCheckbox.checked;
-  });
-});
-
-// 전체 체크박스 체크 여부 확인 및 처리
-function checkSelectAll() {
-  const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-  const allChecked = Array.from(checkboxes).every(
-    (checkbox) => checkbox.checked
-  );
-  selectAllCheckbox.checked = allChecked;
-}
-
-// 페이지 로드 시 사용자 목록 가져오고 표시
-fetchAndDisplayUsers();
-
-// 테이블 하단 페이지네이션
-async function paginateUsers() {
-  const rowsPerPage = 10;
-  const rows = document.querySelectorAll("#my-table tbody tr");
-  const rowsCount = rows.length;
-  const pageCount = Math.ceil(rowsCount / rowsPerPage);
-  const numbers = document.querySelector("#numbers");
-
-  const prevPageBtn = document.querySelector(".pagination .fa-arrow-left");
-  const nextPageBtn = document.querySelector(".pagination .fa-arrow-right");
-
-  let pageActiveIndex = 0; // 현재 보고있는 페이지그룹 번호
-  let currentPageNum = 0; // 현재 보고있는 페이지네이션 번호
-  let maxPageNum = 10; // 페이지그룹 최대 갯수
-
-  for (let i = 1; i <= pageCount; i++) {
-    numbers.innerHTML += `<li><a href="">${i}</a></li>`;
-  }
-  const numberBtn = numbers.querySelectorAll("a");
-
-  // 페이지네이션 번호 감추기
-  for (nb of numberBtn) {
-    nb.style.display = "none";
-  }
-
-  numberBtn.forEach((item, index) => {
-    item.addEventListener("click", (e) => {
-      e.preventDefault();
-      displayRow(index);
-    });
-  });
-
-  function displayRow(index) {
-    let start = index * rowsPerPage;
-    let end = start + rowsPerPage;
-    let rowsArray = [...rows];
-    for (ra of rowsArray) {
-      ra.style.display = "none";
-    }
-    let newRows = rowsArray.slice(start, end);
-    for (nr of newRows) {
-      nr.style.display = "";
-    }
-    for (let nb of numberBtn) {
-      nb.classList.remove("active");
-    }
-    numberBtn[index].classList.add("active");
-  } // displayRow
-
-  displayRow(0);
-
-  // 페이지네이션 그룹 표시 함수
-  function displayPage(num) {
-    for (nb of numberBtn) {
-      nb.style.display = "none";
-    }
-    let totalPageCount = Math.ceil(pageCount / maxPageNum);
-
-    let pageArr = [...numberBtn];
-    let start = num * maxPageNum;
-    let end = start + maxPageNum;
-    let pageListArr = pageArr.slice(start, end);
-
-    for (let item of pageListArr) {
-      item.style.display = "block";
-    }
-    // 첫 페이지그룹시, prevPageBtn이 안 보이도록.
-    if (pageActiveIndex == 0) {
-      prevPageBtn.style.display = "none";
-    } else {
-      prevPageBtn.style.display = "block";
-    }
-
-    // 마지막 페이지그룹시, nextPageBtn이 안 보이도록.
-    if (pageActiveIndex == totalPageCount - 1) {
-      nextPageBtn.style.display = "none";
-    } else {
-      nextPageBtn.style.display = "block";
-    }
-  }
-
-  displayPage(0);
-
-  // prevPageBtn 클릭시
-  prevPageBtn.addEventListener("click", () => {
-    let prevPageNum = pageActiveIndex * maxPageNum - maxPageNum;
-    displayRow(prevPageNum);
-    --pageActiveIndex;
-    displayPage(pageActiveIndex);
-  });
-
-  // nextPageBtn 클릭시
-  nextPageBtn.addEventListener("click", () => {
-    let nextPageNum = pageActiveIndex * maxPageNum + maxPageNum;
-    displayRow(nextPageNum);
-    ++pageActiveIndex;
-    displayPage(pageActiveIndex);
-  });
-  // await fetchAndDisplayUsers()
-}
