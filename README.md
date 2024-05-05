@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-$ npm install
+$ root directory > npm install
 $ cd backend > npm install
 $ cd frontend > npm install
 ```
@@ -11,7 +11,7 @@ $ cd frontend > npm install
 ## Running the app
 
 ```bash
-$ npm run start
+$ root directory > npm run start
 ```
 
 <p align="center"><img src="https://github.com/sangwoorhie/komapper-mission/assets/131964697/1e5e6ad8-4cad-431e-b69d-3a3164452c07"></p>
