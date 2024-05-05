@@ -55,6 +55,7 @@ document
         <td>${user.email}</td>
         <td>${user.phone}</td>
         <td>${user.organization}</td>
+        <td><i class="fa-solid fa-pen"></i></td>
       `;
         userTableBody.appendChild(row);
       } catch (error) {
@@ -259,6 +260,7 @@ async function displayUserData(page) {
       <td>${user.email}</td>
       <td>${user.phone}</td>
       <td>${user.organization}</td>
+      <td><i class="fa-solid fa-pen"></i></td>
     `;
     tbody.appendChild(row);
   });
@@ -337,6 +339,91 @@ selectAllCheckbox.addEventListener("change", function () {
   });
 });
 
+// 정보수정
+document.addEventListener("DOMContentLoaded", function () {
+  const userTableBody = document.getElementById("user-table-body");
+
+  // 정보수정 모달
+  const modifyModal = document.getElementById("modifyModal");
+  const modifyBtn = document.getElementById("modifyBtn");
+  const modifySpan = document.querySelector("#modifyModal .close");
+
+  modifyBtn.onclick = function () {
+    modifyModal.style.display = "block";
+  };
+
+  modifySpan.onclick = function () {
+    modifyModal.style.display = "none";
+  };
+
+  window.onclick = function (event) {
+    if (event.target == modifyModal) {
+      modifyModal.style.display = "none";
+    }
+  };
+
+  // 정보 수정 모달 채우기
+  userTableBody.addEventListener("click", function (event) {
+    const target = event.target;
+    if (
+      target &&
+      target.tagName === "I" &&
+      target.classList.contains("fa-pen")
+    ) {
+      const row = target.closest("tr");
+      const userId = row.querySelector("td:nth-child(2)").textContent.trim(); // 사용자 ID 가져오기
+
+      // Modify 버튼 클릭 시 해당 유저 정보를 모달에 채워 넣기
+      document.getElementById("userId").value = userId;
+
+      modifyModal.style.display = "block";
+    }
+  });
+
+  // 정보 수정 Submit
+  document
+    .getElementById("modifySubmitBtn")
+    .addEventListener("click", async function () {
+      const userId = document.getElementById("userId").value;
+      const originalPassword =
+        document.getElementById("originalPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const newPhone = document.getElementById("newPhone").value;
+      const newName = document.getElementById("newName").value;
+      const newOrganization = document.getElementById("newOrganization").value;
+
+      try {
+        const response = await fetch(`http://localhost:3000/user/${userId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            password: originalPassword,
+            newPassword: newPassword,
+            name: newName,
+            phone: newPhone,
+            organization: newOrganization,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("회원 정보 수정에 실패했습니다.");
+        }
+
+        const data = await response.json();
+        alert("회원 정보가 성공적으로 수정되었습니다.");
+        modifyModal.style.display = "none";
+        // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  document.getElementById("modifyCancelBtn").onclick = function () {
+    modal.style.display = "none";
+  };
+});
+
 // ＊ 유저 목록조회 (페이지네이션X)
 // document.addEventListener("DOMContentLoaded", async function () {
 //   const userTableBody = document.getElementById("user-table-body");
@@ -356,6 +443,7 @@ selectAllCheckbox.addEventListener("change", function () {
 //             <td>${user.email}</td>
 //             <td>${user.phone}</td>
 //             <td>${user.organization}</td>
+//             <td><i class="fa-solid fa-pen"></i></td>
 //           `;
 //         userTableBody.appendChild(row);
 //       });

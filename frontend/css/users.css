@@ -215,7 +215,7 @@ th {
 }
 
 .col1 {
-  width: 10%;
+  width: 9%;
 }
 .col2 {
   width: 18%;
@@ -225,6 +225,9 @@ th {
 }
 .col4 {
   width: 20%;
+}
+.col5 {
+  width: 1%;
 }
 
 /* 회원 가입 */
@@ -286,7 +289,7 @@ th {
 }
 
 .input-container input::placeholder {
-  font-size: 0.7em; /* 텍스트 크기를 조절합니다. */
+  font-size: 0.75em; /* 텍스트 크기를 조절합니다. */
 }
 
 .input-container input {
@@ -322,6 +325,20 @@ th {
 #registerBtn {
   flex-grow: 0; /* 버튼이 더 이상 확장되지 않도록 설정 */
   margin-left: auto; /* 오른쪽으로 이동하여 우측에 위치하도록 설정 */
+}
+
+#modifyBtn {
+  flex-grow: 0;
+  margin-left: auto;
+}
+
+/* 회원정보 수정 */
+#my-table thead th i.fa-solid.fa-pen {
+  cursor: auto;
+}
+
+#user-table-body i.fa-solid.fa-pen {
+  cursor: pointer;
 }
 
 /* 회원 삭제 */
