@@ -1,23 +1,36 @@
-의존성 설치
-npm i
-cd backend npm i
-cd frontend npm i
+# Mission
 
-서버 실행
-루트 디렉토리에서 npm start 후 localhost:3001 실행
+## Installation
 
-Front-end
-사용 스택 : html, js, css
+```bash
+$ npm install
+$ cd backend > npm install
+$ cd frontend > npm install
+```
 
-Back-end
-사용 스택 : Nest.js
+## Running the app
 
-Database
-사용 스택 : PostgreSQL
-SQL 사용
+```bash
+$ npm run start
+```
 
-![image](https://github.com/sangwoorhie/komapper-mission/assets/131964697/ef71f568-45df-4656-a0d7-8421d7f41e1c)
+<p align="center"><img src="https://github.com/sangwoorhie/komapper-mission/assets/131964697/1e5e6ad8-4cad-431e-b69d-3a3164452c07"></p>
 
-![image](https://github.com/sangwoorhie/komapper-mission/assets/131964697/026abcf6-aa69-4692-9dda-5025145f29b4)
+## 🔎주요 기능
 
-![image](https://github.com/sangwoorhie/komapper-mission/assets/131964697/537caafd-1398-4575-ae71-de6528d06c2c)
+- 회원가입, 로그인, 로그아웃
+- 회원정보 수정, 회원탈퇴, 유저목록조회, 유저E-mail 조회
+- 비디오 생성(업로드), 비디오 목록조회, 비디오 ID조회, 비디오 다운로드
+  <br>
+  <br>
+
+## 🖋️Tech Stack
+
+- Typescript 5.3.3
+- Node.js 18.17.0
+- NestJS 10.3.2
+- HTML, CSS, JavaScript
+- Postgres, Sql Query Database
+- Git, Github
+  <br>
+  <br>
