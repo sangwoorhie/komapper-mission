@@ -12,44 +12,34 @@ export class LogService {
 
   // 로그 전체조회
   async findAllLogs(page: number, pageSize: number) {
-    // const countQuery = `SELECT * FROM mission_cst_conn_log`;
-    // const countResult = await this.pool.query(countQuery);
-    // const totalLogs = countResult.rows;
-    // const startIndex = (page - 1) * pageSize;
-    // const endIndex = page * pageSize;
-    // const totalPages = Math.ceil(totalLogs.length / pageSize);
-    // const paginationTotalLogs = totalLogs.slice(startIndex, endIndex);
-    // return { totalPages, paginationTotalLogs };
-    //
-    // const offset = (page - 1) * pageSize;
-    // const query = `
-    //   SELECT id, date, user_ip, user_agent
-    //   FROM mission_cst_conn_log
-    //   OFFSET $1 LIMIT $2;
-    // `;
-    // try {
-    //   const result = await this.pool.query(query, [offset, pageSize]);
-    //   return result.rows; // 로그 전체 목록 반환
-    // } catch (error) {
-    //   throw new Error(`에러가 발생했습니다: ${error.message}`);
-    // }
+    const countQuery = `
+    SELECT id, date, user_ip, user_agent 
+    FROM mission_cst_conn_log
+    `;
+    const countResult = await this.pool.query(countQuery);
+    const totalLogs = countResult.rows;
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = page * pageSize;
+    const totalPages = Math.ceil(totalLogs.length / pageSize);
+    const paginationTotalLogs = totalLogs.slice(startIndex, endIndex);
+    return { totalPages, paginationTotalLogs };
   }
 
   // 페이지네이션 안한 로그 전체목록 조회
-  async getAllLogs() {
-    const query = `
-      SELECT id, date, user_ip, user_agent FROM mission_cst_conn_log
-     `;
-    try {
-      const result = await this.pool.query(query);
-      if (result.rows.length === 0) {
-        throw new NotFoundException('유저가 존재하지 않습니다.');
-      }
-      return result.rows;
-    } catch (error) {
-      throw new Error(`에러가 발생했습니다: ${error.message}`);
-    }
-  }
+  // async getAllLogs() {
+  //   const query = `
+  //     SELECT id, date, user_ip, user_agent FROM mission_cst_conn_log
+  //    `;
+  //   try {
+  //     const result = await this.pool.query(query);
+  //     if (result.rows.length === 0) {
+  //       throw new NotFoundException('유저가 존재하지 않습니다.');
+  //     }
+  //     return result.rows;
+  //   } catch (error) {
+  //     throw new Error(`에러가 발생했습니다: ${error.message}`);
+  //   }
+  // }
 
   // Total 로그 수
   async getLogCount(): Promise<number> {

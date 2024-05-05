@@ -112,6 +112,23 @@ main {
   padding: 10px 10%;
 }
 
+/* 경로표시 */
+#first-breadcrumb {
+  font-size: 26px;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+#second-breadcrumb {
+  font-size: 12px;
+  color: gray;
+}
+
+#first-breadcrumb,
+#second-breadcrumb {
+  display: inline;
+}
+
 /* 컨테이너 박스 */
 #container-box {
   padding: 10px 5%;
@@ -212,7 +229,8 @@ th {
 
 /* 회원 가입 */
 #register-button {
-  background-color: #ddd;
+  color: white;
+  background-color: #303c54;
   cursor: pointer;
 }
 
@@ -398,6 +416,10 @@ th {
 .pagination span {
   color: #fff;
   font-size: 1.2em;
+}
+
+.pagination i {
+  cursor: pointer;
 }
 
 #numbers {

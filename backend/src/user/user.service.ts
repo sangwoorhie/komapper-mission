@@ -225,24 +225,4 @@ export class UserService {
       throw new Error(`에러가 발생했습니다: ${error.message}`);
     }
   }
-
-  // 단일 회원 삭제
-  // async deleteUser(id: string) {
-  //   const query = `
-  //     DELETE FROM mission_cst_user
-  //     WHERE id = $1
-  //     RETURNING *;
-  //   `;
-  //   try {
-  //     const result = await this.pool.query(query, [id]);
-  //     if (result.rows.length === 0) {
-  //       throw new NotFoundException(
-  //         `유저 아이디: ${id} (이)가 존재하지 않습니다.`,
-  //       );
-  //     }
-  //     return result.rows[0]; // 유저 삭제
-  //   } catch (error) {
-  //     throw new Error(`에러가 발생했습니다: ${error.message}`);
-  //   }
-  // }
 }

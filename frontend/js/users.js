@@ -7,7 +7,13 @@ function fetchTotalUserCount() {
   fetch("http://localhost:3000/user/count")
     .then((response) => response.json())
     .then((data) => {
-      document.getElementById("total-users").textContent += ` ${data}`;
+      const totalUsersElement = document.getElementById("total-users");
+      const totalUsersText = totalUsersElement.textContent; // "Total:"의 텍스트
+      const totalUsersValue = data; // 데이터의 값
+
+      // "Total:" 텍스트와 데이터의 값에 각각 스타일을 적용한 HTML을 생성
+      const styledText = `<span style="color: inherit;">${totalUsersText}</span> <span style="color: #DD7012; font-weight: bold;">${totalUsersValue}</span>`;
+      totalUsersElement.innerHTML = styledText;
     })
     .catch((error) => console.error("에러가 발생했습니다:", error));
 }
@@ -235,7 +241,7 @@ async function fetchUserData(page) {
     totalPages = data.totalPages; // 전체 페이지 수 업데이트
     return data.paginationTotalUsers;
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("유저목록 조회 중 에러가 발생했습니다:", error);
   }
 }
 

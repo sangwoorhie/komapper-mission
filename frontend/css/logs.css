@@ -112,6 +112,23 @@ main {
   padding: 10px 10%;
 }
 
+/* 경로표시 */
+#first-breadcrumb {
+  font-size: 26px;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+#second-breadcrumb {
+  font-size: 12px;
+  color: gray;
+}
+
+#first-breadcrumb,
+#second-breadcrumb {
+  display: inline;
+}
+
 /* 컨테이너 박스 */
 #container-box {
   padding: 10px 5%;
@@ -229,15 +246,44 @@ th {
   width: 89%;
   height: 50px;
   float: left;
-  /* display: flex;
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  text-align: center; */
-  background-color: blueviolet;
+  text-align: center;
+  background-color: #ffffff;
 }
 
-#pagination * {
-  margin: auto; /* 내부 요소를 수평으로 가운데 정렬합니다. */
+.pagination span {
+  color: #fff;
+  font-size: 1.2em;
+}
+
+.pagination i {
+  cursor: pointer;
+}
+
+#numbers {
+  padding: 0;
+  margin: 0 2rem;
+  list-style-type: none;
+  display: flex;
+}
+
+#numbers li a {
+  color: black;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+#numbers li a:hover {
+  opacity: 1;
+}
+
+#numbers li a.active {
+  opacity: 1;
+  background: #2387e5;
+  color: #333;
 }
 
 /* 푸터 */

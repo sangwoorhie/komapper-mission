@@ -40,7 +40,7 @@ export class UserController {
     return this.userService.getUserCount();
   }
 
-  // 유저 전체목록 조회 (test 성공)
+  // 페이지네이션 유저 전체목록 조회 (test 성공)
   // GET : http://localhost:3000/user?page=${page}&pageSize=${pageSize}
   @Get()
   async findAllUsers(
