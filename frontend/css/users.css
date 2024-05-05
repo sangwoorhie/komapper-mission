@@ -106,7 +106,6 @@ main {
 
 #body-top {
   height: 20px;
-  background-color: lightpink;
 }
 
 #body-bottom {
@@ -138,6 +137,7 @@ main {
   width: 10%;
   height: 20px;
   float: left;
+  margin-bottom: 10px;
 }
 
 /* 검색창 */
@@ -145,6 +145,7 @@ main {
   width: 20%;
   height: 20px;
   float: right;
+  margin-bottom: 10px;
 }
 
 #searchInput::placeholder {
@@ -253,7 +254,7 @@ th {
 }
 
 .input-container {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center; /* 입력 필드와 레이블을 세로 중앙 정렬 */
   justify-content: space-between; /* 입력 필드와 버튼을 좌우 정렬 */
@@ -262,6 +263,8 @@ th {
 .input-container label {
   margin-right: 10px;
   flex: 1; /* 레이블이 동적으로 크기 조정되도록 */
+  text-align: right;
+  font-size: 0.9em;
 }
 
 .input-container input::placeholder {
@@ -381,11 +384,44 @@ th {
 }
 
 /* 페이지네이션 */
-#pagination {
+.pagination {
   width: 89%;
   height: 50px;
   float: left;
-  background-color: blueviolet;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+.pagination span {
+  color: #fff;
+  font-size: 1.2em;
+}
+
+#numbers {
+  padding: 0;
+  margin: 0 2rem;
+  list-style-type: none;
+  display: flex;
+}
+
+#numbers li a {
+  color: black;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+#numbers li a:hover {
+  opacity: 1;
+}
+
+#numbers li a.active {
+  opacity: 1;
+  background: #2387e5;
+  color: #333;
 }
 
 /* 푸터 */

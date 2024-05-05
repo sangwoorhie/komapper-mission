@@ -106,7 +106,6 @@ main {
 
 #body-top {
   height: 20px;
-  background-color: lightpink;
 }
 
 #body-bottom {
@@ -138,6 +137,7 @@ main {
   width: 10%;
   height: 20px;
   float: left;
+  margin-bottom: 10px;
 }
 
 /* 검색창 */
@@ -145,6 +145,7 @@ main {
   width: 20%;
   height: 20px;
   float: right;
+  margin-bottom: 10px;
 }
 
 #searchInput::placeholder {
@@ -228,7 +229,15 @@ th {
   width: 89%;
   height: 50px;
   float: left;
+  /* display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center; */
   background-color: blueviolet;
+}
+
+#pagination * {
+  margin: auto; /* 내부 요소를 수평으로 가운데 정렬합니다. */
 }
 
 /* 푸터 */
