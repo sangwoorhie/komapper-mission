@@ -212,7 +212,7 @@ document.getElementById("cancelBtn").onclick = function () {
 //   });
 // });
 
-// 삭제버튼 클릭시
+// 회원 삭제
 $(document).ready(function () {
   $("#delete-button").click(function () {
     const selectedUsers = [];
@@ -225,6 +225,23 @@ $(document).ready(function () {
       alert("삭제할 사용자를 선택하세요.");
       return;
     }
+
+    // 모달 열기
+    $("#deleteModal").css("display", "block");
+  });
+
+  // 모달 닫기
+  $(".close, #cancelDeleteBtn").click(function () {
+    $("#deleteModal").css("display", "none");
+  });
+
+  // 삭제 확인 버튼 클릭 시
+  $("#confirmDeleteBtn").click(function () {
+    const selectedUsers = [];
+
+    $("tbody input[type='checkbox']:checked").each(function () {
+      selectedUsers.push($(this).closest("tr").find("td:eq(1)").text());
+    });
 
     $.ajax({
       type: "DELETE",
@@ -240,8 +257,41 @@ $(document).ready(function () {
         alert("삭제 중 오류가 발생했습니다: " + error);
       },
     });
+
+    // 모달 닫기
+    $("#deleteModal").css("display", "none");
   });
 });
+
+// $(document).ready(function () {
+//   $("#delete-button").click(function () {
+//     const selectedUsers = [];
+
+//     $("tbody input[type='checkbox']:checked").each(function () {
+//       selectedUsers.push($(this).closest("tr").find("td:eq(1)").text());
+//     });
+
+//     if (selectedUsers.length === 0) {
+//       alert("삭제할 사용자를 선택하세요.");
+//       return;
+//     }
+
+//     $.ajax({
+//       type: "DELETE",
+//       url: "http://localhost:3000/user",
+//       contentType: "application/json",
+//       data: JSON.stringify({ ids: selectedUsers }),
+//       success: function (response) {
+//         console.log(response);
+//         alert("선택된 사용자가 삭제되었습니다.");
+//         location.reload();
+//       },
+//       error: function (xhr, status, error) {
+//         alert("삭제 중 오류가 발생했습니다: " + error);
+//       },
+//     });
+//   });
+// });
 
 // * 유저목록 전체조회 (페이지네이션)
 const rowsPerPage = 10;
