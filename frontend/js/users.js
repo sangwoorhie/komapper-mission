@@ -84,6 +84,22 @@ window.onclick = function (event) {
   }
 };
 
+// 회원가입 비밀번호 숨기기/ 보여주기
+document.addEventListener("DOMContentLoaded", function () {
+  const passwordInput = document.getElementById("userPassword");
+  const toggleButton = document.getElementById("togglePassword");
+
+  toggleButton.addEventListener("click", function () {
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      toggleButton.textContent = "Hide";
+    } else {
+      passwordInput.type = "password";
+      toggleButton.textContent = "Show";
+    }
+  });
+});
+
 // 중복ID 체크로직
 document
   .getElementById("checkDuplicate")
@@ -340,6 +356,64 @@ selectAllCheckbox.addEventListener("change", function () {
 });
 
 // 정보수정
+// $(document).ready(function () {
+//   const userTableBody = $("#user-table-body");
+
+//   // 정보 수정 모달 채우기
+//   userTableBody.on("click", ".fa-pen", function () {
+//     const userId = $(this).closest("tr").find("td:eq(1)").text().trim(); // 유저 ID 가져오기
+
+//     // Modify 버튼 클릭 시 해당 유저 정보를 모달에 채워 넣기
+//     $("#userId").val(userId);
+
+//     $("#modifyModal").show(); // 모달 표시
+//   });
+
+//   // 정보 수정 Submit
+//   $("#modifyBtn").click(async function () {
+//     const userId = $("#userId").val();
+//     const originalPassword = $("#originalPassword").val();
+//     const newPassword = $("#newPassword").val();
+//     const newPhone = $("#newPhone").val();
+//     const newName = $("#newName").val();
+//     const newOrganization = $("#newOrganization").val();
+
+//     try {
+//       const response = await fetch(`http://localhost:3000/user/${userId}`, {
+//         method: "PATCH",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           password: originalPassword,
+//           newPassword: newPassword,
+//           name: newName,
+//           phone: newPhone,
+//           organization: newOrganization,
+//         }),
+//       });
+//       const data = await response.json();
+//       console.log("data", data);
+//       if (!response.ok) {
+//         throw new Error("회원 정보 수정에 실패했습니다.");
+//       }
+//       // const data = await response.json();
+//       // console.log("data", data);
+//       alert("회원 정보가 성공적으로 수정되었습니다.");
+//       $("#modifyModal").hide(); // 모달 닫기
+//       // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
+//     } catch (error) {
+//       alert(error.message);
+//     }
+//   });
+
+//   // 취소 버튼 클릭 시 모달 닫기
+//   $("#modifyCancelBtn").click(function () {
+//     $("#modifyModal").hide(); // 모달 닫기
+//   });
+// });
+
+// 정보수정
 document.addEventListener("DOMContentLoaded", function () {
   const userTableBody = document.getElementById("user-table-body");
 
@@ -347,12 +421,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const modifyModal = document.getElementById("modifyModal");
   const modifyBtn = document.getElementById("modifyBtn");
   const modifySpan = document.querySelector("#modifyModal .close");
-
-  modifyBtn.onclick = function () {
-    modifyModal.style.display = "block";
-  };
+  const modifyCancelBtn = document.getElementById("modifyCancelBtn");
 
   modifySpan.onclick = function () {
+    modifyModal.style.display = "none";
+  };
+
+  modifyCancelBtn.onclick = function () {
     modifyModal.style.display = "none";
   };
 
@@ -381,47 +456,73 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // 정보 수정 Submit
-  document
-    .getElementById("modifySubmitBtn")
-    .addEventListener("click", async function () {
-      const userId = document.getElementById("userId").value;
-      const originalPassword =
-        document.getElementById("originalPassword").value;
-      const newPassword = document.getElementById("newPassword").value;
-      const newPhone = document.getElementById("newPhone").value;
-      const newName = document.getElementById("newName").value;
-      const newOrganization = document.getElementById("newOrganization").value;
+  modifyBtn.addEventListener("click", async function () {
+    // 수정
+    const userId = document.getElementById("userId").value;
+    const originalPassword = document.getElementById("originalPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const newPhone = document.getElementById("newPhone").value;
+    const newName = document.getElementById("newName").value;
+    const newOrganization = document.getElementById("newOrganization").value;
 
-      try {
-        const response = await fetch(`http://localhost:3000/user/${userId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            password: originalPassword,
-            newPassword: newPassword,
-            name: newName,
-            phone: newPhone,
-            organization: newOrganization,
-          }),
-        });
+    try {
+      const response = await fetch(`http://localhost:3000/user/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: originalPassword,
+          newPassword: newPassword,
+          name: newName,
+          phone: newPhone,
+          organization: newOrganization,
+        }),
+      });
 
-        if (!response.ok) {
-          throw new Error("회원 정보 수정에 실패했습니다.");
-        }
-
-        const data = await response.json();
-        alert("회원 정보가 성공적으로 수정되었습니다.");
-        modifyModal.style.display = "none";
-        // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
-      } catch (error) {
-        alert(error.message);
+      if (!response.ok) {
+        throw new Error("회원 정보 수정에 실패했습니다.");
       }
-    });
-  document.getElementById("modifyCancelBtn").onclick = function () {
-    modal.style.display = "none";
-  };
+
+      const data = await response.json();
+      alert("회원 정보가 성공적으로 수정되었습니다.");
+      modifyModal.style.display = "none";
+      // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
+    } catch (error) {
+      alert(error.message);
+    }
+  });
+});
+
+// 정보수정 비밀번호 숨기기/ 보여주기
+document.addEventListener("DOMContentLoaded", function () {
+  const passwordInput = document.getElementById("originalPassword");
+  const toggleButton = document.getElementById("toggleOriginalPassword");
+
+  toggleButton.addEventListener("click", function () {
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      toggleButton.textContent = "Hide";
+    } else {
+      passwordInput.type = "password";
+      toggleButton.textContent = "Show";
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const passwordInput = document.getElementById("newPassword");
+  const toggleButton = document.getElementById("toggleModifyPassword");
+
+  toggleButton.addEventListener("click", function () {
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      toggleButton.textContent = "Hide";
+    } else {
+      passwordInput.type = "password";
+      toggleButton.textContent = "Show";
+    }
+  });
 });
 
 // ＊ 유저 목록조회 (페이지네이션X)

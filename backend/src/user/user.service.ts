@@ -113,6 +113,24 @@ export class UserService {
   //   }
   // }
 
+  // 유저 비번조회
+  async getUserPassword(id: string) {
+    const query = `
+      SELECT password FROM mission_cst_user WHERE id = $1;
+    `;
+    try {
+      const result = await this.pool.query(query, [id]);
+      if (result.rows.length === 0) {
+        throw new NotFoundException(
+          `유저 아이디: ${id} (이)가 존재하지 않습니다.`,
+        );
+      }
+      return result.rows[0]; // 유저 값 반환
+    } catch (error) {
+      throw new Error(`${error.message}`);
+    }
+  }
+
   // 단일 유저조회
   async getUserById(id: string) {
     const query = `
@@ -147,12 +165,8 @@ export class UserService {
     if (!password || !newPassword || !name || !phone || !organization) {
       throw new BadRequestException('모든 입력란을 입력해 주십시오.');
     }
-    if (isNaN(phone)) {
-      throw new BadRequestException(
-        '핸드폰 번호는 `-`를 제외한, 숫자만 입력해 주십시오.',
-      );
-    }
-    const user = await this.getUserById(id);
+
+    const user = await this.getUserPassword(id);
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       throw new BadRequestException('기존 비밀번호가 일치하지 않습니다.');
