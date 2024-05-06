@@ -294,8 +294,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // 페이지네이션 버튼 클릭 이벤트 처리
-const prevPageBtn = document.querySelector(".pagination .fa-arrow-left");
-const nextPageBtn = document.querySelector(".pagination .fa-arrow-right");
+const prevPageBtn = document.querySelector(".pagination .fa-angle-left");
+const nextPageBtn = document.querySelector(".pagination .fa-angle-right");
 
 prevPageBtn.addEventListener("click", async () => {
   if (currentPage > 1) {
@@ -339,6 +339,22 @@ function updatePagination(currentPage) {
     }
   });
 }
+
+// 가장 첫 페이지로 이동하는 버튼 클릭 이벤트 처리
+const firstPageBtn = document.querySelector(".pagination .fa-angles-left");
+firstPageBtn.addEventListener("click", async () => {
+  if (currentPage > 1) {
+    await onPageChange(1); // 첫 페이지로 이동
+  }
+});
+
+// 가장 마지막 페이지로 이동하는 버튼 클릭 이벤트 처리
+const lastPageBtn = document.querySelector(".pagination .fa-angles-right");
+lastPageBtn.addEventListener("click", async () => {
+  if (currentPage < totalPages) {
+    await onPageChange(totalPages); // 마지막 페이지로 이동
+  }
+});
 
 // * 전체 선택 체크박스
 const selectAllCheckbox = document.getElementById("selectAll");

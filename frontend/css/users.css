@@ -203,6 +203,7 @@ td,
 th {
   text-align: left;
   padding: 0.5rem 1rem;
+  height: calc(100% / 10);
 }
 
 tbody tr:nth-child(odd) {
@@ -425,7 +426,7 @@ th {
   float: left;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   text-align: center;
   background-color: #ffffff;
 }
@@ -437,6 +438,7 @@ th {
 
 .pagination i {
   cursor: pointer;
+  margin: 0 1rem;
 }
 
 #numbers {
