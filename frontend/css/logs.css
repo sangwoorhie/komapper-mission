@@ -135,7 +135,7 @@ main {
 /* 컨테이너 박스 */
 #container-box {
   padding: 10px 5%;
-  height: 600px;
+  height: 800px;
   margin: 0 auto;
   border: 2px solid #d6d6d6;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -153,20 +153,22 @@ main {
   border-top: 1px solid #d6d6d6;
 }
 
-/* 전체 유저 수 */
+/* 전체 로그 수 */
 #total-logs {
   width: 10%;
   height: 20px;
   float: left;
-  margin-bottom: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 /* 검색창 */
 #search-container {
-  width: 16.125%;
+  width: 14%;
   height: 20px;
   float: right;
-  margin-bottom: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 #searchInput::placeholder {
@@ -211,7 +213,7 @@ table {
 #my-table {
   clear: both;
   width: 100%;
-  height: calc(100% - 120px);
+  height: calc(100% - 360px);
 }
 
 thead th {
@@ -241,16 +243,16 @@ th {
   color: #black;
 }
 .col1 {
-  width: 5%;
+  width: 10%;
 }
 .col2 {
   width: 10%;
 }
 .col3 {
-  width: 5%;
+  width: 15%;
 }
 .col4 {
-  width: 80%;
+  width: 65%;
 }
 
 /* 좌측하단 여백 */

@@ -91,6 +91,7 @@
               </tbody>
             </table>
             <br />
+            <br />
             <!-- 삭제 -->
             <div id="delete-area">
               <button id="delete-button">Delete</button>
@@ -181,6 +182,41 @@
       </div>
     </div>
 
+    <!-- 유저 정보조회 모달 -->
+    <div id="userDetailModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>사용자 정보 조회</h2>
+        <br />
+        <br />
+        <div class="input-container">
+          <label for="detailUserId">ID</label>
+          <input type="text" id="detailUserId" readonly />
+        </div>
+        <div class="input-container">
+          <label for="detailUserName">Name</label>
+          <input type="text" id="detailUserName" readonly />
+        </div>
+        <div class="input-container">
+          <label for="detailUserEmail">E-mail</label>
+          <input type="email" id="detailUserEmail" readonly />
+        </div>
+        <div class="input-container">
+          <label for="detailUserPhone">Phone</label>
+          <input type="tel" id="detailUserPhone" readonly />
+        </div>
+        <div class="input-container">
+          <label for="detailUserOrganization">Organization</label>
+          <input type="text" id="detailUserOrganization" readonly />
+        </div>
+        <div class="modal-buttons">
+          <br />
+          <button id="modifycancelBtn">Cancel</button>
+          <button id="modifyBtn">Modify</button>
+        </div>
+      </div>
+    </div>
+
     <!-- 정보수정 모달 -->
     <div id="modifyModal" class="modifyModal">
       <div class="modal-content">
@@ -249,41 +285,6 @@
         <div class="modal-buttons">
           <button id="cancelDeleteBtn">Cancel</button>
           <button id="confirmDeleteBtn">Delete</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 유저 정보조회 모달 -->
-    <div id="userDetailModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>사용자 정보조회</h2>
-        <br />
-        <br />
-        <div class="input-container">
-          <label for="detailUserId">ID</label>
-          <input type="text" id="detailUserId" readonly />
-        </div>
-        <div class="input-container">
-          <label for="detailUserName">Name</label>
-          <input type="text" id="detailUserName" readonly />
-        </div>
-        <div class="input-container">
-          <label for="detailUserEmail">E-mail</label>
-          <input type="email" id="detailUserEmail" readonly />
-        </div>
-        <div class="input-container">
-          <label for="detailUserPhone">Phone</label>
-          <input type="tel" id="detailUserPhone" readonly />
-        </div>
-        <div class="input-container">
-          <label for="detailUserOrganization">Organization</label>
-          <input type="text" id="detailUserOrganization" readonly />
-        </div>
-        <div class="modal-buttons">
-          <br />
-          <button id="modifycancelBtn">Cancel</button>
-          <button id="modifyBtn">Modify</button>
         </div>
       </div>
     </div>
