@@ -136,7 +136,7 @@ export class UserService {
     const query = `
       SELECT id, name, email, phone, organization FROM mission_cst_user WHERE id = $1;
     `;
-    // try {
+
     const result = await this.pool.query(query, [id]);
     if (result.rows.length === 0) {
       throw new NotFoundException(
@@ -144,9 +144,6 @@ export class UserService {
       );
     }
     return result.rows[0]; // 유저 값 반환
-    // } catch (error) {
-    //   throw new Error(`${error.message}`);
-    // }
   }
 
   // 정보 수정

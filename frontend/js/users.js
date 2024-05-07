@@ -18,7 +18,7 @@ function fetchTotalUserCount() {
     .catch((error) => console.error("에러가 발생했습니다:", error));
 }
 
-// ＊ 유저 단일조회
+// ＊ 유저 단일조회 (search 창)
 document
   .getElementById("search-button")
   .addEventListener("click", async function () {
@@ -52,7 +52,6 @@ document
         <td>${user.email}</td>
         <td>${user.phone}</td>
         <td>${user.organization}</td>
-        <td><i class="fa-solid fa-pen"></i></td>
       `;
         userTableBody.appendChild(row);
       } catch (error) {
@@ -69,6 +68,7 @@ const span = document.getElementsByClassName("close")[0];
 
 btn.onclick = function () {
   modal.style.display = "block";
+  resetModalInputs(); // 모달 열릴 때 입력 초기화
 };
 
 span.onclick = function () {
@@ -78,6 +78,7 @@ span.onclick = function () {
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
+    resetModalInputs(); // 모달 외부 클릭시 입력 초기화
   }
 };
 
@@ -163,9 +164,20 @@ document
     }
   });
 
-document.getElementById("cancelBtn").onclick = function () {
+document.getElementById("registercancelBtn").onclick = function () {
   modal.style.display = "none";
+  resetModalInputs(); // 취소 버튼 클릭시 입력 초기화
 };
+
+function resetModalInputs() {
+  // 모달 내의 입력란 초기화
+  document.getElementById("userId").value = "";
+  document.getElementById("userPassword").value = "";
+  document.getElementById("userName").value = "";
+  document.getElementById("userEmail").value = "";
+  document.getElementById("userPhone").value = "";
+  document.getElementById("userOrganization").value = "";
+}
 
 // 회원삭제 (모달)
 // 회원삭제
@@ -325,7 +337,6 @@ async function displayUserData(page) {
       <td>${user.email}</td>
       <td>${user.phone}</td>
       <td>${user.organization}</td>
-      <td><i class="fa-solid fa-pen"></i></td>
     `;
     tbody.appendChild(row);
   });
@@ -478,6 +489,48 @@ selectAllCheckbox.addEventListener("change", function () {
 //   });
 // });
 
+// 유저 단일조회 (Modal)
+const userDetailModal = document.getElementById("userDetailModal");
+const userDetailClose = document.querySelector("#userDetailModal .close");
+
+// 테이블 행 클릭 시 상세 정보 모달 열기
+document
+  .getElementById("user-table-body")
+  .addEventListener("click", function (event) {
+    const target = event.target;
+    if (target.tagName === "TD") {
+      const row = target.parentNode;
+      const userId = row.querySelector("td:nth-child(2)").textContent; // 유저 ID 가져오기
+
+      // 해당 유저의 상세 정보를 가져와 모달에 표시
+      fetch(`http://localhost:3000/user/${userId}`)
+        .then((response) => response.json())
+        .then((user) => {
+          document.getElementById("detailUserId").value = user.id;
+          document.getElementById("detailUserName").value = user.name;
+          document.getElementById("detailUserEmail").value = user.email;
+          document.getElementById("detailUserPhone").value = user.phone;
+          document.getElementById("detailUserOrganization").value =
+            user.organization;
+
+          // 모달 열기
+          userDetailModal.style.display = "block";
+        })
+        .catch((error) => {
+          console.error("Error fetching user details:", error);
+        });
+    }
+  });
+
+// 유저 상세 정보 모달 닫기
+document.getElementById("modifycancelBtn").onclick = function () {
+  userDetailModal.style.display = "none";
+};
+
+userDetailClose.onclick = function () {
+  userDetailModal.style.display = "none";
+};
+
 // 정보수정
 document.addEventListener("DOMContentLoaded", function () {
   const userTableBody = document.getElementById("user-table-body");
@@ -505,11 +558,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 정보 수정 모달 채우기
   userTableBody.addEventListener("click", function (event) {
     const target = event.target;
-    if (
-      target &&
-      target.tagName === "I" &&
-      target.classList.contains("fa-pen")
-    ) {
+    if (target && target.tagName === "BUTTON" && target.id === "modifyBtn") {
       const row = target.closest("tr");
       const userId = row.querySelector("td:nth-child(2)").textContent.trim(); // 사용자 ID 가져오기
 
@@ -521,41 +570,68 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // 정보 수정 Submit
-  modifyBtn.addEventListener("click", async function () {
-    // 수정
-    const userId = document.getElementById("userId").value;
-    const originalPassword = document.getElementById("originalPassword").value;
-    const newPassword = document.getElementById("newPassword").value;
-    const newPhone = document.getElementById("newPhone").value;
-    const newName = document.getElementById("newName").value;
-    const newOrganization = document.getElementById("newOrganization").value;
+  modifyBtn.onclick = function () {
+    const detailModalContent = document.querySelector(
+      "#userDetailModal .modal-content"
+    );
+    const modifyModalContent = document.querySelector(
+      "#modifyModal .modal-content"
+    );
 
-    try {
-      const response = await fetch(`http://localhost:3000/user/${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          password: originalPassword,
-          newPassword: newPassword,
-          name: newName,
-          phone: newPhone,
-          organization: newOrganization,
-        }),
-      });
-      if (!response.ok) {
-        const responseData = await response.json();
-        throw new Error(responseData.message); // 백엔드 에러메시지
-      }
-      // const data = await response.json();
-      alert("회원 정보가 성공적으로 수정되었습니다.");
-      modifyModal.style.display = "none";
-      // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
-    } catch (error) {
-      alert(error.message);
-    }
+    detailModalContent.style.display = "none";
+    modifyModal.style.display = "block";
+    modifyModalContent.style.display = "block";
+  };
+
+  const inputFields = modifyModalContent.querySelectorAll("input");
+  inputFields.forEach((input) => {
+    input.removeAttribute("readonly");
   });
+
+  modifyCancelBtn.onclick = function () {
+    const detailModalContent = document.querySelector(
+      "#userDetailModal .modal-content"
+    );
+
+    modifyModal.style.display = "none";
+    detailModalContent.style.display = "block";
+  };
+
+  // modifyBtn.addEventListener("click", async function () {
+  //   // 수정
+  //   const userId = document.getElementById("userId").value;
+  //   const originalPassword = document.getElementById("originalPassword").value;
+  //   const newPassword = document.getElementById("newPassword").value;
+  //   const newPhone = document.getElementById("newPhone").value;
+  //   const newName = document.getElementById("newName").value;
+  //   const newOrganization = document.getElementById("newOrganization").value;
+
+  //   try {
+  //     const response = await fetch(`http://localhost:3000/user/${userId}`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         password: originalPassword,
+  //         newPassword: newPassword,
+  //         name: newName,
+  //         phone: newPhone,
+  //         organization: newOrganization,
+  //       }),
+  //     });
+  //     if (!response.ok) {
+  //       const responseData = await response.json();
+  //       throw new Error(responseData.message); // 백엔드 에러메시지
+  //     }
+  //     // const data = await response.json();
+  //     alert("회원 정보가 성공적으로 수정되었습니다.");
+  //     modifyModal.style.display = "none";
+  //     // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // });
 });
 
 // 정보수정 비밀번호 숨기기/ 보여주기

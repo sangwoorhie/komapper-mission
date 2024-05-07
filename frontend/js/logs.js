@@ -17,7 +17,7 @@ function fetchTotalLogCount() {
     .catch((error) => console.error("에러가 발생했습니다:", error));
 }
 
-// * 로그 단일조회
+// * 로그 단일조회 (search 창)
 document
   .getElementById("search-button")
   .addEventListener("click", async function () {
@@ -37,6 +37,7 @@ document
         );
         const log = await response.json();
         if (!response.ok) {
+          console.log("log.message", log.message);
           throw new Error(log.message); // 백엔드 에러메시지
         }
 

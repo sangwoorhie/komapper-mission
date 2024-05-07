@@ -15,6 +15,7 @@ export class LogService {
     const countQuery = `
     SELECT id, date, user_ip, user_agent 
     FROM mission_cst_conn_log
+    ORDER BY date DESC
     `;
     const countResult = await this.pool.query(countQuery);
     const totalLogs = countResult.rows;
