@@ -35,12 +35,11 @@ document
         const response = await fetch(
           `http://localhost:3000/log/${searchInput}`
         );
-        if (!response.ok) {
-          throw new Error(
-            `로그 아이디: ${searchInput}이(가) 존재하지 않습니다.`
-          );
-        }
         const log = await response.json();
+        if (!response.ok) {
+          throw new Error(log.message); // 백엔드 에러메시지
+        }
+
         const logTableBody = document.getElementById("log-table-body");
         logTableBody.innerHTML = ""; // 기존 데이터 삭제
 

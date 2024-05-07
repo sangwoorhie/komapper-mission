@@ -64,7 +64,7 @@ export class UserService {
     const idExistResult = await this.pool.query(idExistQuery, [id]);
     if (idExistResult.rows.length > 0) {
       throw new BadRequestException(
-        '이미 존재하는 아이디입니다. 다른 아이디를 입력해주세요.',
+        `${id}(은)는 이미 존재하는 아이디입니다. 다른 아이디를 입력해주세요.`,
       );
     } else {
       return `${id}(은)는 사용 가능한 아이디입니다.`;
@@ -136,17 +136,17 @@ export class UserService {
     const query = `
       SELECT id, name, email, phone, organization FROM mission_cst_user WHERE id = $1;
     `;
-    try {
-      const result = await this.pool.query(query, [id]);
-      if (result.rows.length === 0) {
-        throw new NotFoundException(
-          `유저 아이디: ${id} (이)가 존재하지 않습니다.`,
-        );
-      }
-      return result.rows[0]; // 유저 값 반환
-    } catch (error) {
-      throw new Error(`${error.message}`);
+    // try {
+    const result = await this.pool.query(query, [id]);
+    if (result.rows.length === 0) {
+      throw new NotFoundException(
+        `유저 아이디: ${id} (이)가 존재하지 않습니다.`,
+      );
     }
+    return result.rows[0]; // 유저 값 반환
+    // } catch (error) {
+    //   throw new Error(`${error.message}`);
+    // }
   }
 
   // 정보 수정

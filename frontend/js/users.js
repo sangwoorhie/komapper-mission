@@ -36,13 +36,10 @@ document
         const response = await fetch(
           `http://localhost:3000/user/${searchInput}`
         );
-        if (!response.ok) {
-          throw new Error(
-            `유저 아이디: ${searchInput}이(가) 존재하지 않습니다.`
-          );
-        }
         const user = await response.json();
-
+        if (!response.ok) {
+          throw new Error(user.message); // 백엔드 에러메시지
+        }
         // 결과를 테이블에 표시
         const userTableBody = document.getElementById("user-table-body");
         userTableBody.innerHTML = ""; // 기존 데이터 삭제
@@ -117,7 +114,8 @@ document
         const result = await response.text();
         alert(result);
       } else {
-        throw new Error(`${userId}는 이미 존재하는 ID입니다.`);
+        const responseData = await response.json();
+        throw new Error(responseData.message); // 백엔드 에러메시지
       }
     } catch (error) {
       alert(error.message);
@@ -157,7 +155,8 @@ document
         alert(result);
         window.location.reload();
       } else {
-        throw new Error("회원가입에 실패했습니다.");
+        const responseData = await response.json();
+        throw new Error(responseData.message); // 백엔드 에러메시지
       }
     } catch (error) {
       alert(error.message);
@@ -545,12 +544,11 @@ document.addEventListener("DOMContentLoaded", function () {
           organization: newOrganization,
         }),
       });
-
       if (!response.ok) {
-        throw new Error("회원 정보 수정에 실패했습니다.");
+        const responseData = await response.json();
+        throw new Error(responseData.message); // 백엔드 에러메시지
       }
-
-      const data = await response.json();
+      // const data = await response.json();
       alert("회원 정보가 성공적으로 수정되었습니다.");
       modifyModal.style.display = "none";
       // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
