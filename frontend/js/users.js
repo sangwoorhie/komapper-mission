@@ -179,50 +179,6 @@ function resetModalInputs() {
   document.getElementById("userOrganization").value = "";
 }
 
-// 회원삭제 (모달)
-// 회원삭제
-// document.addEventListener("DOMContentLoaded", function () {
-//   const deleteButton = document.getElementById("deleteButton");
-//   const modal = document.getElementById("deleteModal");
-//   const cancelButton = document.getElementById("cancelButton");
-//   const confirmDeleteButton = document.getElementById("confirmDeleteButton");
-//   const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-
-//   deleteButton.addEventListener("click", function () {
-//     modal.style.display = "block";
-//   });
-
-//   cancelButton.addEventListener("click", function () {
-//     modal.style.display = "none";
-//   });
-
-//   confirmDeleteButton.addEventListener("click", async function () {
-//     modal.style.display = "none";
-//     const checkedUserIds = Array.from(checkboxes)
-//       .filter((checkbox) => checkbox.checked)
-//       .map((checkbox) => checkbox.parentNode.nextElementSibling.textContent);
-
-//     try {
-//       const response = await fetch("http://localhost:3000/user", {
-//         method: "DELETE",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ ids: checkedUserIds }),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error("삭제 요청 실패");
-//       }
-//       console.log("response", response);
-//       alert("사용자가 성공적으로 삭제되었습니다.");
-//       await fetchAndDisplayUsers();
-//     } catch (error) {
-//       console.error("삭제 요청 중 에러가 발생했습니다:", error);
-//     }
-//   });
-// });
-
 // 회원 삭제
 $(document).ready(function () {
   $("#delete-button").click(function () {
@@ -273,36 +229,6 @@ $(document).ready(function () {
     $("#deleteModal").css("display", "none");
   });
 });
-
-// $(document).ready(function () {
-//   $("#delete-button").click(function () {
-//     const selectedUsers = [];
-
-//     $("tbody input[type='checkbox']:checked").each(function () {
-//       selectedUsers.push($(this).closest("tr").find("td:eq(1)").text());
-//     });
-
-//     if (selectedUsers.length === 0) {
-//       alert("삭제할 사용자를 선택하세요.");
-//       return;
-//     }
-
-//     $.ajax({
-//       type: "DELETE",
-//       url: "http://localhost:3000/user",
-//       contentType: "application/json",
-//       data: JSON.stringify({ ids: selectedUsers }),
-//       success: function (response) {
-//         console.log(response);
-//         alert("선택된 사용자가 삭제되었습니다.");
-//         location.reload();
-//       },
-//       error: function (xhr, status, error) {
-//         alert("삭제 중 오류가 발생했습니다: " + error);
-//       },
-//     });
-//   });
-// });
 
 // * 유저목록 전체조회 (페이지네이션)
 const rowsPerPage = 10;
@@ -431,64 +357,6 @@ selectAllCheckbox.addEventListener("change", function () {
   });
 });
 
-// 정보수정
-// $(document).ready(function () {
-//   const userTableBody = $("#user-table-body");
-
-//   // 정보 수정 모달 채우기
-//   userTableBody.on("click", ".fa-pen", function () {
-//     const userId = $(this).closest("tr").find("td:eq(1)").text().trim(); // 유저 ID 가져오기
-
-//     // Modify 버튼 클릭 시 해당 유저 정보를 모달에 채워 넣기
-//     $("#userId").val(userId);
-
-//     $("#modifyModal").show(); // 모달 표시
-//   });
-
-//   // 정보 수정 Submit
-//   $("#modifyBtn").click(async function () {
-//     const userId = $("#userId").val();
-//     const originalPassword = $("#originalPassword").val();
-//     const newPassword = $("#newPassword").val();
-//     const newPhone = $("#newPhone").val();
-//     const newName = $("#newName").val();
-//     const newOrganization = $("#newOrganization").val();
-
-//     try {
-//       const response = await fetch(`http://localhost:3000/user/${userId}`, {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           password: originalPassword,
-//           newPassword: newPassword,
-//           name: newName,
-//           phone: newPhone,
-//           organization: newOrganization,
-//         }),
-//       });
-//       const data = await response.json();
-//       console.log("data", data);
-//       if (!response.ok) {
-//         throw new Error("회원 정보 수정에 실패했습니다.");
-//       }
-//       // const data = await response.json();
-//       // console.log("data", data);
-//       alert("회원 정보가 성공적으로 수정되었습니다.");
-//       $("#modifyModal").hide(); // 모달 닫기
-//       // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
-//     } catch (error) {
-//       alert(error.message);
-//     }
-//   });
-
-//   // 취소 버튼 클릭 시 모달 닫기
-//   $("#modifyCancelBtn").click(function () {
-//     $("#modifyModal").hide(); // 모달 닫기
-//   });
-// });
-
 // 유저 단일조회 (Modal)
 const userDetailModal = document.getElementById("userDetailModal");
 const userDetailClose = document.querySelector("#userDetailModal .close");
@@ -531,268 +399,107 @@ userDetailClose.onclick = function () {
   userDetailModal.style.display = "none";
 };
 
-// GPT 정보수정
-document.getElementById("modifyBtnConfirm").onclick = function (event) {
-  const userId = event.target
-    .closest("tr")
-    .querySelector("td:nth-child(2)").textContent;
-  console.log("userId", userId);
-
-  // 정보 수정을 위한 데이터 수집
-  const password = document.getElementById("originalPassword").value;
-  const newPassword = document.getElementById("newPassword").value;
-  const name = document.getElementById("newName").value;
-  const phone = document.getElementById("newPhone").value;
-  const organization = document.getElementById("newOrganization").value;
-
-  // 정보 수정 요청 보내기
-  fetch(`http://localhost:3000/user/${userId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      password: password,
-      newPassword: newPassword,
-      name: name,
-      phone: phone,
-      organization: organization,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("서버 오류가 발생했습니다.");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      // 성공 시 알림 메시지 표시
-      alert("정보가 성공적으로 수정되었습니다.");
-    })
-    .catch((error) => {
-      console.error("정보 수정 오류:", error);
-      alert("정보 수정 중 오류가 발생했습니다.");
-    });
-  alert("정보가 성공적으로 수정되었습니다.");
-
-  // 모달 닫기
-  document.getElementById("modifyModal").style.display = "none";
-};
-
-// 정보수정
+// 정보수정 모달 관련 이벤트 리스너들
 document.addEventListener("DOMContentLoaded", function () {
-  const userTableBody = document.getElementById("user-table-body");
-
-  // 정보수정 모달
   const modifyModal = document.getElementById("modifyModal");
   const modifyBtn = document.getElementById("modifyBtn");
-  const modifySpan = document.querySelector("#modifyModal .close");
   const modifyCancelBtn = document.getElementById("modifyCancelBtn");
+  const modifyBtnConfirm = document.getElementById("modifyBtnConfirm");
+  const toggleOriginalPasswordBtn = document.getElementById(
+    "toggleOriginalPassword"
+  );
+  const toggleModifyPasswordBtn = document.getElementById(
+    "toggleModifyPassword"
+  );
+  const originalPasswordInput = document.getElementById("originalPassword");
+  const newPasswordInput = document.getElementById("newPassword");
 
-  modifySpan.onclick = function () {
+  // 정보수정 모달 닫기 이벤트 처리
+  modifyCancelBtn.addEventListener("click", function () {
     modifyModal.style.display = "none";
-  };
-
-  modifyCancelBtn.onclick = function () {
-    modifyModal.style.display = "none";
-  };
-
-  window.onclick = function (event) {
-    if (event.target == modifyModal) {
-      modifyModal.style.display = "none";
-    }
-  };
-
-  // 정보 수정 모달 채우기
-  userTableBody.addEventListener("click", function (event) {
-    const target = event.target;
-    if (target && target.tagName === "BUTTON" && target.id === "modifyBtn") {
-      const row = target.closest("tr");
-      const userId = row.querySelector("td:nth-child(2)").textContent.trim(); // 사용자 ID 가져오기
-
-      // Modify 버튼 클릭 시 해당 유저 정보를 모달에 채워 넣기
-      document.getElementById("userId").value = userId;
-
-      modifyModal.style.display = "block";
-    }
   });
 
-  // 정보 수정 Submit
-  modifyBtn.onclick = function () {
-    const detailModalContent = document.querySelector(
-      "#userDetailModal .modal-content"
-    );
-    const modifyModalContent = document.querySelector(
-      "#modifyModal .modal-content"
-    );
-
-    detailModalContent.style.display = "none";
+  // Modify 버튼 클릭 시 정보수정 모달 띄우기
+  modifyBtn.addEventListener("click", function () {
+    // 모달 열기
     modifyModal.style.display = "block";
-    modifyModalContent.style.display = "block";
-  };
 
-  const inputFields = modifyModalContent.querySelectorAll("input");
-  inputFields.forEach((input) => {
-    input.removeAttribute("readonly");
+    // 입력 필드 초기화
+    document.getElementById("originalPassword").value = "";
+    document.getElementById("newPassword").value = "";
+    document.getElementById("newName").value = "";
+    document.getElementById("newPhone").value = "";
+    document.getElementById("newOrganization").value = "";
+
+    // 비밀번호 숨김/보임 토글 버튼 초기화
+    originalPasswordInput.type = "password";
+    toggleOriginalPasswordBtn.textContent = "Show";
+    newPasswordInput.type = "password";
+    toggleModifyPasswordBtn.textContent = "Show";
   });
 
-  modifyCancelBtn.onclick = function () {
-    const detailModalContent = document.querySelector(
-      "#userDetailModal .modal-content"
-    );
-
-    modifyModal.style.display = "none";
-    detailModalContent.style.display = "block";
-  };
-});
-
-// 정보수정 비밀번호 숨기기/ 보여주기
-document.addEventListener("DOMContentLoaded", function () {
-  const passwordInput = document.getElementById("originalPassword");
-  const toggleButton = document.getElementById("toggleOriginalPassword");
-
-  toggleButton.addEventListener("click", function () {
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      toggleButton.textContent = "Hide";
+  // 비밀번호 숨김/보임 토글 버튼 이벤트 처리
+  toggleOriginalPasswordBtn.addEventListener("click", function () {
+    if (originalPasswordInput.type === "password") {
+      originalPasswordInput.type = "text";
+      toggleOriginalPasswordBtn.textContent = "Hide";
     } else {
-      passwordInput.type = "password";
-      toggleButton.textContent = "Show";
+      originalPasswordInput.type = "password";
+      toggleOriginalPasswordBtn.textContent = "Show";
     }
   });
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-  const passwordInput = document.getElementById("newPassword");
-  const toggleButton = document.getElementById("toggleModifyPassword");
-
-  toggleButton.addEventListener("click", function () {
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      toggleButton.textContent = "Hide";
+  toggleModifyPasswordBtn.addEventListener("click", function () {
+    if (newPasswordInput.type === "password") {
+      newPasswordInput.type = "text";
+      toggleModifyPasswordBtn.textContent = "Hide";
     } else {
-      passwordInput.type = "password";
-      toggleButton.textContent = "Show";
+      newPasswordInput.type = "password";
+      toggleModifyPasswordBtn.textContent = "Show";
     }
   });
-});
 
-document.getElementById("modifyBtn").onclick = function () {
-  // 정보수정 모달로 변경
-  const userDetailModalContent = document
-    .getElementById("userDetailModal")
-    .querySelector(".modal-content");
-  const modifyModalContent = document
-    .getElementById("modifyModal")
-    .querySelector(".modal-content");
+  // 정보 수정 확인 버튼 클릭 시
+  modifyBtnConfirm.addEventListener("click", function () {
+    const userId = document.getElementById("detailUserId").value;
+    const password = originalPasswordInput.value;
+    const newPassword = newPasswordInput.value;
+    const name = document.getElementById("newName").value;
+    const phone = document.getElementById("newPhone").value;
+    const organization = document.getElementById("newOrganization").value;
 
-  userDetailModalContent.style.display = "none";
-  modifyModalContent.style.display = "block";
+    console.log("userId", userId);
 
-  // 입력 필드 초기화
-  const inputFields = modifyModalContent.querySelectorAll("input");
-  inputFields.forEach((input) => {
-    input.value = ""; // 입력 필드 초기화
+    // 정보 수정 요청 보내기
+    fetch(`http://localhost:3000/user/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password: password,
+        newPassword: newPassword,
+        name: name,
+        phone: phone,
+        organization: organization,
+      }),
+    })
+      .then((response) => {
+        const responseData = response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+        return responseData;
+      })
+      .then((data) => {
+        // 성공 시 알림 메시지 표시
+        alert("정보가 성공적으로 수정되었습니다.");
+        modifyModal.style.display = "none";
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("정보 수정 오류:", error);
+        alert("정보 수정 중 오류가 발생했습니다.");
+      });
   });
-
-  // 모달 열기
-  document.getElementById("modifyModal").style.display = "block";
-};
-
-// ＊ 유저 목록조회 (페이지네이션X)
-// document.addEventListener("DOMContentLoaded", async function () {
-//   const userTableBody = document.getElementById("user-table-body");
-
-//   async function fetchAndDisplayUsers() {
-//     try {
-//       const response = await fetch("http://localhost:3000/user");
-//       const users = await response.json();
-//       userTableBody.innerHTML = "";
-
-//       users.forEach((user) => {
-//         const row = document.createElement("tr");
-//         row.innerHTML = `
-//             <td><input type="checkbox" /></td>
-//             <td>${user.id}</td>
-//             <td>${user.name}</td>
-//             <td>${user.email}</td>
-//             <td>${user.phone}</td>
-//             <td>${user.organization}</td>
-//             <td><i class="fa-solid fa-pen"></i></td>
-//           `;
-//         userTableBody.appendChild(row);
-//       });
-//       // tbody에 추가한 체크박스들을 선택하는 이벤트 리스너 등록
-// const checkboxes = document.querySelectorAll(
-//   'tbody input[type="checkbox"]'
-// );
-// checkboxes.forEach((checkbox) => {
-//   checkbox.addEventListener("change", function () {
-//     checkSelectAll();
-//   });
-// });
-//     } catch (error) {
-//       console.error("유저목록 조회중 에러가 발생했습니다:", error);
-//     }
-//   }
-
-//   await fetchAndDisplayUsers();
-
-//   // 전체 선택 체크박스 이벤트 리스너 등록
-//   const selectAllCheckbox = document.getElementById("selectAll");
-//   selectAllCheckbox.addEventListener("change", function () {
-//     const checkboxes = document.querySelectorAll(
-//       'tbody input[type="checkbox"]'
-//     );
-//     checkboxes.forEach((checkbox) => {
-//       checkbox.checked = selectAllCheckbox.checked;
-//     });
-//   });
-
-//   // 전체 체크박스 체크 여부 확인 및 처리
-//   function checkSelectAll() {
-//     const checkboxes = document.querySelectorAll(
-//       'tbody input[type="checkbox"]'
-//     );
-//     const allChecked = Array.from(checkboxes).every(
-//       (checkbox) => checkbox.checked
-//     );
-//     selectAllCheckbox.checked = allChecked;
-//   }
-// });
-
-// modifyBtn.addEventListener("click", async function () {
-//   // 수정
-//   const userId = document.getElementById("userId").value;
-//   const originalPassword = document.getElementById("originalPassword").value;
-//   const newPassword = document.getElementById("newPassword").value;
-//   const newPhone = document.getElementById("newPhone").value;
-//   const newName = document.getElementById("newName").value;
-//   const newOrganization = document.getElementById("newOrganization").value;
-
-//   try {
-//     const response = await fetch(`http://localhost:3000/user/${userId}`, {
-//       method: "PATCH",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         password: originalPassword,
-//         newPassword: newPassword,
-//         name: newName,
-//         phone: newPhone,
-//         organization: newOrganization,
-//       }),
-//     });
-//     if (!response.ok) {
-//       const responseData = await response.json();
-//       throw new Error(responseData.message); // 백엔드 에러메시지
-//     }
-//     // const data = await response.json();
-//     alert("회원 정보가 성공적으로 수정되었습니다.");
-//     modifyModal.style.display = "none";
-//     // 필요에 따라 페이지 새로고침 또는 다른 작업 수행
-//   } catch (error) {
-//     alert(error.message);
-//   }
-// });
+});

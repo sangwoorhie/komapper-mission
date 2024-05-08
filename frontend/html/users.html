@@ -56,16 +56,18 @@
             <div id="total-users" class="total-users">Total:</div>
             <!-- 검색창 -->
             <div id="search-container">
-              <input
-                type="text"
-                id="searchInput"
-                placeholder="조회할 유저 ID를 입력하세요."
-              />
-              <button id="search-button">
-                <i class="fa-solid fa-search"></i>
-              </button>
+              <div id="search-box">
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder=" 조회할 유저 ID를 입력하세요."
+                />
+                <div id="magnifier">
+                  <i class="fa-solid fa-search" id="search-button"></i>
+                </div>
+              </div>
             </div>
-
+            <br />
             <!-- 테이블 -->
             <table id="my-table">
               <colgroup>
@@ -220,7 +222,6 @@
     <!-- 정보수정 모달 -->
     <div id="modifyModal" class="modifyModal">
       <div class="modal-content">
-        <span class="close">&times;</span>
         <h2>사용자 정보 수정</h2>
         <br />
         <br />
@@ -268,8 +269,8 @@
         </div>
         <div class="modal-buttons">
           <br />
-          <button id="modifyCancelBtn">Cancel</button>
-          <button id="modifyBtnConfirm">Modify</button>
+          <button id="modifyCancelBtn">Back</button>
+          <button id="modifyBtnConfirm">submit</button>
         </div>
       </div>
     </div>
