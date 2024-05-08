@@ -460,46 +460,43 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // 정보 수정 확인 버튼 클릭 시
-  modifyBtnConfirm.addEventListener("click", function () {
-    const userId = document.getElementById("detailUserId").value;
-    const password = originalPasswordInput.value;
-    const newPassword = newPasswordInput.value;
-    const name = document.getElementById("newName").value;
-    const phone = document.getElementById("newPhone").value;
-    const organization = document.getElementById("newOrganization").value;
+  modifyBtnConfirm.addEventListener("click", async function () {
+    try {
+      const userId = document.getElementById("detailUserId").value;
+      const password = originalPasswordInput.value;
+      const newPassword = newPasswordInput.value;
+      const name = document.getElementById("newName").value;
+      const phone = document.getElementById("newPhone").value;
+      const organization = document.getElementById("newOrganization").value;
 
-    console.log("userId", userId);
+      console.log("userId", userId);
 
-    // 정보 수정 요청 보내기
-    fetch(`http://localhost:3000/user/${userId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        password: password,
-        newPassword: newPassword,
-        name: name,
-        phone: phone,
-        organization: organization,
-      }),
-    })
-      .then((response) => {
-        const responseData = response.json();
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-        return responseData;
-      })
-      .then((data) => {
-        // 성공 시 알림 메시지 표시
-        alert("정보가 성공적으로 수정되었습니다.");
+      // 정보 수정 요청 보내기
+      const response = await fetch(`http://localhost:3000/user/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: password,
+          newPassword: newPassword,
+          name: name,
+          phone: phone,
+          organization: organization,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.text();
+        alert(result);
         modifyModal.style.display = "none";
         window.location.reload();
-      })
-      .catch((error) => {
-        console.error("정보 수정 오류:", error);
-        alert("정보 수정 중 오류가 발생했습니다.");
-      });
+      } else {
+        const responseData = await response.json();
+        throw new Error(responseData.message); // 백엔드 에러메시지
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   });
 });

@@ -380,11 +380,17 @@ th {
 
 #registercancelBtn {
   flex-grow: 0; /* 버튼이 더 이상 확장되지 않도록 설정 */
+  width: 60px;
+  height: 25px;
 }
 
 #registerBtn {
   flex-grow: 0; /* 버튼이 더 이상 확장되지 않도록 설정 */
   margin-left: auto; /* 오른쪽으로 이동하여 우측에 위치하도록 설정 */
+  color: white;
+  background-color: #002b49;
+  width: 65px;
+  height: 25px;
 }
 
 #modifycancelBtn {

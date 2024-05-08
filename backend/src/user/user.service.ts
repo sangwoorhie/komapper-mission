@@ -184,7 +184,7 @@ export class UserService {
         organization,
         id,
       ]);
-      return result.rows[0];
+      return `${result.rows[0].id}님의 회원정보가 성공적으로 수정되었습니다.`;
     } catch (error) {
       throw new Error(`에러가 발생했습니다: ${error.message}`);
     }
