@@ -11,7 +11,9 @@ function fetchTotalLogCount() {
       const totalLogsText = totalLogsElement.textContent;
       const totalLogsValue = data;
 
-      const styledText = `<span style="color: inherit;">${totalLogsText}</span> <span style="color: #DD7012; font-weight: bold;">${totalLogsValue}</span>`;
+      const styledText = `
+      <span style="color: inherit;">${totalLogsText}</span> <span style="color: #DD7012; font-weight: bold;">${totalLogsValue}</span>
+      `;
       totalLogsElement.innerHTML = styledText;
     })
     .catch((error) => console.error("에러가 발생했습니다:", error));
