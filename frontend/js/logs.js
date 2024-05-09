@@ -204,3 +204,24 @@ lastPageBtn.addEventListener("click", async () => {
 //   }
 //   fetchAndDisplayLogs();
 // });
+
+// 스크롤바에 따른 이동
+window.addEventListener("scroll", function () {
+  const header = document.getElementById("header");
+  const footer = document.getElementById("footer");
+  const scrollPosition = window.scrollY;
+
+  // 스크롤이 아래로 이동하면 헤더를 숨김
+  if (scrollPosition > 0) {
+    header.style.top = "-80px";
+    footer.style.bottom = "0";
+    // 스크롤이 위로 이동하면 푸터를 숨김
+  } else if (scrollPosition === 0) {
+    header.style.top = "0";
+    footer.style.bottom = "-80px";
+  } else {
+    // 스크롤이 위로 이동하면 헤더와 푸터를 보임
+    header.style.top = "0";
+    footer.style.bottom = "0";
+  }
+});

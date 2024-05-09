@@ -63,9 +63,7 @@ export class LogService {
     // try {
     const result = await this.pool.query(query, [id]);
     if (result.rows.length === 0) {
-      throw new NotFoundException(
-        `로그 아이디: ${id} (이)가 존재하지 않습니다.`,
-      );
+      throw new NotFoundException(`로그 ID: ${id} (이)가 존재하지 않습니다.`);
     }
     return result.rows[0]; // 단일 로그 반환
     // } catch (error) {

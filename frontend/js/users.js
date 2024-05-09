@@ -170,7 +170,7 @@ document.getElementById("registercancelBtn").onclick = function () {
 };
 
 function resetModalInputs() {
-  // 모달 내의 입력란 초기화
+  // (취소버튼 클릭시) 모달 내의 입력란 초기화
   document.getElementById("userId").value = "";
   document.getElementById("userPassword").value = "";
   document.getElementById("userName").value = "";
@@ -424,12 +424,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // 모달 열기
     modifyModal.style.display = "block";
 
+    // 기존 유저정보 가져오기
+    const originalName = document.getElementById("detailUserName").value;
+    const originalPhone = document.getElementById("detailUserPhone").value;
+    const originalOrganization = document.getElementById(
+      "detailUserOrganization"
+    ).value;
+
     // 입력 필드 초기화
     document.getElementById("originalPassword").value = "";
     document.getElementById("newPassword").value = "";
-    document.getElementById("newName").value = "";
-    document.getElementById("newPhone").value = "";
-    document.getElementById("newOrganization").value = "";
+    document.getElementById("newName").value = `${originalName}`;
+    document.getElementById("newPhone").value = `${originalPhone}`;
+    document.getElementById("newOrganization").value =
+      `${originalOrganization}`;
 
     // 비밀번호 숨김/보임 토글 버튼 초기화
     originalPasswordInput.type = "password";
@@ -499,4 +507,25 @@ document.addEventListener("DOMContentLoaded", function () {
       alert(error.message);
     }
   });
+});
+
+// 스크롤바에 따른 이동
+window.addEventListener("scroll", function () {
+  const header = document.getElementById("header");
+  const footer = document.getElementById("footer");
+  const scrollPosition = window.scrollY;
+
+  // 스크롤이 아래로 이동하면 헤더를 숨김
+  if (scrollPosition > 0) {
+    header.style.top = "-80px";
+    footer.style.bottom = "0";
+    // 스크롤이 위로 이동하면 푸터를 숨김
+  } else if (scrollPosition === 0) {
+    header.style.top = "0";
+    footer.style.bottom = "-80px";
+  } else {
+    // 스크롤이 위로 이동하면 헤더와 푸터를 보임
+    header.style.top = "0";
+    footer.style.bottom = "0";
+  }
 });

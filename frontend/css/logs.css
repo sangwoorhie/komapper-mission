@@ -16,7 +16,8 @@ body {
   background-color: #efefef;
   display: flex;
   align-items: center;
-  z-index: 1000;
+  transition: top 0.3s;
+  z-index: 1;
 }
 
 .logo {
@@ -36,7 +37,7 @@ main {
   top: 80px;
   left: 0;
   width: 200px;
-  height: calc(100% - 160px);
+  height: calc(100%);
   background-color: #3c4b64;
 }
 
@@ -86,7 +87,7 @@ main {
   top: 210px;
   width: 200px;
   height: 80px;
-  background-color: #h-container798291;
+  background-color: #798291;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -175,7 +176,7 @@ main {
 
 #search-box {
   position: relative;
-  width: 250px;
+  width: 260px;
 }
 
 #magnifier {
@@ -194,7 +195,7 @@ main {
 }
 
 #searchInput {
-  width: 230px;
+  width: 240px;
   height: 30px;
   font-size: 16px;
   border: solid 1px rgba(0, 0, 0, 0.8);
@@ -339,5 +340,6 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  transition: bottom 0.3s;
+  z-index: 1;
 }
