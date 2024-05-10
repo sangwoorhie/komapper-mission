@@ -12,7 +12,7 @@ $ cd frontend > npm install
 
 ```bash
 $ root directory > npm run start
-$ Server : localhost:3000
+$ Web : localhost:3001
 $ Swagger API : localhost:3000/api
 ```
 
