@@ -27,14 +27,15 @@ body {
 }
 
 main {
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding-bottom: 160px;
+  position: absolute;
+  width: 100%;
+  top: 80px;
 }
 
 /* 전체 사이드바 */
 #side-bar {
   position: absolute;
-  top: 80px;
   left: 0;
   width: 250px;
   height: calc(100%);

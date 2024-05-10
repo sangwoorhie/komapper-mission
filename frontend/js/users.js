@@ -19,33 +19,21 @@ function fetchTotalUserCount() {
 }
 
 // ＊ 유저 단일조회 (search 창)
-document
-  .getElementById("search-button")
-  .addEventListener("click", async function () {
-    const searchInput = document.getElementById("searchInput").value.trim(); // 입력된 값 가져오기
+async function searchUser() {
+  const searchInput = document.getElementById("searchInput").value.trim(); // 입력된 값 가져오기
+  if (searchInput !== "") {
+    try {
+      const response = await fetch(`http://localhost:3000/user/${searchInput}`);
+      const user = await response.json();
+      if (!response.ok) {
+        throw new Error(user.message); // 백엔드 에러메시지
+      }
+      // 결과를 테이블에 표시
+      const userTableBody = document.getElementById("user-table-body");
+      userTableBody.innerHTML = ""; // 기존 데이터 삭제
 
-    // 아무 입력값이 없으면 유저 전체 보여줌.
-    if (searchInput == "") {
-      // 유저 전체 보여주는 함수
-      await fetchAndDisplayUsers();
-      return;
-    }
-
-    if (searchInput !== "") {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/user/${searchInput}`
-        );
-        const user = await response.json();
-        if (!response.ok) {
-          throw new Error(user.message); // 백엔드 에러메시지
-        }
-        // 결과를 테이블에 표시
-        const userTableBody = document.getElementById("user-table-body");
-        userTableBody.innerHTML = ""; // 기존 데이터 삭제
-
-        const row = document.createElement("tr");
-        row.innerHTML = `
+      const row = document.createElement("tr");
+      row.innerHTML = `
         <td><input type="checkbox" /></td>
         <td>${user.id}</td>
         <td>${user.name}</td>
@@ -53,11 +41,23 @@ document
         <td>${user.phone}</td>
         <td>${user.organization}</td>
       `;
-        userTableBody.appendChild(row);
-      } catch (error) {
-        alert(error.message);
-        console.error("에러 발생:", error.message);
-      }
+      userTableBody.appendChild(row);
+    } catch (error) {
+      alert(error.message);
+      console.error("에러 발생:", error.message);
+    }
+  }
+}
+
+// 클릭시
+document.getElementById("search-button").addEventListener("click", searchUser);
+// 엔터시
+document
+  .getElementById("searchInput")
+  .addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault(); // 기본 엔터 행동 방지
+      searchUser();
     }
   });
 
@@ -529,3 +529,27 @@ window.addEventListener("scroll", function () {
     footer.style.bottom = "0";
   }
 });
+
+// 스크롤이 가장 하단인 경우만 보이고, 그렇지 않은경우 숨김
+// function detectBottom() {
+//   const scrollTop = $(window).scrollTop();
+//   const innerHeight = $(window).innerHeight();
+//   const scrollHeight = $("body").prop("scrollHeight");
+//   const footer = document.getElementById("footer");
+
+//   if (scrollTop + innerHeight >= scrollHeight) {
+//     return (footer.style.bottom = "0");
+//   } else {
+//     return (footer.style.bottom = "-80px");
+//   }
+// }
+
+// function detectTop() {
+//   const scrollTop = $(window).scrollTop();
+//   const header = document.getElementById("header");
+//   if (scrollTop == 0) {
+//     return (header.style.top = "0");
+//   } else {
+//     return (header.style.top = "-80px");
+//   }
+// }

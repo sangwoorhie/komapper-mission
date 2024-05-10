@@ -10,7 +10,6 @@ function fetchTotalLogCount() {
       const totalLogsElement = document.getElementById("total-logs");
       const totalLogsText = totalLogsElement.textContent;
       const totalLogsValue = data;
-
       const styledText = `
       <span style="color: inherit;">${totalLogsText}</span> <span style="color: #DD7012; font-weight: bold;">${totalLogsValue}</span>
       `;
@@ -20,47 +19,50 @@ function fetchTotalLogCount() {
 }
 
 // * 로그 단일조회 (search 창)
-document
-  .getElementById("search-button")
-  .addEventListener("click", async function () {
-    const searchInput = document.getElementById("searchInput").value.trim(); // 입력된 값 가져오기
-
-    // 아무 입력값이 없으면 유저 전체 보여줌.
-    if (searchInput == "") {
-      // 로그 전체 보여주는 함수
-      await fetchAndDisplayLogs();
-      return;
+function search() {
+  const searchInput = document.getElementById("searchInput").value.trim(); // 입력된 값 가져오기
+  if (searchInput !== "") {
+    try {
+      fetchLog(searchInput);
+    } catch (error) {
+      alert(error.message);
+      console.error("에러 발생:", error.message);
     }
+  }
+}
 
-    if (searchInput !== "") {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/log/${searchInput}`
-        );
-        const log = await response.json();
-        if (!response.ok) {
-          console.log("log.message", log.message);
-          throw new Error(log.message); // 백엔드 에러메시지
-        }
+async function fetchLog(searchInput) {
+  const response = await fetch(`http://localhost:3000/log/${searchInput}`);
+  const log = await response.json();
+  if (!response.ok) {
+    console.log("log.message", log.message);
+    throw new Error(log.message); // 백엔드 에러메시지
+  }
 
-        const logTableBody = document.getElementById("log-table-body");
-        logTableBody.innerHTML = ""; // 기존 데이터 삭제
+  const logTableBody = document.getElementById("log-table-body");
+  logTableBody.innerHTML = ""; // 기존 데이터 삭제
 
-        const date = new Date(log.date);
-        const formattedDate = date.toISOString().split("T")[0];
+  const date = new Date(log.date);
+  const formattedDate = date.toISOString().split("T")[0];
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-      <td>${log.id}</td>
-      <td>${formattedDate}</td>
-      <td>${log.user_ip}</td>
-      <td>${log.user_agent}</td>
-    `;
-        logTableBody.appendChild(row);
-      } catch (error) {
-        alert(error.message);
-        console.error("에러 발생:", error.message);
-      }
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${log.id}</td>
+    <td>${formattedDate}</td>
+    <td>${log.user_ip}</td>
+    <td>${log.user_agent}</td>
+  `;
+  logTableBody.appendChild(row);
+}
+// 클릭시
+document.getElementById("search-button").addEventListener("click", search);
+// 엔터시
+document
+  .getElementById("searchInput")
+  .addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault(); // 기본 엔터 행동 방지
+      search();
     }
   });
 
@@ -227,3 +229,27 @@ window.addEventListener("scroll", function () {
     footer.style.bottom = "0";
   }
 });
+
+// 스크롤이 가장 하단인 경우만 보이고, 그렇지 않은경우 숨김
+// function detectBottom() {
+//   const scrollTop = $(window).scrollTop();
+//   const innerHeight = $(window).innerHeight();
+//   const scrollHeight = $("body").prop("scrollHeight");
+//   const footer = document.getElementById("footer");
+
+//   if (scrollTop + innerHeight >= scrollHeight) {
+//     return (footer.style.bottom = "0");
+//   } else {
+//     return (footer.style.bottom = "-80px");
+//   }
+// }
+
+// function detectTop() {
+//   const scrollTop = $(window).scrollTop();
+//   const header = document.getElementById("header");
+//   if (scrollTop == 0) {
+//     return (header.style.top = "0");
+//   } else {
+//     return (header.style.top = "-80px");
+//   }
+// }
