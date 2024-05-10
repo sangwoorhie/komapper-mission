@@ -18,7 +18,12 @@ export class LogController {
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
   ) {
-    return await this.logService.findAllLogs(page, pageSize);
+    const getTotalLogs = await this.logService.findAllLogs(page, pageSize);
+    try {
+      return getTotalLogs;
+    } catch (error) {
+      throw new Error(`${error.message}`);
+    }
   }
 
   // 페이지네이션 안한 로그 전체목록 조회
@@ -36,7 +41,12 @@ export class LogController {
     description: 'Total 로그 수를 조회한다.',
   })
   async getLogCount(): Promise<number> {
-    return this.logService.getLogCount();
+    const totalLogNumber = await this.logService.getLogCount();
+    try {
+      return totalLogNumber;
+    } catch (error) {
+      throw new Error(`${error.message}`);
+    }
   }
 
   // 로그 단일조회 (test 성공)
@@ -47,6 +57,11 @@ export class LogController {
     description: '로그 단일조회',
   })
   async getLogById(@Param('id') id: string) {
-    return await this.logService.getLogById(id);
+    const getSingleLog = await this.logService.getLogById(id);
+    try {
+      return getSingleLog;
+    } catch (error) {
+      throw new Error(`${error.message}`);
+    }
   }
 }
