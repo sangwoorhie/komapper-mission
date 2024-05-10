@@ -12,6 +12,8 @@ $ cd frontend > npm install
 
 ```bash
 $ root directory > npm run start
+$ Server : localhost:3000
+$ Swagger API : localhost:3000/api
 ```
 
 <p align="center"><img src="https://github.com/sangwoorhie/komapper-mission/assets/131964697/1e5e6ad8-4cad-431e-b69d-3a3164452c07"></p>
