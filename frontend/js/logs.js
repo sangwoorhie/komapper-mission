@@ -229,27 +229,3 @@ window.addEventListener("scroll", function () {
     footer.style.bottom = "0";
   }
 });
-
-// 스크롤이 가장 하단인 경우만 보이고, 그렇지 않은경우 숨김
-// function detectBottom() {
-//   const scrollTop = $(window).scrollTop();
-//   const innerHeight = $(window).innerHeight();
-//   const scrollHeight = $("body").prop("scrollHeight");
-//   const footer = document.getElementById("footer");
-
-//   if (scrollTop + innerHeight >= scrollHeight) {
-//     return (footer.style.bottom = "0");
-//   } else {
-//     return (footer.style.bottom = "-80px");
-//   }
-// }
-
-// function detectTop() {
-//   const scrollTop = $(window).scrollTop();
-//   const header = document.getElementById("header");
-//   if (scrollTop == 0) {
-//     return (header.style.top = "0");
-//   } else {
-//     return (header.style.top = "-80px");
-//   }
-// }

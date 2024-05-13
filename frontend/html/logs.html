@@ -43,66 +43,65 @@
         </a>
       </ul>
       <div id="body">
-        <div id="body-top"></div>
         <div id="body-bottom">
           <div id="first-breadcrumb">Logs</div>
           <div id="second-breadcrumb">Mission > Logs</div>
           <br />
           <br />
           <br />
-          <br />
-          <br />
           <div id="container-box">
-            <!-- 로그 수 -->
-            <div id="total-logs" class="total-logs">Total:</div>
-            <!-- 검색창 -->
-            <div id="search-container">
-              <div id="search-box">
-                <input
-                  type="text"
-                  id="searchInput"
-                  placeholder=" 조회할 로그 ID를 입력하세요."
-                />
-                <div id="magnifier">
-                  <i class="fa-solid fa-search" id="search-button"></i>
+            <div id="inner-box">
+              <!-- 로그 수 -->
+              <div id="total-logs" class="total-logs">Total:</div>
+              <!-- 검색창 -->
+              <div id="search-container">
+                <div id="search-box">
+                  <input
+                    type="text"
+                    id="searchInput"
+                    placeholder=" 조회할 로그 ID를 입력하세요."
+                  />
+                  <div id="magnifier">
+                    <i class="fa-solid fa-search" id="search-button"></i>
+                  </div>
                 </div>
               </div>
+              <br />
+              <!-- 테이블 -->
+              <table id="my-table">
+                <colgroup>
+                  <col class="col1" />
+                  <col class="col2" />
+                  <col class="col3" />
+                  <col class="col4" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>User IP</th>
+                    <th>User Agent</th>
+                  </tr>
+                </thead>
+                <tbody id="log-table-body">
+                  <!-- 로그 목록이 들어가는 부분 -->
+                </tbody>
+              </table>
+              <br />
+              <br />
+              <!-- 좌측하단 여핵 -->
+              <div id="left-area"></div>
+              <!-- 페이지네이션 -->
+              <div class="pagination" id="pagination">
+                <i class="fa-solid fa-angles-left"></i>
+                <i class="fa-solid fa-angle-left"></i>
+                <ol id="numbers"></ol>
+                <i class="fa-solid fa-angle-right"></i>
+                <i class="fa-solid fa-angles-right"></i>
+              </div>
+              <!-- 우측하단 여백 -->
+              <div id="right-area"></div>
             </div>
-            <br />
-            <!-- 테이블 -->
-            <table id="my-table">
-              <colgroup>
-                <col class="col1" />
-                <col class="col2" />
-                <col class="col3" />
-                <col class="col4" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Date</th>
-                  <th>User IP</th>
-                  <th>User Agent</th>
-                </tr>
-              </thead>
-              <tbody id="log-table-body">
-                <!-- 로그 목록이 들어가는 부분 -->
-              </tbody>
-            </table>
-            <br />
-            <br />
-            <!-- 좌측하단 여핵 -->
-            <div id="left-area"></div>
-            <!-- 페이지네이션 -->
-            <div class="pagination" id="pagination">
-              <i class="fa-solid fa-angles-left"></i>
-              <i class="fa-solid fa-angle-left"></i>
-              <ol id="numbers"></ol>
-              <i class="fa-solid fa-angle-right"></i>
-              <i class="fa-solid fa-angles-right"></i>
-            </div>
-            <!-- 우측하단 여백 -->
-            <div id="right-area"></div>
           </div>
         </div>
       </div>

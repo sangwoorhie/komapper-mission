@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  padding-bottom: 80px;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  background-color: #333;
+  color: #fff;
+  padding: 40px;
+}
+
+ul {
+  margin-left: 0;
+}
+
+main {
+  width: 90vw;
+  margin: 0 auto;
+  min-height: calc(100vh - 160px);
+}
+
+footer {
+  text-align: center;
+  background-color: #333;
+  color: #fff;
+  padding: 40px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
