@@ -1,28 +1,27 @@
 /* 전체 화면을 꽉 채우도록 설정 */
-html,
-body {
+
+* {
   margin: 0;
   padding: 0;
-  /* height: 100%; */
-  /* width: 100%; */
-  background-color: #f0f4f7;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
 }
 
 body {
-  /* min-height: 100vh;
-  display: flex;
-  flex-direction: column; */
-  padding-bottom: 80px;
-}
-/* 
-.wrapper {
-  height: auto;
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  margin: 0;
   min-height: 100%;
   padding-bottom: 80px;
-} */
+  background-color: #f0f4f7;
+  box-sizing: inherit;
+}
 
 /* 헤더 */
-#header {
+header {
   position: absolute;
   top: 0;
   width: 100%;
@@ -41,16 +40,14 @@ body {
 }
 
 main {
-  /* padding-bottom: 80px; */
   position: absolute;
   width: 100%;
   top: 80px;
-  /* bottom: 80px; */
   min-height: calc(100% - 160px);
 }
 
 /* 전체 사이드바 */
-#side-bar {
+ul {
   position: absolute;
   left: 0;
   width: 250px;
@@ -118,17 +115,13 @@ main {
   background-color: #798291;
 }
 
-#body-all {
-  margin-left: 250px;
-  top: 80px;
-  padding-bottom: 80px;
-  background-color: #f0f4f7;
-  /* height: calc(100% + 80px); */
-}
-
-#body-bottom {
-  padding: 40px 75px;
-  /* padding: 35px 75px; */
+section {
+  position: absolute;
+  top: 0;
+  left: 250px;
+  padding: 40px 75px 80px;
+  bottom: 0;
+  min-width: 1800px;
   background-color: #f0f4f7;
 }
 
@@ -137,32 +130,32 @@ main {
   font-size: 32px;
   font-weight: bold;
   margin-right: 15px;
-  /* margin-bottom: 30px; */
 }
 
 #second-breadcrumb {
   font-size: 14px;
   color: gray;
-  /* margin-bottom: 30px; */
 }
 
 #first-breadcrumb,
 #second-breadcrumb {
   display: inline;
-  /* margin-bottom: 30px; */
 }
 
 /* 컨테이너 박스 */
 #container-box {
   padding: 20px 5%;
-  height: 690px;
+  height: 800px;
+  min-height: 690px;
   margin: 20px 0 auto;
   margin-top: 50px;
   border: 2px solid #d6d6d6;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   position: absolute;
-  background-color: white;
+  background-color: #ffffff;
   min-width: 1520px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 컨테이너박스 상단 줄 */
@@ -253,14 +246,14 @@ table {
   font-family: Arial, sans-serif;
 }
 
-#my-table {
+table {
   clear: both;
   width: 100%;
   height: 400px;
 }
 
 thead th {
-  background-color: ##efefef;
+  background-color: #efefef;
   font-weight: bold;
 }
 
@@ -268,14 +261,13 @@ td,
 th {
   text-align: center;
   padding: 8px;
-  /* padding: 0.5rem 1rem; */
-  height: calc(100% / 10);
+  /* height: calc(100% / 10); */
 }
 
 #my-table tbody tr {
   cursor: pointer;
-  background-color: #fff; /* 모든 행을 흰색으로 설정 */
-  border-bottom: 1px solid #ccc; /* 행 사이에 실선으로 구분 */
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
   text-align: center;
 }
 
@@ -290,6 +282,7 @@ th {
 
 #user-table-body td {
   text-align: center;
+  height: 14px;
 }
 
 #user-table-body tr:hover {
@@ -528,9 +521,16 @@ th {
   height: 25px;
 }
 
+#bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px; /* 간격 조정을 위해 추가 */
+}
+
 /* 회원 등록 */
 #register-area {
-  margin-left: 0;
+  margin-left:;
   height: 50px;
   float: right;
   margin-top: 25px;
@@ -540,7 +540,6 @@ th {
 .pagination {
   width: 89%;
   height: 50px;
-  float: left;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -589,19 +588,19 @@ th {
 }
 
 /* 푸터 */
-#footer {
+footer {
   position: absolute;
   left: 0;
+  right: 0;
   bottom: 0;
   width: 100%;
   height: 80px;
   background-color: #efefef;
   box-sizing: border-box;
   border: 1px solid #d6d6d6;
-  /* transform: translateY(-100%); */
 }
 
-#footer p {
+footer p {
   display: flex;
   align-items: center;
   justify-content: center;
