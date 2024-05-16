@@ -104,7 +104,6 @@ ul {
   color: white;
   font-size: 14px;
   box-sizing: border-box;
-  border: 1px solid #000000;
   padding: 10px;
   cursor: pointer;
 }
@@ -273,7 +272,7 @@ tbody tr:nth-child(odd) {
 
 th {
   background-color: #efefef;
-  color: #black;
+  color: black;
 }
 
 #log-table-body tr:hover {

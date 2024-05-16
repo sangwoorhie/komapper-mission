@@ -29,8 +29,8 @@ export class UserController {
     description: 'CreateUserDto에 있는 내용을 기입하여 회원 가입한다.',
   })
   async createUser(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
-    const register = await this.userService.createUser(createUserDto);
     try {
+      const register = await this.userService.createUser(createUserDto);
       return register;
     } catch (error) {
       throw new Error(`${error.message}`);
@@ -45,8 +45,8 @@ export class UserController {
     description: '회원 가입 시 idcheckDto의 ID로 아이디 중복 확인한다.',
   })
   async checkId(@Body(new ValidationPipe()) idcheckDto: IdcheckDto) {
-    const doubleCheckId = await this.userService.checkId(idcheckDto);
     try {
+      const doubleCheckId = await this.userService.checkId(idcheckDto);
       return doubleCheckId;
     } catch (error) {
       throw new Error(`${error.message}`);
@@ -61,8 +61,8 @@ export class UserController {
     description: 'Total 유저 수를 조회한다.',
   })
   async getUserCount(): Promise<number> {
-    const totalUserNumber = this.userService.getUserCount();
     try {
+      const totalUserNumber = this.userService.getUserCount();
       return totalUserNumber;
     } catch (error) {
       throw new Error(`${error.message}`);
@@ -80,8 +80,8 @@ export class UserController {
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
   ) {
-    const getTotalUsers = await this.userService.findAllUsers(page, pageSize);
     try {
+      const getTotalUsers = await this.userService.findAllUsers(page, pageSize);
       return getTotalUsers;
     } catch (error) {
       throw new Error(`${error.message}`);
@@ -103,8 +103,8 @@ export class UserController {
     description: '유저를 단일조회한다.',
   })
   async getUserById(@Param('id') id: string) {
-    const getSingleUser = await this.userService.getUserById(id);
     try {
+      const getSingleUser = await this.userService.getUserById(id);
       return getSingleUser;
     } catch (error) {
       throw new Error(`${error.message}`);
@@ -122,8 +122,8 @@ export class UserController {
     @Param('id') id: string,
     @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
   ) {
-    const editUserInfo = await this.userService.updateUser(id, updateUserDto);
     try {
+      const editUserInfo = await this.userService.updateUser(id, updateUserDto);
       return editUserInfo;
     } catch (error) {
       throw new Error(`${error.message}`);
@@ -139,8 +139,8 @@ export class UserController {
       'DeleteUserDto에 유저를 배열형태로 넣어 삭제한다. (단일삭제, 다중삭제 둘 다 가능)',
   })
   async deleteUsers(@Body() deleteUsersDto: DeleteUsersDto) {
-    const deleteUser = await this.userService.deleteUsers(deleteUsersDto.ids);
     try {
+      const deleteUser = await this.userService.deleteUsers(deleteUsersDto.ids);
       return deleteUser;
     } catch (error) {
       throw new Error(`${error.message}`);

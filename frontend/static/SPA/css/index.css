@@ -1,0 +1,46 @@
+// <!--  Common  -->
+
+/* 헤더 */
+header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    background-color: #ffffff;
+    align-items: center;
+    box-sizing: border-box;
+    border: 1px solid #d6d6d6;
+  }
+
+  .logo {
+    margin-top: 25px;
+    margin-left: 30px;
+    max-width: 40%;
+    max-height: 40%;
+  }
+
+  /* 푸터 */
+footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    background-color: #efefef;
+    box-sizing: border-box;
+    border: 1px solid #d6d6d6;
+  }
+  
+  footer p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    height: 100%;
+    margin: 0;
+  }
+
+// <!--  Users  -->
+
+// <!--  Logs  -->
