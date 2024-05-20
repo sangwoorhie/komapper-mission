@@ -9,7 +9,7 @@ app.get("/*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "index.html"));
 });
 
-const port = 3001;
-app.listen(port, () => {
-  console.log(`server ${port} is open!`);
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`server ${PORT} is open!`);
 });

@@ -4,16 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Single Page App</title>
+    <title>Mission</title>
     <link rel="stylesheet" href="./static/css/reset.css" />
     <link rel="stylesheet" href="./static/css/users.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
-    <nav class="nav">
-      <a href="/user" class="nav__link" data-link>Users</a>
-      <a href="/log" class="nav__link" data-link>Logs</a>
-    </nav>
-
+    <header>
+      <img src="./static/img/kmplogo_fit.png" alt="Logo" class="logo" />
+    </header>
+    <main>
+      <nav>
+        <ul>
+          <li id="first-sidebar">Mission</li>
+          <a href="/user" data-link>
+            <li id="second-sidebar">
+              <i class="fa-solid fa-users"></i>
+              <span class="sidebar_item">Users</span>
+            </li>
+          </a>
+          <a href="/log" data-link>
+            <li id="third-sidebar">
+              <i class="fa-solid fa-door-open"></i>
+              <span class="sidebar_item">Logs</span>
+            </li></a
+          >
+        </ul>
+      </nav>
+      <section></section>
+    </main>
+    <footer>Copyright ⓒ 2024 ㈜KO-MAPPER Co.,Ltd rights reserved.</footer>
     <div id="app"></div>
     <script type="module" src="./static/js/index.js"></script>
   </body>

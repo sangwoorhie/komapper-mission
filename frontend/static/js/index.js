@@ -1,5 +1,5 @@
-import Users from "./view/users";
-import Logs from "./view/logs";
+import Users from "./view/users.js";
+import Logs from "./view/logs.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
