@@ -1,5 +1,5 @@
-import Logs from "./views/logs.js";
-import Users from "./views/users.js";
+import Users from "./view/users";
+import Logs from "./view/logs";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -30,16 +30,14 @@ const router = async () => {
   ];
 
   // Test each route for potential match
-  const potentialMatches = routes.map((route) => {
+  const pageMatches = routes.map((route) => {
     return {
       route: route,
       result: location.pathname.match(pathToRegex(route.path)),
     };
   });
 
-  let match = potentialMatches.find(
-    (potentialMatch) => potentialMatch.result !== null
-  );
+  let match = pageMatches.find((pageMatch) => pageMatch.result !== null);
 
   if (!match) {
     match = {
