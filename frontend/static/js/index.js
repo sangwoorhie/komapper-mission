@@ -26,7 +26,9 @@ const router = async () => {
   const routes = [
     { path: "/", view: Users },
     { path: "/user", view: Users },
+    { path: "/user/:id", view: Users },
     { path: "/log", view: Logs },
+    { path: "/log/:id", view: Logs },
   ];
 
   // Test each route for potential match
@@ -47,7 +49,6 @@ const router = async () => {
   }
 
   const view = new match.route.view(getParams(match));
-
   document.querySelector("#app").innerHTML = await view.getHtml();
 };
 

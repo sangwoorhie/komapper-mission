@@ -132,19 +132,8 @@ footer {
   font-size: 14px;
 }
 
-/* 경로 표시 */
-#first-breadcrumb {
-  font-size: 32px;
-  font-weight: bold;
-  margin-right: 15px;
-}
-
-#second-breadcrumb {
-  font-size: 14px;
-  color: gray;
-}
-
-#first-breadcrumb,
-#second-breadcrumb {
-  display: inline;
+main {
+  position: absolute;
+  width: 100%;
+  min-height: calc(100% - 160px);
 }
