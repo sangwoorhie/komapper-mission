@@ -1,5 +1,5 @@
-import Users from "./view/users.js";
-import Logs from "./view/logs.js";
+import Users from "./view/usersView.js";
+import Logs from "./view/logsView.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -49,7 +49,7 @@ const router = async () => {
   }
 
   const view = new match.route.view(getParams(match));
-  document.querySelector("#app").innerHTML = await view.getHtml();
+  document.querySelector("#content").innerHTML = await view.getHtml();
 };
 
 window.addEventListener("popstate", router);

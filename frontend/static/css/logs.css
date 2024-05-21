@@ -1,1 +1,217 @@
+/* 경로표시 */
+#log-first-breadcrumb {
+  margin-left: 55px;
+  font-size: 32px;
+  font-weight: bold;
+  margin-right: 15px;
+}
 
+#log-second-breadcrumb {
+  font-size: 14px;
+  color: gray;
+}
+
+#log-first-breadcrumb,
+#log-second-breadcrumb {
+  display: inline;
+}
+
+/* 컨테이너 박스 */
+#log-container-box {
+  padding: 20px 5%;
+  height: 800px;
+  min-height: 690px;
+  margin: 20px 0 auto;
+  margin-top: 50px;
+  margin-left: 55px;
+  border: 2px solid #d6d6d6;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 1520px;
+  display: flex;
+  flex-direction: column;
+}
+
+#log-inner-box {
+  box-sizing: border-box;
+}
+
+/* 전체 로그 수 */
+#total-logs {
+  width: 10%;
+  height: 20px;
+  float: left;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/* 검색창 */
+#log-search-container {
+  height: 20px;
+  float: right;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+}
+
+#total-logs,
+#log-search-container {
+  display: inline;
+}
+
+#log-search-box {
+  position: relative;
+  width: 100%;
+}
+
+#log-magnifier {
+  display: flex;
+  position: absolute;
+  top: 5px;
+  right: 0;
+  left: 20px;
+}
+
+#log-magnifier i {
+  display: inline-block;
+  position: absolute;
+  right: 0; /* 오른쪽 끝에 위치 */
+  font-size: 1.3em;
+}
+
+#log-searchInput {
+  width: 300px;
+  height: 30px;
+  font-size: 16px;
+  margin-left: 0;
+  border: solid 1px rgba(0, 0, 0, 0.8);
+}
+
+#log-searchInput::placeholder {
+  font-size: 14px;
+}
+
+.log-search-container input[type="text"] {
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 0;
+  font-size: 12px;
+  border: none;
+}
+
+#log-search-button {
+  cursor: pointer;
+}
+
+/* 로그 테이블 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+#log-my-table {
+  clear: both;
+  width: 100%;
+  height: 400px;
+}
+
+thead th {
+  background-color: #efefef;
+  font-weight: bold;
+}
+
+td,
+th {
+  text-align: left;
+  padding: 8px;
+  /* height: calc(100% / 10); */
+}
+
+#log-my-table tbody tr {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #ccc;
+}
+
+th {
+  background-color: #efefef;
+  color: #black;
+}
+
+#log-table-body tr:hover {
+  background-color: #f5f5f5; /* 마우스를 올렸을 때 배경색 변경 */
+}
+
+#log-table-body td {
+  height: 14px;
+}
+
+.log-col1 {
+  width: 10%;
+}
+.log-col2 {
+  width: 15%;
+}
+.log-col3 {
+  width: 20%;
+}
+.log-col4 {
+  width: 55%;
+}
+
+#log-bottom-controls {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
+
+/* 페이지네이션 */
+#log-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #ffffff;
+  margin: 0 auto;
+}
+
+.log-pagination span {
+  color: #fff;
+  font-size: 1.2em;
+}
+
+.log-pagination i {
+  cursor: pointer;
+  margin: 0 1rem; /* 화살표와 번호 사이의 여백 조정 */
+}
+
+#log-numbers {
+  padding: 0;
+  margin: 0 2rem;
+  list-style-type: none;
+  display: flex;
+}
+
+#log-numbers li a {
+  color: black;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+#log-numbers li a:hover {
+  opacity: 1;
+}
+
+#log-numbers li a.active {
+  opacity: 1;
+  background: #2387e5;
+  color: white;
+}
