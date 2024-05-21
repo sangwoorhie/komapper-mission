@@ -1,9 +1,10 @@
-// ＊ 회원 Total 수 조회
 document.addEventListener("DOMContentLoaded", function () {
   fetchTotalUserCount();
+  setupUserEventListeners();
 });
 
-function fetchTotalUserCount() {
+// 유저 전체 수
+async function fetchTotalUserCount() {
   fetch("http://localhost:3000/user/count")
     .then((response) => response.json())
     .then((data) => {
@@ -18,22 +19,34 @@ function fetchTotalUserCount() {
     .catch((error) => console.error("에러가 발생했습니다:", error));
 }
 
-// ＊ 유저 단일조회 (search 창)
+// * 유저 단일조회 (search 창)
 async function searchUser() {
-  const searchInput = document.getElementById("user-searchInput").value.trim(); // 입력된 값 가져오기
+  const searchInput = await document
+    .getElementById("user-searchInput")
+    .value.trim(); // 입력된 값 가져오기
+  console.log("searchInput", searchInput);
   if (searchInput !== "") {
     try {
-      const response = await fetch(`http://localhost:3000/user/${searchInput}`);
-      const user = await response.json();
-      if (!response.ok) {
-        throw new Error(user.message); // 백엔드 에러메시지
-      }
-      // 결과를 테이블에 표시
-      const userTableBody = document.getElementById("user-table-body");
-      userTableBody.innerHTML = ""; // 기존 데이터 삭제
+      fetchUser(searchInput);
+    } catch (error) {
+      alert(error.message);
+      console.error("에러 발생", error.message);
+    }
+  }
+}
 
-      const row = document.createElement("tr");
-      row.innerHTML = `
+async function fetchUser(searchInput) {
+  const response = await fetch(`http://localhost:3000/user/${searchInput}`);
+  const user = await response.json();
+  if (!response.ok) {
+    console.log("user.message", user.message);
+    throw new Error(user.message); // 백엔드 에러메시지
+  }
+  const userTableBody = document.getElementById("user-table-body");
+  userTableBody.innerHTML = ""; // 기존 데이터 삭제
+
+  const row = document.createElement("tr");
+  row.innerHTML = `
           <td><input type="checkbox" /></td>
           <td>${user.id}</td>
           <td>${user.name}</td>
@@ -41,27 +54,160 @@ async function searchUser() {
           <td>${user.phone}</td>
           <td>${user.organization}</td>
         `;
-      userTableBody.appendChild(row);
-    } catch (error) {
-      alert(error.message);
-      console.error("에러 발생:", error.message);
+  userTableBody.appendChild(row);
+}
+
+function setupUserEventListeners() {
+  // 클릭시
+  document
+    .getElementById("user-search-button")
+    .addEventListener("click", searchUser);
+
+  // 엔터시
+  document
+    .getElementById("user-searchInput")
+    .addEventListener("keyup", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault(); // 기본 엔터 행동 방지
+        searchUser();
+      }
+    });
+
+  // 페이지네이션 버튼 클릭 이벤트 처리
+  const prevPageBtn = document.querySelector(".user-pagination .fa-angle-left");
+  const nextPageBtn = document.querySelector(
+    ".user-pagination .fa-angle-right"
+  );
+
+  prevPageBtn.addEventListener("click", async () => {
+    if (currentPage > 1) {
+      await onPageChangeUser(currentPage - 1);
     }
+  });
+
+  nextPageBtn.addEventListener("click", async () => {
+    if (currentPage < totalPages) {
+      await onPageChangeUser(currentPage + 1);
+    }
+  });
+
+  // 가장 첫 페이지로 이동하는 버튼 클릭 이벤트 처리
+  const firstPageBtn = document.querySelector(
+    ".user-pagination .fa-angles-left"
+  );
+  firstPageBtn.addEventListener("click", async () => {
+    if (currentPage > 1) {
+      await onPageChangeUser(1); // 첫 페이지로 이동
+    }
+  });
+
+  // 가장 마지막 페이지로 이동하는 버튼 클릭 이벤트 처리
+  const lastPageBtn = document.querySelector(
+    ".user-pagination .fa-angles-right"
+  );
+  lastPageBtn.addEventListener("click", async () => {
+    if (currentPage < totalPages) {
+      await onPageChangeUser(totalPages); // 마지막 페이지로 이동
+    }
+  });
+
+  // * 전체 선택 체크박스
+  const selectAllCheckbox = document.getElementById("selectAll");
+
+  // 전체 선택 체크박스에 이벤트 리스너 추가
+  selectAllCheckbox.addEventListener("change", function () {
+    const checkboxes = document.querySelectorAll(
+      "#user-table-body input[type='checkbox']"
+    );
+
+    // 전체 선택 체크박스의 상태에 따라 하단 체크박스들의 상태 변경
+    checkboxes.forEach(function (checkbox) {
+      checkbox.checked = selectAllCheckbox.checked;
+    });
+  });
+}
+
+// 초기 페이지 로드 시 첫 번째 페이지 데이터 표시
+document.addEventListener("DOMContentLoaded", async () => {
+  await onPageChangeUser(currentPage);
+});
+
+// 로그목록 전체조회 (페이지네이션)
+const rowsPerPage = 10;
+let currentPage = 1;
+let totalPages = 1; // 초기값 설정
+const maxPageNum = 10; // 한 화면에 표시될 최대 페이지 숫자
+
+async function fetchUserData(page) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/user?page=${page}&pageSize=${rowsPerPage}`
+    );
+    const data = await response.json();
+    totalPages = data.totalPages; // 전체 페이지 수 업데이트
+    return data.paginationTotalUsers;
+  } catch (error) {
+    console.error("유저목록 조회 중 에러가 발생했습니다:", error);
   }
 }
 
-// 클릭시
-document
-  .getElementById("user-search-button")
-  .addEventListener("click", searchUser);
-// 엔터시
-document
-  .getElementById("user-searchInput")
-  .addEventListener("keyup", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault(); // 기본 엔터 행동 방지
-      searchUser();
+async function displayUserData(page) {
+  const userData = await fetchUserData(page);
+  const tbody = document.getElementById("user-table-body");
+  tbody.innerHTML = ""; // 기존 테이블 내용 비우기
+
+  userData.forEach((user) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td><input type="checkbox" /></td>
+        <td>${user.id}</td>
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>${user.phone}</td>
+        <td>${user.organization}</td>
+      `;
+    tbody.appendChild(row);
+  });
+}
+
+async function onPageChangeUser(page) {
+  currentPage = page;
+  await displayUserData(page);
+  updatePaginationUser(page);
+}
+
+// 페이지네이션 업데이트 함수
+function updatePaginationUser(currentPage) {
+  const numbers = document.querySelector("#user-numbers");
+  numbers.innerHTML = ""; // 이전 페이지 번호 삭제
+
+  const start = Math.max(1, currentPage - Math.floor(maxPageNum / 2));
+  const end = Math.min(totalPages, start + maxPageNum - 1);
+
+  for (let i = start; i <= end; i++) {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = "#";
+    a.textContent = i;
+    li.appendChild(a);
+    numbers.appendChild(li);
+
+    // 페이지 숫자를 클릭할 때 해당 페이지로 이동하는 이벤트 추가
+    a.addEventListener("click", async () => {
+      await onPageChangeUser(i);
+    });
+  }
+
+  // 현재 페이지에 'active' 클래스 추가
+  const pageLinks = document.querySelectorAll("#user-numbers li a");
+  pageLinks.forEach((link) => {
+    if (parseInt(link.textContent) === currentPage) {
+      link.classList.add("active");
     }
   });
+}
+
+/////////////////////////////////////////////////////////
 
 // 회원가입 (모달)
 const modal = document.getElementById("createModal");
@@ -229,133 +375,6 @@ $(document).ready(function () {
 
     // 모달 닫기
     $("#deleteModal").css("display", "none");
-  });
-});
-
-// * 유저목록 전체조회 (페이지네이션)
-const rowsPerPage = 10;
-let currentPage = 1;
-let totalPages = 1; // 초기값 설정
-const maxPageNum = 10; // 한 화면에 표시될 최대 페이지 숫자
-
-async function fetchUserData(page) {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/user?page=${page}&pageSize=${rowsPerPage}`
-    );
-    const data = await response.json();
-    totalPages = data.totalPages; // 전체 페이지 수 업데이트
-    return data.paginationTotalUsers;
-  } catch (error) {
-    console.error("유저목록 조회 중 에러가 발생했습니다:", error);
-  }
-}
-
-async function displayUserData(page) {
-  const userData = await fetchUserData(page);
-  const tbody = document.getElementById("user-table-body");
-  tbody.innerHTML = ""; // 기존 테이블 내용 비우기
-
-  userData.forEach((user) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td><input type="checkbox" /></td>
-        <td>${user.id}</td>
-        <td>${user.name}</td>
-        <td>${user.email}</td>
-        <td>${user.phone}</td>
-        <td>${user.organization}</td>
-      `;
-    tbody.appendChild(row);
-  });
-}
-
-async function onPageChange(page) {
-  currentPage = page;
-  await displayUserData(page);
-  updatePagination(page);
-}
-
-// 초기 페이지 로드 시 첫 번째 페이지 데이터 표시
-document.addEventListener("DOMContentLoaded", async () => {
-  await onPageChange(currentPage);
-});
-
-// 페이지네이션 버튼 클릭 이벤트 처리
-const prevPageBtn = document.querySelector(".pagination .fa-angle-left");
-const nextPageBtn = document.querySelector(".pagination .fa-angle-right");
-
-prevPageBtn.addEventListener("click", async () => {
-  if (currentPage > 1) {
-    await onPageChange(currentPage - 1);
-  }
-});
-
-nextPageBtn.addEventListener("click", async () => {
-  if (currentPage < totalPages) {
-    await onPageChange(currentPage + 1);
-  }
-});
-
-// 페이지네이션 업데이트 함수
-function updatePagination(currentPage) {
-  const numbers = document.querySelector("#numbers");
-  numbers.innerHTML = ""; // 이전 페이지 번호 삭제
-
-  const start = Math.max(1, currentPage - Math.floor(maxPageNum / 2));
-  const end = Math.min(totalPages, start + maxPageNum - 1);
-
-  for (let i = start; i <= end; i++) {
-    const li = document.createElement("li");
-    const a = document.createElement("a");
-    a.href = "#";
-    a.textContent = i;
-    li.appendChild(a);
-    numbers.appendChild(li);
-
-    // 페이지 숫자를 클릭할 때 해당 페이지로 이동하는 이벤트 추가
-    a.addEventListener("click", async () => {
-      await onPageChange(i);
-    });
-  }
-
-  // 현재 페이지에 'active' 클래스 추가
-  const pageLinks = document.querySelectorAll("#numbers li a");
-  pageLinks.forEach((link) => {
-    if (parseInt(link.textContent) === currentPage) {
-      link.classList.add("active");
-    }
-  });
-}
-
-// 가장 첫 페이지로 이동하는 버튼 클릭 이벤트 처리
-const firstPageBtn = document.querySelector(".pagination .fa-angles-left");
-firstPageBtn.addEventListener("click", async () => {
-  if (currentPage > 1) {
-    await onPageChange(1); // 첫 페이지로 이동
-  }
-});
-
-// 가장 마지막 페이지로 이동하는 버튼 클릭 이벤트 처리
-const lastPageBtn = document.querySelector(".pagination .fa-angles-right");
-lastPageBtn.addEventListener("click", async () => {
-  if (currentPage < totalPages) {
-    await onPageChange(totalPages); // 마지막 페이지로 이동
-  }
-});
-
-// * 전체 선택 체크박스
-const selectAllCheckbox = document.getElementById("selectAll");
-
-// 전체 선택 체크박스에 이벤트 리스너 추가
-selectAllCheckbox.addEventListener("change", function () {
-  const checkboxes = document.querySelectorAll(
-    "#user-table-body input[type='checkbox']"
-  );
-
-  // 전체 선택 체크박스의 상태에 따라 하단 체크박스들의 상태 변경
-  checkboxes.forEach(function (checkbox) {
-    checkbox.checked = selectAllCheckbox.checked;
   });
 });
 

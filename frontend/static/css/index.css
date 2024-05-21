@@ -45,7 +45,7 @@ nav {
   width: 250px;
   background-color: #3c4b64;
   height: 100%;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 /* 첫번째 사이드바 */
@@ -102,7 +102,7 @@ a:active {
 section#content {
   flex: 1;
   padding: 2em;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 /* 페이지 컨텐츠 */

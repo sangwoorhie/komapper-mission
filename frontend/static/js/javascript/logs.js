@@ -1,9 +1,10 @@
-// ＊ 로그 Total 수 조회
 document.addEventListener("DOMContentLoaded", function () {
   fetchTotalLogCount();
+  setupLogEventListeners();
 });
 
-function fetchTotalLogCount() {
+// 로그 전체 수
+async function fetchTotalLogCount() {
   fetch("http://localhost:3000/log/count")
     .then((response) => response.json())
     .then((data) => {
@@ -11,16 +12,18 @@ function fetchTotalLogCount() {
       const totalLogsText = totalLogsElement.textContent;
       const totalLogsValue = data;
       const styledText = `
-        <span style="color: inherit;">${totalLogsText}</span> <span style="color: #DD7012; font-weight: bold;">${totalLogsValue}</span>
-        `;
+      <span style="color: inherit;">${totalLogsText}</span> <span style="color: #DD7012; font-weight: bold;">${totalLogsValue}</span>
+      `;
       totalLogsElement.innerHTML = styledText;
     })
     .catch((error) => console.error("에러가 발생했습니다:", error));
 }
 
 // * 로그 단일조회 (search 창)
-function searchLog() {
-  const searchInput = document.getElementById("log-searchInput").value.trim(); // 입력된 값 가져오기
+async function searchLog() {
+  const searchInput = await document
+    .getElementById("log-searchInput")
+    .value.trim(); // 입력된 값 가져오기
   console.log("searchInput", searchInput);
   if (searchInput !== "") {
     try {
@@ -49,26 +52,71 @@ async function fetchLog(searchInput) {
 
   const row = document.createElement("tr");
   row.innerHTML = `
-      <td>${log.id}</td>
-      <td>${formattedDate}</td>
-      <td>${log.user_ip}</td>
-      <td>${log.user_agent}</td>
-    `;
+          <td>${log.id}</td>
+          <td>${formattedDate}</td>
+          <td>${log.user_ip}</td>
+          <td>${log.user_agent}</td>
+        `;
   logTableBody.appendChild(row);
 }
-// 클릭시
-document
-  .getElementById("log-search-button")
-  .addEventListener("click", searchLog);
-// 엔터시
-document
-  .getElementById("log-searchInput")
-  .addEventListener("keyup", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault(); // 기본 엔터 행동 방지
-      searchLog();
+
+function setupLogEventListeners() {
+  // 클릭시
+  document
+    .getElementById("log-search-button")
+    .addEventListener("click", searchLog);
+
+  // 엔터시
+  document
+    .getElementById("log-searchInput")
+    .addEventListener("keyup", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault(); // 기본 엔터 행동 방지
+        searchLog();
+      }
+    });
+
+  // 페이지네이션 버튼 클릭 이벤트 처리
+  const prevPageBtn = document.querySelector(".log-pagination .fa-angle-left");
+  const nextPageBtn = document.querySelector(".log-pagination .fa-angle-right");
+
+  prevPageBtn.addEventListener("click", async () => {
+    if (currentPage > 1) {
+      await onPageChangeLog(currentPage - 1);
     }
   });
+
+  nextPageBtn.addEventListener("click", async () => {
+    if (currentPage < totalPages) {
+      await onPageChangeLog(currentPage + 1);
+    }
+  });
+
+  // 가장 첫 페이지로 이동하는 버튼 클릭 이벤트 처리
+  const firstPageBtn = document.querySelector(
+    ".log-pagination .fa-angles-left"
+  );
+  firstPageBtn.addEventListener("click", async () => {
+    if (currentPage > 1) {
+      await onPageChangeLog(1); // 첫 페이지로 이동
+    }
+  });
+
+  // 가장 마지막 페이지로 이동하는 버튼 클릭 이벤트 처리
+  const lastPageBtn = document.querySelector(
+    ".log-pagination .fa-angles-right"
+  );
+  lastPageBtn.addEventListener("click", async () => {
+    if (currentPage < totalPages) {
+      await onPageChangeLog(totalPages); // 마지막 페이지로 이동
+    }
+  });
+}
+
+// 초기 페이지 로드 시 첫 번째 페이지 데이터 표시
+document.addEventListener("DOMContentLoaded", async () => {
+  await onPageChangeLog(currentPage);
+});
 
 // 로그목록 전체조회 (페이지네이션)
 const rowsPerPage = 10;
@@ -100,44 +148,23 @@ async function displayLogData(page) {
 
     const row = document.createElement("tr");
     row.innerHTML = `
-        <td>${log.id}</td>
-        <td>${formattedDate}</td>
-        <td>${log.user_ip}</td>
-        <td>${log.user_agent}</td>
-      `;
+          <td>${log.id}</td>
+          <td>${formattedDate}</td>
+          <td>${log.user_ip}</td>
+          <td>${log.user_agent}</td>
+        `;
     tbody.appendChild(row);
   });
 }
 
-async function onPageChange(page) {
+async function onPageChangeLog(page) {
   currentPage = page;
   await displayLogData(page);
-  updatePagination(page);
+  updatePaginationLog(page);
 }
 
-// 초기 페이지 로드 시 첫 번째 페이지 데이터 표시
-document.addEventListener("DOMContentLoaded", async () => {
-  await onPageChange(currentPage);
-});
-
-// 페이지네이션 버튼 클릭 이벤트 처리
-const prevPageBtn = document.querySelector(".log-pagination .fa-angle-left");
-const nextPageBtn = document.querySelector(".log-pagination .fa-angle-right");
-
-prevPageBtn.addEventListener("click", async () => {
-  if (currentPage > 1) {
-    await onPageChange(currentPage - 1);
-  }
-});
-
-nextPageBtn.addEventListener("click", async () => {
-  if (currentPage < totalPages) {
-    await onPageChange(currentPage + 1);
-  }
-});
-
 // 페이지네이션 업데이트 함수
-function updatePagination(currentPage) {
+function updatePaginationLog(currentPage) {
   const numbers = document.querySelector("#log-numbers");
   numbers.innerHTML = ""; // 이전 페이지 번호 삭제
 
@@ -154,7 +181,7 @@ function updatePagination(currentPage) {
 
     // 페이지 숫자를 클릭할 때 해당 페이지로 이동하는 이벤트 추가
     a.addEventListener("click", async () => {
-      await onPageChange(i);
+      await onPageChangeLog(i);
     });
   }
 
@@ -166,22 +193,6 @@ function updatePagination(currentPage) {
     }
   });
 }
-
-// 가장 첫 페이지로 이동하는 버튼 클릭 이벤트 처리
-const firstPageBtn = document.querySelector(".log-pagination .fa-angles-left");
-firstPageBtn.addEventListener("click", async () => {
-  if (currentPage > 1) {
-    await onPageChange(1); // 첫 페이지로 이동
-  }
-});
-
-// 가장 마지막 페이지로 이동하는 버튼 클릭 이벤트 처리
-const lastPageBtn = document.querySelector(".log-pagination .fa-angles-right");
-lastPageBtn.addEventListener("click", async () => {
-  if (currentPage < totalPages) {
-    await onPageChange(totalPages); // 마지막 페이지로 이동
-  }
-});
 
 // * 로그 목록조회 (페이지네이션X)
 // document.addEventListener("DOMContentLoaded", async function () {
