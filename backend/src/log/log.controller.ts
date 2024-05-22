@@ -19,8 +19,7 @@ export class LogController {
     @Query('pageSize') pageSize: number = 10,
   ) {
     try {
-      const getTotalLogs = await this.logService.findAllLogs(page, pageSize);
-      return getTotalLogs;
+      return await this.logService.findAllLogs(page, pageSize);
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -42,8 +41,7 @@ export class LogController {
   })
   async getLogCount(): Promise<number> {
     try {
-      const totalLogNumber = await this.logService.getLogCount();
-      return totalLogNumber;
+      return await this.logService.getLogCount();
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -58,8 +56,7 @@ export class LogController {
   })
   async getLogById(@Param('id') id: string) {
     try {
-      const getSingleLog = await this.logService.getLogById(id);
-      return getSingleLog;
+      return await this.logService.getLogById(id);
     } catch (error) {
       throw new Error(`${error.message}`);
     }

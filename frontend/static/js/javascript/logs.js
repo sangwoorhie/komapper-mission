@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-  fetchTotalLogCount();
-  setupLogEventListeners();
+  fetchTotalLogCount(); // 로그 Total수 조회
+  setupLogEventListeners(); // 로그목록 조회
 });
 
 // 로그 전체 수

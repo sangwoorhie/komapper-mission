@@ -1,4 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  // NotFoundException
+} from '@nestjs/common';
 import { Pool } from 'pg';
 import pool from 'src/db/postgres';
 
@@ -60,14 +63,11 @@ export class LogService {
     const query = `
       SELECT id, date, user_ip, user_agent FROM mission_cst_conn_log WHERE id = $1;
     `;
-    // try {
+
     const result = await this.pool.query(query, [id]);
     if (result.rows.length === 0) {
-      throw new NotFoundException(`로그 ID: ${id} (이)가 존재하지 않습니다.`);
+      return `로그 ID: ${id} (이)가 존재하지 않습니다.`;
     }
     return result.rows[0]; // 단일 로그 반환
-    // } catch (error) {
-    //   throw new Error(`${error.message}`);
-    // }
   }
 }

@@ -30,8 +30,7 @@ export class UserController {
   })
   async createUser(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
     try {
-      const register = await this.userService.createUser(createUserDto);
-      return register;
+      return await this.userService.createUser(createUserDto);
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -46,8 +45,7 @@ export class UserController {
   })
   async checkId(@Body(new ValidationPipe()) idcheckDto: IdcheckDto) {
     try {
-      const doubleCheckId = await this.userService.checkId(idcheckDto);
-      return doubleCheckId;
+      return await this.userService.checkId(idcheckDto);
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -62,8 +60,7 @@ export class UserController {
   })
   async getUserCount(): Promise<number> {
     try {
-      const totalUserNumber = this.userService.getUserCount();
-      return totalUserNumber;
+      return await this.userService.getUserCount();
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -81,8 +78,7 @@ export class UserController {
     @Query('pageSize') pageSize: number = 10,
   ) {
     try {
-      const getTotalUsers = await this.userService.findAllUsers(page, pageSize);
-      return getTotalUsers;
+      return await this.userService.findAllUsers(page, pageSize);
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -104,8 +100,7 @@ export class UserController {
   })
   async getUserById(@Param('id') id: string) {
     try {
-      const getSingleUser = await this.userService.getUserById(id);
-      return getSingleUser;
+      return await this.userService.getUserById(id);
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -123,8 +118,7 @@ export class UserController {
     @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
   ) {
     try {
-      const editUserInfo = await this.userService.updateUser(id, updateUserDto);
-      return editUserInfo;
+      return await this.userService.updateUser(id, updateUserDto);
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -140,8 +134,7 @@ export class UserController {
   })
   async deleteUsers(@Body() deleteUsersDto: DeleteUsersDto) {
     try {
-      const deleteUser = await this.userService.deleteUsers(deleteUsersDto.ids);
-      return deleteUser;
+      return await this.userService.deleteUsers(deleteUsersDto.ids);
     } catch (error) {
       throw new Error(`${error.message}`);
     }

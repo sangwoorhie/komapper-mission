@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-  fetchTotalUserCount();
-  setupUserEventListeners();
+  fetchTotalUserCount(); // 유저 Total수 조회
+  setupUserEventListeners(); // 유저목록 조회
+  setupRegisterModal(); // 회원가입 모달
+  setupDeleteModal(); // 회원삭제 모달
+  setupInfoModal(); // 회원정보 조회모달
 });
 
 // 유저 전체 수
@@ -62,6 +65,7 @@ async function fetchUser(searchInput) {
   }
 }
 
+// 유저목록 조회
 function setupUserEventListeners() {
   // 클릭시
   document
@@ -131,8 +135,6 @@ function setupUserEventListeners() {
     });
   });
 }
-
-////////////////////////////////////////////
 
 // 초기 페이지 로드 시 첫 번째 페이지 데이터 표시
 document.addEventListener("DOMContentLoaded", async () => {
@@ -215,325 +217,336 @@ function updatePaginationUser(currentPage) {
   });
 }
 
-/////////////////////////////////////////////////////////
+// 회원가입 모달
+async function setupRegisterModal() {
+  try {
+    // 회원가입 (모달)
+    const modal = document.getElementById("createModal");
+    const btn = document.getElementById("register-button");
+    const span = document.getElementsByClassName("close")[0];
 
-// 회원가입 (모달)
-const modal = document.getElementById("createModal");
-const btn = document.getElementById("register-button");
-const span = document.getElementsByClassName("close")[0];
-
-btn.onclick = function () {
-  modal.style.display = "block";
-  resetModalInputs(); // 모달 열릴 때 입력 초기화
-};
-
-span.onclick = function () {
-  modal.style.display = "none";
-};
-
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-    resetModalInputs(); // 모달 외부 클릭시 입력 초기화
-  }
-};
-
-// 회원가입 비밀번호 숨기기/ 보여주기
-document.addEventListener("DOMContentLoaded", function () {
-  const passwordInput = document.getElementById("userPassword");
-  const toggleButton = document.getElementById("togglePassword");
-
-  toggleButton.addEventListener("click", function () {
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      toggleButton.textContent = "Hide";
-    } else {
-      passwordInput.type = "password";
-      toggleButton.textContent = "Show";
-    }
-  });
-});
-
-// 중복ID 체크로직
-document
-  .getElementById("checkDuplicate")
-  .addEventListener("click", async function () {
-    const userId = document.getElementById("userId").value;
-    try {
-      const response = await fetch("http://localhost:3000/user/idcheck", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: userId }),
-      });
-      if (response.ok) {
-        const result = await response.text();
-        alert(result);
-      } else {
-        const responseData = await response.json();
-        throw new Error(responseData.message); // 백엔드 에러메시지
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  });
-
-// 회원가입
-document
-  .getElementById("registerBtn")
-  .addEventListener("click", async function () {
-    const userId = document.getElementById("userId").value;
-    const password = document.getElementById("userPassword").value;
-    const name = document.getElementById("userName").value;
-    const email = document.getElementById("userEmail").value;
-    const phone = document.getElementById("userPhone").value;
-    const organization = document.getElementById("userOrganization").value;
-
-    const userData = {
-      id: userId,
-      password: password,
-      name: name,
-      email: email,
-      phone: phone,
-      organization: organization,
+    btn.onclick = function () {
+      modal.style.display = "block";
+      resetModalInputs(); // 모달 열릴 때 입력 초기화
     };
 
-    try {
-      const response = await fetch("http://localhost:3000/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-      if (response.ok) {
-        const result = await response.text();
-        alert(result);
-        window.location.reload();
-      } else {
-        const responseData = await response.json();
-        throw new Error(responseData.message); // 백엔드 에러메시지
+    span.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+        resetModalInputs(); // 모달 외부 클릭시 입력 초기화
       }
-    } catch (error) {
-      alert(error.message);
+    };
+
+    // 중복ID 체크로직
+    document
+      .getElementById("checkDuplicate")
+      .addEventListener("click", async function () {
+        const userId = document.getElementById("userId").value;
+        try {
+          const response = await fetch("http://localhost:3000/user/idcheck", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: userId }),
+          });
+          if (response.ok) {
+            const result = await response.text();
+            alert(result);
+          } else {
+            const responseData = await response.json();
+            throw new Error(responseData.message); // 백엔드 에러메시지
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+    // 회원가입 비밀번호 숨기기/ 보여주기
+    const passwordInput = document.getElementById("userPassword");
+    const toggleButton = document.getElementById("togglePassword");
+
+    toggleButton.addEventListener("click", function () {
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleButton.textContent = "Hide";
+      } else {
+        passwordInput.type = "password";
+        toggleButton.textContent = "Show";
+      }
+    });
+
+    // 회원가입
+    document
+      .getElementById("registerBtn")
+      .addEventListener("click", async function () {
+        const userId = document.getElementById("userId").value;
+        const password = document.getElementById("userPassword").value;
+        const name = document.getElementById("userName").value;
+        const email = document.getElementById("userEmail").value;
+        const phone = document.getElementById("userPhone").value;
+        const organization = document.getElementById("userOrganization").value;
+
+        const userData = {
+          id: userId,
+          password: password,
+          name: name,
+          email: email,
+          phone: phone,
+          organization: organization,
+        };
+
+        try {
+          const response = await fetch("http://localhost:3000/user/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+          });
+          if (response.ok) {
+            const result = await response.text();
+            alert(result);
+            window.location.reload();
+          } else {
+            const responseData = await response.json();
+            throw new Error(responseData.message); // 백엔드 에러메시지
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+    document.getElementById("registercancelBtn").onclick = function () {
+      modal.style.display = "none";
+      resetModalInputs(); // 취소 버튼 클릭시 입력 초기화
+    };
+
+    function resetModalInputs() {
+      // (취소버튼 클릭시) 모달 내의 입력란 초기화
+      document.getElementById("userId").value = "";
+      document.getElementById("userPassword").value = "";
+      document.getElementById("userName").value = "";
+      document.getElementById("userEmail").value = "";
+      document.getElementById("userPhone").value = "";
+      document.getElementById("userOrganization").value = "";
     }
-  });
-
-document.getElementById("registercancelBtn").onclick = function () {
-  modal.style.display = "none";
-  resetModalInputs(); // 취소 버튼 클릭시 입력 초기화
-};
-
-function resetModalInputs() {
-  // (취소버튼 클릭시) 모달 내의 입력란 초기화
-  document.getElementById("userId").value = "";
-  document.getElementById("userPassword").value = "";
-  document.getElementById("userName").value = "";
-  document.getElementById("userEmail").value = "";
-  document.getElementById("userPhone").value = "";
-  document.getElementById("userOrganization").value = "";
+  } catch (error) {
+    console.log("에러 발생:", error);
+  }
 }
 
-// 회원 삭제
-$(document).ready(function () {
-  $("#delete-button").click(function () {
-    const selectedUsers = [];
+// 회원삭제 모달
+async function setupDeleteModal() {
+  // 회원 삭제
+  $(document).ready(function () {
+    $("#delete-button").click(function () {
+      const selectedUsers = [];
 
-    $("tbody input[type='checkbox']:checked").each(function () {
-      selectedUsers.push($(this).closest("tr").find("td:eq(1)").text());
-    });
+      $("tbody input[type='checkbox']:checked").each(function () {
+        selectedUsers.push($(this).closest("tr").find("td:eq(1)").text());
+      });
 
-    if (selectedUsers.length === 0) {
-      alert("삭제할 사용자를 선택하세요.");
-      return;
-    }
+      if (selectedUsers.length === 0) {
+        alert("삭제할 사용자를 선택하세요.");
+        return;
+      }
 
-    // 모달 열기
-    $("#deleteModal").css("display", "block");
-  });
-
-  // 모달 닫기
-  $(".close, #cancelDeleteBtn").click(function () {
-    $("#deleteModal").css("display", "none");
-  });
-
-  // 삭제 확인 버튼 클릭 시
-  $("#confirmDeleteBtn").click(function () {
-    const selectedUsers = [];
-
-    $("tbody input[type='checkbox']:checked").each(function () {
-      selectedUsers.push($(this).closest("tr").find("td:eq(1)").text());
-    });
-
-    $.ajax({
-      type: "DELETE",
-      url: "http://localhost:3000/user",
-      contentType: "application/json",
-      data: JSON.stringify({ ids: selectedUsers }),
-      success: function (response) {
-        console.log(response);
-        alert("선택된 사용자가 삭제되었습니다.");
-        location.reload();
-      },
-      error: function (xhr, status, error) {
-        alert("삭제 중 오류가 발생했습니다: " + error);
-      },
+      // 모달 열기
+      $("#deleteModal").css("display", "block");
     });
 
     // 모달 닫기
-    $("#deleteModal").css("display", "none");
-  });
-});
+    $(".close, #cancelDeleteBtn").click(function () {
+      $("#deleteModal").css("display", "none");
+    });
 
-// 유저 단일조회 (Modal)
-const userDetailModal = document.getElementById("userDetailModal");
-const userDetailClose = document.querySelector("#userDetailModal .close");
+    // 삭제 확인 버튼 클릭 시
+    $("#confirmDeleteBtn").click(function () {
+      const selectedUsers = [];
 
-// 테이블 행 클릭 시 상세 정보 모달 열기
-document
-  .getElementById("user-table-body")
-  .addEventListener("click", function (event) {
-    const target = event.target;
-    if (target.tagName === "TD") {
-      const row = target.parentNode;
-      const userId = row.querySelector("td:nth-child(2)").textContent; // 유저 ID 가져오기
-
-      // 해당 유저의 상세 정보를 가져와 모달에 표시
-      fetch(`http://localhost:3000/user/${userId}`)
-        .then((response) => response.json())
-        .then((user) => {
-          document.getElementById("detailUserId").value = user.id;
-          document.getElementById("detailUserName").value = user.name;
-          document.getElementById("detailUserEmail").value = user.email;
-          document.getElementById("detailUserPhone").value = user.phone;
-          document.getElementById("detailUserOrganization").value =
-            user.organization;
-
-          // 모달 열기
-          userDetailModal.style.display = "block";
-        })
-        .catch((error) => {
-          console.error("Error fetching user details:", error);
-        });
-    }
-  });
-
-// 유저 상세 정보 모달 닫기
-document.getElementById("modifycancelBtn").onclick = function () {
-  userDetailModal.style.display = "none";
-};
-
-userDetailClose.onclick = function () {
-  userDetailModal.style.display = "none";
-};
-
-// 정보수정 모달 관련 이벤트 리스너들
-document.addEventListener("DOMContentLoaded", function () {
-  const modifyModal = document.getElementById("modifyModal");
-  const modifyBtn = document.getElementById("modifyBtn");
-  const modifyCancelBtn = document.getElementById("modifyCancelBtn");
-  const modifyBtnConfirm = document.getElementById("modifyBtnConfirm");
-  const toggleOriginalPasswordBtn = document.getElementById(
-    "toggleOriginalPassword"
-  );
-  const toggleModifyPasswordBtn = document.getElementById(
-    "toggleModifyPassword"
-  );
-  const originalPasswordInput = document.getElementById("originalPassword");
-  const newPasswordInput = document.getElementById("newPassword");
-
-  // 정보수정 모달 닫기 이벤트 처리
-  modifyCancelBtn.addEventListener("click", function () {
-    modifyModal.style.display = "none";
-  });
-
-  // Modify 버튼 클릭 시 정보수정 모달 띄우기
-  modifyBtn.addEventListener("click", function () {
-    // 모달 열기
-    modifyModal.style.display = "block";
-
-    // 기존 유저정보 가져오기
-    const originalName = document.getElementById("detailUserName").value;
-    const originalPhone = document.getElementById("detailUserPhone").value;
-    const originalOrganization = document.getElementById(
-      "detailUserOrganization"
-    ).value;
-
-    // 입력 필드 초기화
-    document.getElementById("originalPassword").value = "";
-    document.getElementById("newPassword").value = "";
-    document.getElementById("newName").value = `${originalName}`;
-    document.getElementById("newPhone").value = `${originalPhone}`;
-    document.getElementById("newOrganization").value =
-      `${originalOrganization}`;
-
-    // 비밀번호 숨김/보임 토글 버튼 초기화
-    originalPasswordInput.type = "password";
-    toggleOriginalPasswordBtn.textContent = "Show";
-    newPasswordInput.type = "password";
-    toggleModifyPasswordBtn.textContent = "Show";
-  });
-
-  // 비밀번호 숨김/보임 토글 버튼 이벤트 처리
-  toggleOriginalPasswordBtn.addEventListener("click", function () {
-    if (originalPasswordInput.type === "password") {
-      originalPasswordInput.type = "text";
-      toggleOriginalPasswordBtn.textContent = "Hide";
-    } else {
-      originalPasswordInput.type = "password";
-      toggleOriginalPasswordBtn.textContent = "Show";
-    }
-  });
-
-  toggleModifyPasswordBtn.addEventListener("click", function () {
-    if (newPasswordInput.type === "password") {
-      newPasswordInput.type = "text";
-      toggleModifyPasswordBtn.textContent = "Hide";
-    } else {
-      newPasswordInput.type = "password";
-      toggleModifyPasswordBtn.textContent = "Show";
-    }
-  });
-
-  // 정보 수정 확인 버튼 클릭 시
-  modifyBtnConfirm.addEventListener("click", async function () {
-    try {
-      const userId = document.getElementById("detailUserId").value;
-      const password = originalPasswordInput.value;
-      const newPassword = newPasswordInput.value;
-      const name = document.getElementById("newName").value;
-      const phone = document.getElementById("newPhone").value;
-      const organization = document.getElementById("newOrganization").value;
-
-      console.log("userId", userId);
-
-      // 정보 수정 요청 보내기
-      const response = await fetch(`http://localhost:3000/user/${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          password: password,
-          newPassword: newPassword,
-          name: name,
-          phone: phone,
-          organization: organization,
-        }),
+      $("tbody input[type='checkbox']:checked").each(function () {
+        selectedUsers.push($(this).closest("tr").find("td:eq(1)").text());
       });
 
-      if (response.ok) {
-        const result = await response.text();
-        alert(result);
-        modifyModal.style.display = "none";
-        window.location.reload();
-      } else {
-        const responseData = await response.json();
-        throw new Error(responseData.message); // 백엔드 에러메시지
-      }
-    } catch (error) {
-      alert(error.message);
-    }
+      $.ajax({
+        type: "DELETE",
+        url: "http://localhost:3000/user",
+        contentType: "application/json",
+        data: JSON.stringify({ ids: selectedUsers }),
+        success: function (response) {
+          console.log(response);
+          alert("선택된 사용자가 삭제되었습니다.");
+          location.reload();
+        },
+        error: function (xhr, status, error) {
+          alert("삭제 중 오류가 발생했습니다: " + error);
+        },
+      });
+
+      // 모달 닫기
+      $("#deleteModal").css("display", "none");
+    });
   });
-});
+}
+
+// 회원정보 & 수정 모달
+async function setupInfoModal() {
+  try {
+    // 유저 단일조회 (Modal)
+    const userDetailModal = document.getElementById("userDetailModal");
+    const userDetailClose = document.querySelector("#userDetailModal .close");
+
+    // 테이블 행 클릭 시 상세 정보 모달 열기
+    document
+      .getElementById("user-table-body")
+      .addEventListener("click", function (event) {
+        const target = event.target;
+        if (target.tagName === "TD") {
+          const row = target.parentNode;
+          const userId = row.querySelector("td:nth-child(2)").textContent; // 유저 ID 가져오기
+
+          // 해당 유저의 상세 정보를 가져와 모달에 표시
+          fetch(`http://localhost:3000/user/${userId}`)
+            .then((response) => response.json())
+            .then((user) => {
+              document.getElementById("detailUserId").value = user.id;
+              document.getElementById("detailUserName").value = user.name;
+              document.getElementById("detailUserEmail").value = user.email;
+              document.getElementById("detailUserPhone").value = user.phone;
+              document.getElementById("detailUserOrganization").value =
+                user.organization;
+
+              // 모달 열기
+              userDetailModal.style.display = "block";
+            })
+            .catch((error) => {
+              console.error("Error fetching user details:", error);
+            });
+        }
+      });
+
+    // 유저 상세 정보 모달 닫기
+    document.getElementById("modifycancelBtn").onclick = function () {
+      userDetailModal.style.display = "none";
+    };
+
+    userDetailClose.onclick = function () {
+      userDetailModal.style.display = "none";
+    };
+
+    // 정보수정 모달 관련 이벤트 리스너들
+    const modifyModal = document.getElementById("modifyModal");
+    const modifyBtn = document.getElementById("modifyBtn");
+    const modifyCancelBtn = document.getElementById("modifyCancelBtn");
+    const modifyBtnConfirm = document.getElementById("modifyBtnConfirm");
+    const toggleOriginalPasswordBtn = document.getElementById(
+      "toggleOriginalPassword"
+    );
+    const toggleModifyPasswordBtn = document.getElementById(
+      "toggleModifyPassword"
+    );
+    const originalPasswordInput = document.getElementById("originalPassword");
+    const newPasswordInput = document.getElementById("newPassword");
+
+    // 정보수정 모달 닫기 이벤트 처리
+    modifyCancelBtn.addEventListener("click", function () {
+      modifyModal.style.display = "none";
+    });
+
+    // Modify 버튼 클릭 시 정보수정 모달 띄우기
+    modifyBtn.addEventListener("click", function () {
+      // 모달 열기
+      modifyModal.style.display = "block";
+
+      // 기존 유저정보 가져오기
+      const originalName = document.getElementById("detailUserName").value;
+      const originalPhone = document.getElementById("detailUserPhone").value;
+      const originalOrganization = document.getElementById(
+        "detailUserOrganization"
+      ).value;
+
+      // 입력 필드 초기화
+      document.getElementById("originalPassword").value = "";
+      document.getElementById("newPassword").value = "";
+      document.getElementById("newName").value = `${originalName}`;
+      document.getElementById("newPhone").value = `${originalPhone}`;
+      document.getElementById("newOrganization").value =
+        `${originalOrganization}`;
+
+      // 비밀번호 숨김/보임 토글 버튼 초기화
+      originalPasswordInput.type = "password";
+      toggleOriginalPasswordBtn.textContent = "Show";
+      newPasswordInput.type = "password";
+      toggleModifyPasswordBtn.textContent = "Show";
+    });
+
+    // 비밀번호 숨김/보임 토글 버튼 이벤트 처리
+    toggleOriginalPasswordBtn.addEventListener("click", function () {
+      if (originalPasswordInput.type === "password") {
+        originalPasswordInput.type = "text";
+        toggleOriginalPasswordBtn.textContent = "Hide";
+      } else {
+        originalPasswordInput.type = "password";
+        toggleOriginalPasswordBtn.textContent = "Show";
+      }
+    });
+
+    toggleModifyPasswordBtn.addEventListener("click", function () {
+      if (newPasswordInput.type === "password") {
+        newPasswordInput.type = "text";
+        toggleModifyPasswordBtn.textContent = "Hide";
+      } else {
+        newPasswordInput.type = "password";
+        toggleModifyPasswordBtn.textContent = "Show";
+      }
+    });
+
+    // 정보 수정 확인 버튼 클릭 시
+    modifyBtnConfirm.addEventListener("click", async function () {
+      try {
+        const userId = document.getElementById("detailUserId").value;
+        const password = originalPasswordInput.value;
+        const newPassword = newPasswordInput.value;
+        const name = document.getElementById("newName").value;
+        const phone = document.getElementById("newPhone").value;
+        const organization = document.getElementById("newOrganization").value;
+
+        console.log("userId", userId);
+
+        // 정보 수정 요청 보내기
+        const response = await fetch(`http://localhost:3000/user/${userId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            password: password,
+            newPassword: newPassword,
+            name: name,
+            phone: phone,
+            organization: organization,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.text();
+          alert(result);
+          modifyModal.style.display = "none";
+          window.location.reload();
+        } else {
+          const responseData = await response.json();
+          throw new Error(responseData.message); // 백엔드 에러메시지
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  } catch (error) {
+    console.log("에러 발생", error);
+  }
+}

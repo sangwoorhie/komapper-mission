@@ -1,7 +1,7 @@
 import {
   Injectable,
-  NotFoundException,
-  BadRequestException,
+  // NotFoundException,
+  // BadRequestException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -22,19 +22,17 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto) {
     const { id, password, name, email, phone, organization } = createUserDto;
     if (!id || !password || !name || !email || !phone || !organization) {
-      throw new BadRequestException('모든 입력란을 입력해 주세요.');
+      return `모든 입력란을 입력해 주세요.`;
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{4,}$/;
     if (!passwordRegex.test(password)) {
-      throw new BadRequestException(
-        '비밀번호는 최소 4자 이상의 영문 대소문자 및 숫자를 포함해야 합니다.',
-      );
+      return `비밀번호는 최소 4자 이상의 영문 대소문자 및 숫자를 포함해야 합니다.`;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      throw new BadRequestException('유효한 이메일 주소를 입력해주세요.');
+      return `유효한 이메일 주소를 입력해주세요.`;
     }
 
     const hashedPw = await bcrypt.hash(password, 10);
@@ -42,9 +40,7 @@ export class UserService {
     const query1 = `SELECT id FROM mission_cst_user WHERE id = $1;`;
     const idExistResult = await this.pool.query(query1, [id]);
     if (idExistResult.rows.length > 0) {
-      throw new BadRequestException(
-        '이미 존재하는 ID입니다. 다른 ID를 입력해주세요.',
-      );
+      return `이미 존재하는 ID입니다. 다른 ID를 입력해주세요.`;
     }
 
     const query2 = `
@@ -71,16 +67,14 @@ export class UserService {
   async checkId(idcheckDto: IdcheckDto) {
     const { id } = idcheckDto;
     if (!id) {
-      throw new BadRequestException('ID를 입력해주세요.');
+      return `ID를 입력해주세요.`;
     }
     const idExistQuery = `
     SELECT id FROM mission_cst_user WHERE id = $1;
   `;
     const idExistResult = await this.pool.query(idExistQuery, [id]);
     if (idExistResult.rows.length > 0) {
-      throw new BadRequestException(
-        `${id}(은)는 이미 존재하는 ID입니다. 다른 ID를 입력해주세요.`,
-      );
+      return `${id}(은)는 이미 존재하는 ID입니다. 다른 ID를 입력해주세요.`;
     } else {
       return `${id}(은)는 사용 가능한 ID입니다.`;
     }
@@ -136,7 +130,7 @@ export class UserService {
     try {
       const result = await this.pool.query(query, [id]);
       if (result.rows.length === 0) {
-        throw new NotFoundException(`유저 ID: ${id} (이)가 존재하지 않습니다.`);
+        return `유저 ID: ${id} (이)가 존재하지 않습니다.`;
       }
       return result.rows[0]; // 유저 값 반환
     } catch (error) {
@@ -152,7 +146,7 @@ export class UserService {
 
     const result = await this.pool.query(query, [id]);
     if (result.rows.length === 0) {
-      throw new NotFoundException(`유저 ID: ${id} (이)가 존재하지 않습니다.`);
+      return `유저 ID: ${id} (이)가 존재하지 않습니다.`;
     }
     return result.rows[0]; // 유저 값 반환
   }
@@ -164,25 +158,23 @@ export class UserService {
   `;
     const result = await this.pool.query(query1, [id]);
     if (result.rows.length === 0) {
-      throw new NotFoundException(`유저 ID: ${id} (이)가 존재하지 않습니다.`);
+      return `유저 ID: ${id} (이)가 존재하지 않습니다.`;
     }
 
     const { password, newPassword, name, phone, organization } = updateUserDto;
     if (!password || !newPassword || !name || !phone || !organization) {
-      throw new BadRequestException('모든 입력란을 입력해 주십시오.');
+      return `모든 입력란을 입력해 주십시오.`;
     }
 
     const user = await this.getUserPassword(id);
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw new BadRequestException('기존 비밀번호가 일치하지 않습니다.');
+      return `기존 비밀번호가 일치하지 않습니다.`;
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{4,}$/;
     if (!passwordRegex.test(newPassword)) {
-      throw new BadRequestException(
-        '새 비밀번호는 최소 4자 이상의 영문 대소문자 및 숫자를 포함해야 합니다.',
-      );
+      return `새 비밀번호는 최소 4자 이상의 영문 대소문자 및 숫자를 포함해야 합니다.`;
     }
 
     const hashedPw = await bcrypt.hash(newPassword, 10);
@@ -244,7 +236,7 @@ export class UserService {
     try {
       const result = await this.pool.query(query, [id]);
       if (result.rows.length === 0) {
-        throw new NotFoundException(`유저 ID: ${id} (이)가 존재하지 않습니다.`);
+        return `유저 ID: ${id} (이)가 존재하지 않습니다.`;
       }
       return result.rows[0]; // 유저 삭제
     } catch (error) {
