@@ -371,7 +371,7 @@ th {
 
 /* 페이지네이션 */
 .user-pagination {
-  width: 89%;
+  width: 85%;
   height: 50px;
   display: flex;
   align-items: center;
