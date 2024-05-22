@@ -9,12 +9,7 @@ export default class extends AbstractView {
   // localhost:3000/log => section에 동적으로 들어가는 부분
   async getHtml() {
     return `
-    <div id="log-first-breadcrumb">Logs</div>
-    <div id="log-second-breadcrumb">Mission > Logs</div>
-    <hr />
-
     <!-- 컨테이너 박스 -->
-    <div id="log-container-box">
       <div id="log-inner-box">
 
         <!-- 로그 수 -->
@@ -67,7 +62,6 @@ export default class extends AbstractView {
           </div>
         </div>
       </div>
-    </div>
         `;
   }
 }

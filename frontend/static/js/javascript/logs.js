@@ -5,29 +5,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 로그 전체 수
 async function fetchTotalLogCount() {
-  fetch("http://localhost:3000/log/count")
-    .then((response) => response.json())
-    .then((data) => {
-      const totalLogsElement = document.getElementById("total-logs");
-      const totalLogsText = totalLogsElement.textContent;
-      const totalLogsValue = data;
-      const styledText = `
+  try {
+    const response = await fetch("http://localhost:3000/log/count");
+    const data = await response.json();
+    const totalLogsElement = document.getElementById("total-logs");
+    const totalLogsText = totalLogsElement.textContent;
+    const totalLogsValue = data;
+    const styledText = `
       <span style="color: inherit;">${totalLogsText}</span> <span style="color: #DD7012; font-weight: bold;">${totalLogsValue}</span>
       `;
-      totalLogsElement.innerHTML = styledText;
-    })
-    .catch((error) => console.error("에러가 발생했습니다:", error));
+    totalLogsElement.innerHTML = styledText;
+  } catch (error) {
+    console.error("에러가 발생했습니다:", error);
+  }
 }
 
 // * 로그 단일조회 (search 창)
 async function searchLog() {
-  const searchInput = await document
-    .getElementById("log-searchInput")
-    .value.trim(); // 입력된 값 가져오기
+  const searchInput = document.getElementById("log-searchInput").value.trim(); // 입력된 값 가져오기
   console.log("searchInput", searchInput);
   if (searchInput !== "") {
     try {
-      fetchLog(searchInput);
+      await fetchLog(searchInput);
     } catch (error) {
       alert(error.message);
       console.error("에러 발생:", error.message);
@@ -36,28 +35,32 @@ async function searchLog() {
 }
 
 async function fetchLog(searchInput) {
-  const response = await fetch(`http://localhost:3000/log/${searchInput}`);
-  const log = await response.json();
+  try {
+    const response = await fetch(`http://localhost:3000/log/${searchInput}`);
+    const log = await response.json();
 
-  if (!response.ok) {
-    console.log("log.message", log.message);
-    throw new Error(log.message); // 백엔드 에러메시지
-  }
+    if (!response.ok) {
+      console.log("log.message", log.message);
+      throw new Error(log.message); // 백엔드 에러메시지
+    }
 
-  const logTableBody = document.getElementById("log-table-body");
-  logTableBody.innerHTML = ""; // 기존 데이터 삭제
+    const logTableBody = document.getElementById("log-table-body");
+    logTableBody.innerHTML = ""; // 기존 데이터 삭제
 
-  const date = new Date(log.date);
-  const formattedDate = date.toISOString().split("T")[0];
+    const date = new Date(log.date);
+    const formattedDate = date.toISOString().split("T")[0];
 
-  const row = document.createElement("tr");
-  row.innerHTML = `
+    const row = document.createElement("tr");
+    row.innerHTML = `
           <td>${log.id}</td>
           <td>${formattedDate}</td>
           <td>${log.user_ip}</td>
           <td>${log.user_agent}</td>
         `;
-  logTableBody.appendChild(row);
+    logTableBody.appendChild(row);
+  } catch (error) {
+    console.error("에러 발생:", error);
+  }
 }
 
 function setupLogEventListeners() {
@@ -112,6 +115,8 @@ function setupLogEventListeners() {
     }
   });
 }
+
+////////////////////////////////////////////
 
 // 초기 페이지 로드 시 첫 번째 페이지 데이터 표시
 document.addEventListener("DOMContentLoaded", async () => {
@@ -180,7 +185,8 @@ function updatePaginationLog(currentPage) {
     numbers.appendChild(li);
 
     // 페이지 숫자를 클릭할 때 해당 페이지로 이동하는 이벤트 추가
-    a.addEventListener("click", async () => {
+    a.addEventListener("click", async (e) => {
+      e.preventDefault(); // 기본 동작 방지
       await onPageChangeLog(i);
     });
   }
@@ -193,33 +199,3 @@ function updatePaginationLog(currentPage) {
     }
   });
 }
-
-// * 로그 목록조회 (페이지네이션X)
-// document.addEventListener("DOMContentLoaded", async function () {
-//   const logTableBody = document.getElementById("log-table-body");
-
-//   async function fetchAndDisplayLogs() {
-//     try {
-//       const response = await fetch("http://localhost:3000/log");
-//       const logs = await response.json();
-//       logTableBody.innerHTML = "";
-
-//       logs.forEach((log) => {
-//         const date = new Date(log.date);
-//         const formattedDate = date.toISOString().split("T")[0];
-
-//         const row = document.createElement("tr");
-//         row.innerHTML = `
-//             <td>${log.id}</td>
-//             <td>${formattedDate}</td>
-//             <td>${log.user_ip}</td>
-//             <td>${log.user_agent}</td>
-//           `;
-//         logTableBody.appendChild(row);
-//       });
-//     } catch (error) {
-//       console.log("로그목록 조회중 에러가 발생했습니다.", error);
-//     }
-//   }
-//   fetchAndDisplayLogs();
-// });

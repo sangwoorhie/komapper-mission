@@ -5,29 +5,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 유저 전체 수
 async function fetchTotalUserCount() {
-  fetch("http://localhost:3000/user/count")
-    .then((response) => response.json())
-    .then((data) => {
-      const totalUsersElement = document.getElementById("total-users");
-      const totalUsersText = totalUsersElement.textContent; // "Total:"의 텍스트
-      const totalUsersValue = data; // 데이터의 값
-
-      // "Total:" 텍스트와 데이터의 값에 각각 스타일을 적용한 HTML을 생성
-      const styledText = `<span style="color: inherit;">${totalUsersText}</span> <span style="color: #DD7012; font-weight: bold;">${totalUsersValue}</span>`;
-      totalUsersElement.innerHTML = styledText;
-    })
-    .catch((error) => console.error("에러가 발생했습니다:", error));
+  try {
+    const response = await fetch("http://localhost:3000/user/count");
+    const data = await response.json();
+    const totalUsersElement = document.getElementById("total-users");
+    const totalUsersText = totalUsersElement.textContent; // "Total:"의 텍스트
+    const totalUsersValue = data;
+    const styledText = `
+    <span style="color: inherit;">${totalUsersText}</span> <span style="color: #DD7012; font-weight: bold;">${totalUsersValue}</span>
+    `;
+    totalUsersElement.innerHTML = styledText;
+  } catch (error) {
+    console.log("에러가 발생했습니다:", error);
+  }
 }
 
 // * 유저 단일조회 (search 창)
 async function searchUser() {
-  const searchInput = await document
-    .getElementById("user-searchInput")
-    .value.trim(); // 입력된 값 가져오기
+  const searchInput = document.getElementById("user-searchInput").value.trim(); // 입력된 값 가져오기
   console.log("searchInput", searchInput);
   if (searchInput !== "") {
     try {
-      fetchUser(searchInput);
+      await fetchUser(searchInput);
     } catch (error) {
       alert(error.message);
       console.error("에러 발생", error.message);
@@ -36,25 +35,31 @@ async function searchUser() {
 }
 
 async function fetchUser(searchInput) {
-  const response = await fetch(`http://localhost:3000/user/${searchInput}`);
-  const user = await response.json();
-  if (!response.ok) {
-    console.log("user.message", user.message);
-    throw new Error(user.message); // 백엔드 에러메시지
-  }
-  const userTableBody = document.getElementById("user-table-body");
-  userTableBody.innerHTML = ""; // 기존 데이터 삭제
+  try {
+    const response = await fetch(`http://localhost:3000/user/${searchInput}`);
+    const user = await response.json();
 
-  const row = document.createElement("tr");
-  row.innerHTML = `
-          <td><input type="checkbox" /></td>
-          <td>${user.id}</td>
-          <td>${user.name}</td>
-          <td>${user.email}</td>
-          <td>${user.phone}</td>
-          <td>${user.organization}</td>
-        `;
-  userTableBody.appendChild(row);
+    if (!response.ok) {
+      console.log("user.message", user.message);
+      throw new Error(user.message); // 백엔드 에러메시지
+    }
+
+    const userTableBody = document.getElementById("user-table-body");
+    userTableBody.innerHTML = ""; // 기존 데이터 삭제
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+            <td><input type="checkbox" /></td>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.phone}</td>
+            <td>${user.organization}</td>
+          `;
+    userTableBody.appendChild(row);
+  } catch (error) {
+    console.log("에러 발생:", error);
+  }
 }
 
 function setupUserEventListeners() {
@@ -127,6 +132,8 @@ function setupUserEventListeners() {
   });
 }
 
+////////////////////////////////////////////
+
 // 초기 페이지 로드 시 첫 번째 페이지 데이터 표시
 document.addEventListener("DOMContentLoaded", async () => {
   await onPageChangeUser(currentPage);
@@ -193,7 +200,8 @@ function updatePaginationUser(currentPage) {
     numbers.appendChild(li);
 
     // 페이지 숫자를 클릭할 때 해당 페이지로 이동하는 이벤트 추가
-    a.addEventListener("click", async () => {
+    a.addEventListener("click", async (e) => {
+      e.preventDefault(); // 기본 동작 방지
       await onPageChangeUser(i);
     });
   }
