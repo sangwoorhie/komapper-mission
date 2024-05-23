@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Mission</title>
     <link rel="stylesheet" href="./static/css/reset.css" />
     <link rel="stylesheet" href="./static/css/index.css" />
@@ -48,11 +47,18 @@
         </div>
         <hr />
         <!-- 컨테이너 박스 = 내용을 동적으로 불러오는 부분 -->
-        <div id="container-box"></div>
+        <article id="container-box"></article>
       </section>
     </main>
     <!-- 푸터 -->
-    <footer>Copyright ⓒ 2024 ㈜KO-MAPPER Co.,Ltd rights reserved.</footer>
+    <footer>
+      Copyright ⓒ
+      <script>
+        document.write(new Date().getFullYear());
+      </script>
+      ㈜KO-MAPPER Co.,Ltd rights reserved.
+    </footer>
+
     <script type="module" src="./static/js/index.js" defer></script>
     <script
       type="module"

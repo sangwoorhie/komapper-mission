@@ -7,21 +7,22 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  min-height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: #f0f4f7;
 }
 
 /* 헤더 */
 header {
-  position: absolute;
-  top: 0;
   width: 100%;
   height: 80px;
   background-color: #ffffff;
+  display: flex;
   align-items: center;
   box-sizing: border-box;
   border: 0.5px solid #d6d6d6;
+  z-index: 1000;
 }
 
 .logo {
@@ -33,19 +34,24 @@ header {
 
 /* 메인 콘텐츠 */
 main {
-  position: absolute;
-  top: 80px;
-  bottom: 80px;
-  width: 100%;
+  flex: 1;
   display: flex;
+  margin-top: 80px;
+}
+
+section {
+  margin-left: 250px;
+  margin-top: -80px;
+  overflow-y: auto;
 }
 
 /* 전체 사이드바 */
 nav {
   width: 250px;
   background-color: #3c4b64;
-  height: 100%;
-  /* overflow-y: auto; */
+  height: calc(100vh - 160px);
+  position: absolute;
+  top: 80px;
 }
 
 /* 경로표시 */
@@ -120,21 +126,18 @@ a:active {
   text-decoration: none;
 }
 
-/* 콘텐츠 섹션 */
-div#container-box {
+/* 컨테이너 박스 = 내용을 동적으로 불러오는 부분 */
+article#container-box {
   padding: 20px 5%;
-  height: 800px;
-  min-height: 690px;
-  margin: 20px 0 auto;
-  margin-top: 50px;
-  margin-left: 75px;
+  margin: 40px 0;
   border: 2px solid #d6d6d6;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  position: absolute;
   background-color: #ffffff;
   min-width: 1520px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  margin-left: 75px;
 }
 
 a {
@@ -151,8 +154,6 @@ hr {
 
 /* 푸터 */
 footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   height: 80px;
   background-color: #efefef;
@@ -162,6 +163,8 @@ footer {
   align-items: center;
   justify-content: center;
   font-size: 14px;
+  margin-top: auto;
+  z-index: 1000;
 }
 
 /* 추가: 클릭된 사이드바 항목의 스타일 */

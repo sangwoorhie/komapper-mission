@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
     logSidebar.classList.add("active-sidebar");
     firstBreadcrumb.textContent = "Logs";
     secondBreadcrumb.textContent = "Mission > Logs";
+  } else if (path === "/") {
+    firstBreadcrumb.textContent = "Users";
+    secondBreadcrumb.textContent = "Mission > Users";
   }
 
   // 사이드바 클릭 이벤트 리스너
