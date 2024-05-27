@@ -16,3 +16,5 @@
 .env.test.local
 .env.production.local
 .env.local
+
+// "start": "concurrently \"cd backend && npm run start:dev\" \"cd frontend && node server\""
