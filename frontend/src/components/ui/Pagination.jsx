@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-const Header = () => {
-  return `Header`;
+const Pagination = () => {
+  return `Pagination`;
 };
 
-export default Header;
+export default Pagination;

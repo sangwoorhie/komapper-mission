@@ -5,7 +5,7 @@ import Delete from "./modals/Delete";
 import Inquiry from "./modals/Inquiry";
 import Modify from "./modals/Modify";
 import Register from "./modals/Register";
-import Breadcrumb from "./ui/breadcrumb";
+import Breadcrumb from "./ui/Breadcrumb";
 import Button from "./ui/Button";
 import SearchBar from "./ui/SearchBar";
 import TextInput from "./ui/TextInput";
