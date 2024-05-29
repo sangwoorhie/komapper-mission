@@ -24,9 +24,9 @@ const HeaderContainer = styled.nav`
 
   img {
     margin-top: 5px;
-    margin-left: 20px;
-    max-width: 40%;
-    max-height: 40%;
+    margin-left: 30px;
+    max-width: 20%;
+    max-height: 20%;
   }
 `;
 

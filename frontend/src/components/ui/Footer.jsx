@@ -4,7 +4,8 @@ import styled from "styled-components";
 const Footer = () => {
   return (
     <FooterContainer>
-      Copyright ⓒ ㈜KO-MAPPER Co.,Ltd rights reserved.
+      Copyright &copy; {new Date().getFullYear()} ㈜KO-MAPPER Co.,Ltd rights
+      reserved.
     </FooterContainer>
   );
 };
