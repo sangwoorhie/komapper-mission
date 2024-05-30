@@ -7,19 +7,19 @@ import TextInput from "./ui/TextInput";
 import ContainerBox from "./ui/ContainerBox";
 import Main from "./ui/Main";
 import Section from "./ui/Section";
-import Delete from "./modals/Delete";
-import Inquiry from "./modals/Inquiry";
-import Modify from "./modals/Modify";
-import Register from "./modals/Register";
+import DeleteModal from "./modals/Delete";
+import UserDetailModal from "./modals/UderDetail";
+import ModifyModal from "./modals/Modify";
+import RegisterModal from "./modals/Register";
 
 export {
   Footer,
   Header,
   SideBar,
-  Delete,
-  Inquiry,
-  Modify,
-  Register,
+  DeleteModal,
+  UserDetailModal,
+  ModifyModal,
+  RegisterModal,
   Breadcrumb,
   SearchBar,
   TextInput,
