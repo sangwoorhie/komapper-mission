@@ -90,6 +90,10 @@ const ContainerBox = () => {
     }
   }, [currentPage, location.pathname]); // currentPage 또는 경로가 변경될 때마다 useEffect 실행
 
+  useEffect(() => {
+    setCurrentPage(1); // 경로가 변경될 때마다 currentPage를 1로 설정
+  }, [location.pathname]);
+
   // 페이지네이션 페이지 변경 핸들러
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -380,28 +384,28 @@ const StyledTable = styled.table`
     text-align: left;
   }
 
-  td,
-  th {
+  td {
     text-align: left;
     padding: 8px;
     border-bottom: 1px solid #d6d6d6;
   }
 
+  tbody {
+    background-color: #ffffff;
+  }
+
   tbody tr {
-    /* cursor: pointer; */
     background-color: #fff;
     height: 30px;
     text-align: left;
-    border-bottom: 1px solid #d6d6d6; /* 추가: 테이블 행 간의 경계 */
-  }
-
-  tbody tr:nth-child(odd) {
-    background-color: #ccc;
   }
 
   th {
     background-color: #efefef;
     color: black;
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #d6d6d6;
   }
 
   #user-table-body tr:hover {
