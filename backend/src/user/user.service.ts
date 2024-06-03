@@ -1,5 +1,7 @@
+import { User } from './entities/user.entity';
 import {
   Injectable,
+  UnauthorizedException,
   // NotFoundException,
   // BadRequestException,
 } from '@nestjs/common';
@@ -9,13 +11,40 @@ import { Pool } from 'pg';
 import pool from 'src/db/postgres';
 import * as bcrypt from 'bcrypt';
 import { IdcheckDto } from './dto/id-check.dto';
+import { LoginDto } from './dto/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   private readonly pool: Pool;
+  private readonly jwtService: JwtService;
 
-  constructor() {
+  constructor(jwtService: JwtService) {
     this.pool = pool;
+    this.jwtService = jwtService;
+  }
+
+  // 로그인
+  async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
+    const { id, password } = loginDto;
+    const query = `
+      SELECT * FROM mission_cst_user WHERE id = $1;
+    `;
+    const result = await this.pool.query(query, [id]);
+    const user = result.rows[0];
+
+    if (!user) {
+      throw new UnauthorizedException('사용자를 찾을 수 없습니다.');
+    }
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const username = user.name;
+      const payload = { username };
+      const accessToken = await this.jwtService.sign(payload);
+      return { accessToken: accessToken };
+    } else {
+      throw new UnauthorizedException('로그인에 실패하였습니다.');
+    }
   }
 
   // 회원가입
@@ -151,8 +180,16 @@ export class UserService {
     return result.rows[0]; // 유저 값 반환
   }
 
-  // 정보 수정
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+  // 정보수정
+  async updateUser(
+    currentUser: User,
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ) {
+    if (currentUser.id !== id) {
+      throw new UnauthorizedException('본인의 정보만 수정할 수 있습니다.');
+    }
+
     const query1 = `
     SELECT * FROM mission_cst_user WHERE id = $1;
   `;

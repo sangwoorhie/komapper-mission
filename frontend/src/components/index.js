@@ -12,18 +12,20 @@ import DeleteModal from "./modals/Delete";
 import UserDetailModal from "./modals/UserDetail";
 import ModifyModal from "./modals/Modify";
 import RegisterModal from "./modals/Register";
+import LoginModal from "./modals/Login";
 
 export {
   Footer,
   Header,
   SideBar,
-  DeleteModal,
-  UserDetailModal,
-  ModifyModal,
-  RegisterModal,
   Breadcrumb,
   SearchBar,
   ContainerBox,
   Main,
   Section,
+  DeleteModal,
+  UserDetailModal,
+  ModifyModal,
+  RegisterModal,
+  LoginModal,
 };

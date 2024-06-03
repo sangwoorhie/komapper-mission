@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { UnauthorizedExceptionFilter } from './user/decorators/unauthorized.decorator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalFilters(new UnauthorizedExceptionFilter());
   // CORS 설정 추가
   app.enableCors({
     origin: 'http://localhost:3001',

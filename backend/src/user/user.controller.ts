@@ -8,18 +8,35 @@ import {
   Delete,
   ValidationPipe,
   Query,
+  UseGuards,
+  // Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IdcheckDto } from './dto/id-check.dto';
 import { DeleteUsersDto } from './dto/delete-user.dto';
+import { LoginDto } from './dto/login-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './decorators/get-user.decorator';
+import { User } from './entities/user.entity';
 
 @Controller('user')
 @ApiTags('유저 API')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  // 로그인 (토큰 발급 test 성공)
+  // POST : http://localhost:3000/user/login
+  @Post('/login')
+  async login(@Body(new ValidationPipe()) loginDto: LoginDto) {
+    try {
+      return await this.userService.login(loginDto);
+    } catch (error) {
+      throw new Error(`${error.message}`);
+    }
+  }
 
   // 회원가입 (test 성공)
   // POST : http://localhost:3000/user/register
@@ -109,16 +126,19 @@ export class UserController {
   // 정보수정
   // PATCH : http://localhost:3000/user/id
   @Patch('/:id')
+  @UseGuards(AuthGuard())
   @ApiOperation({
     summary: '유저 정보수정',
     description: 'UpdateUserDto에 있는 내용을 기입하여 유저를 정보수정한다.',
   })
   async updateUser(
-    @Param('id') id: string,
+    @GetUser() currentUser: User,
+    @Param('id')
+    id: string,
     @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
   ) {
     try {
-      return await this.userService.updateUser(id, updateUserDto);
+      return await this.userService.updateUser(currentUser, id, updateUserDto);
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -127,6 +147,7 @@ export class UserController {
   // 다중 회원 삭제 (test 성공)
   // DELETE : http://localhost:3000/user/id
   @Delete()
+  @UseGuards(AuthGuard())
   @ApiOperation({
     summary: '유저 삭제',
     description:
