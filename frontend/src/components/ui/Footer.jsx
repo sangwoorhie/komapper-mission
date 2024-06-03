@@ -4,6 +4,7 @@ import styled from "styled-components";
 const Footer = () => {
   return (
     <FooterContainer>
+      {/* 연도 현재시점에 맞추어 자동 변경 */}
       Copyright &copy; {new Date().getFullYear()} ㈜KO-MAPPER Co.,Ltd rights
       reserved.
     </FooterContainer>

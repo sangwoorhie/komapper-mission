@@ -6,10 +6,11 @@ import SearchBar from "./SearchBar";
 import { RegisterButton, DeleteButton } from "./Buttons";
 import DeleteModal from "../modals/Delete";
 import RegisterModal from "../modals/Register";
-import UserDetailModal from "../modals/UderDetail";
+import UserDetailModal from "../modals/UserDetail";
 
+// ContainerBox 컴포넌트 정의
 const ContainerBox = () => {
-  const [totalCount, setTotalCount] = useState(0); // 총 개수 (유저 또는 로그)
+  const [totalCount, setTotalCount] = useState(0); // 유저 또는 로그의 총 갯수 상태
   const location = useLocation(); // 현재 경로 가져오기
   const [userData, setUserData] = useState([]); // 유저 데이터 상태
   const [logData, setLogData] = useState([]); // 로그 데이터 상태
@@ -17,16 +18,15 @@ const ContainerBox = () => {
   const [totalPages, setTotalPages] = useState(1); // 총 페이지 수 (페이지네이션)
   const rowsPerPage = 10; // 한 페이지당 행 수
   const maxPageNum = 10; // 페이지네이션에서 보여줄 최대 페이지 번호 수
-  const [showModal, setShowModal] = useState(false); // 모달 표시 여부 상태
-  const [selectedUsers, setSelectedUsers] = useState([]); // 삭제 시 유저 배열형태로 복수선택
-  const [showRegisterModal, setShowRegisterModal] = useState(false); // RegisterModal 표시 여부 상태
-  const [selectedUser, setSelectedUser] = useState(null); // 사용자 조회모달
+  const [showModal, setShowModal] = useState(false); // 삭제 모달 표시 여부 상태
+  const [selectedUsers, setSelectedUsers] = useState([]); // 삭제 시 유저 배열형태로 선택
+  const [showRegisterModal, setShowRegisterModal] = useState(false); // 회원가입 모달 표시 여부 상태
+  const [selectedUser, setSelectedUser] = useState(null); // 사용자 상세정보 조회 상태
 
   // 모달 관련 함수들
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
-  const openRegisterModal = () => setShowRegisterModal(true); // RegisterModal 열기
-  const closeRegisterModal = () => setShowRegisterModal(false); // RegisterModal 닫기
+  const closeModal = () => setShowModal(false); // 모달 닫기
+  const openRegisterModal = () => setShowRegisterModal(true); // 회원가입 모달 열기
+  const closeRegisterModal = () => setShowRegisterModal(false); // 회원가입 모달 닫기
 
   // Total Count : 현재 경로에 따라 유저 또는 로그의 총 개수를 가져옴
   useEffect(() => {
@@ -48,8 +48,8 @@ const ContainerBox = () => {
       }
     };
 
-    fetchData();
-  }, [location.pathname]);
+    fetchData(); // 데이터 가져오는 함수 호출
+  }, [location.pathname]); // 경로가 변경될 때마다 useEffect 실행
 
   // 전체목록 가져오기 (페이지네이션)
   // 1. 현재 경로가 "/" 또는 "/user"일 때 유저 데이터를 가져옴
@@ -66,10 +66,10 @@ const ContainerBox = () => {
           console.error("Error fetching user data:", error);
         }
       };
-
+      // 유저 데이터 가져오는 함수 호출
       fetchUserData(currentPage);
     }
-  }, [currentPage, location.pathname]);
+  }, [currentPage, location.pathname]); // currentPage 또는 경로가 변경될 때마다 useEffect 실행
 
   // 2. 현재 경로가 "/log"일 때 로그 데이터를 가져옴
   useEffect(() => {
@@ -86,14 +86,23 @@ const ContainerBox = () => {
         }
       };
 
-      fetchLogData(currentPage);
+      fetchLogData(currentPage); // 로그 데이터 가져오는 함수 호출
     }
-  }, [currentPage, location.pathname]);
+  }, [currentPage, location.pathname]); // currentPage 또는 경로가 변경될 때마다 useEffect 실행
 
   // 페이지네이션 페이지 변경 핸들러
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page); // 현재 페이지 설정
+    }
+  };
+
+  // 삭제 시, checkbox 선택이 안된 경우
+  const handleOpenModal = () => {
+    if (selectedUsers.length === 0) {
+      alert("선택된 사용자가 없습니다. 삭제할 사용자를 선택해주세요.");
+    } else {
+      setShowModal(true);
     }
   };
 
@@ -107,14 +116,29 @@ const ContainerBox = () => {
       alert("선택된 사용자가 삭제되었습니다.");
       closeModal();
       setSelectedUsers([]);
-      location.reload();
+
+      // 삭제 후, 삭제된 유저를 제외한 새로운 유저 데이터를 가져와서 설정
+      if (location.pathname === "/" || location.pathname === "/user") {
+        const response = await axios.get(
+          `http://localhost:3000/user?page=${currentPage}&pageSize=${rowsPerPage}`
+        );
+        setUserData(response.data.paginationTotalUsers);
+      }
     } catch (error) {
       alert("삭제 중 오류가 발생했습니다: " + error);
     }
   };
 
   // 유저 정보조회
-  const handleRowClick = async (userId) => {
+  const handleRowClick = async (userId, e) => {
+    // checkbox 선택시 모달 열지않음 (클릭된 엘리먼트가 input 태그이고 type이 checkbox인 경우 모달 열지 않음)
+    if (
+      e.target.tagName.toLowerCase() === "input" &&
+      e.target.type === "checkbox"
+    ) {
+      return;
+    }
+
     try {
       const response = await axios.get(`http://localhost:3000/user/${userId}`);
       const user = response.data;
@@ -124,13 +148,14 @@ const ContainerBox = () => {
     }
   };
 
-  // const handleOpenModal = () => {
-  //   if (selectedUsers.length === 0) {
-  //     alert("선택된 사용자가 없습니다.");
-  //   } else {
-  //     openModal();
-  //   }
-  // };
+  // CheckBox 상태변경 핸들러
+  const handleCheckboxChange = (e, userId) => {
+    if (e.target.checked) {
+      setSelectedUsers([...selectedUsers, userId]); // 체크된 경우 선택된 사용자 목록에 추가
+    } else {
+      setSelectedUsers(selectedUsers.filter((id) => id !== userId)); // 체크 해제된 경우 선택된 사용자 목록에서 제거
+    }
+  };
 
   return (
     <Container>
@@ -138,7 +163,7 @@ const ContainerBox = () => {
         <TotalCount>
           Total :<Count> {totalCount}</Count>
         </TotalCount>
-        <SearchBar>{/* 검색 기능 구현 */}</SearchBar>
+        <SearchBar>{/* 검색 기능 */}</SearchBar>
       </SearchBarWrapper>
       <StyledTable>
         {location.pathname === "/" || location.pathname === "/user" ? (
@@ -181,10 +206,13 @@ const ContainerBox = () => {
                   style={{
                     cursor: "pointer",
                   }}
-                  onClick={() => handleRowClick(user.id)}
+                  onClick={(e) => handleRowClick(user.id, e)}
                 >
                   <td>
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      onChange={(e) => handleCheckboxChange(e, user.id)}
+                    />
                   </td>
                   <td>{user.id}</td>
                   <td>{user.name}</td>
@@ -232,10 +260,10 @@ const ContainerBox = () => {
           {(location.pathname === "/" || location.pathname === "/user") && (
             <>
               <DeleteButton
-                name="Delete"
+                className="Delete"
                 id="deleteUserBtn"
-                onClick={openModal}
-                // onClick={handleOpenModal}
+                // onClick={openModal}
+                onClick={handleOpenModal}
               />
             </>
           )}
@@ -250,13 +278,13 @@ const ContainerBox = () => {
         <Pagination>
           <button
             onClick={() => handlePageChange(1)}
-            disabled={currentPage === 1}
+            disabled={currentPage === 1} // 첫 페이지인 경우 비활성화
           >
             {"<<"}
           </button>
           <button
             onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
+            disabled={currentPage === 1} // 첫 페이지인 경우 비활성화
           >
             {"<"}
           </button>
@@ -276,20 +304,20 @@ const ContainerBox = () => {
             ))}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages} // 마지막 페이지인 경우 비활성화
           >
             {">"}
           </button>
           <button
             onClick={() => handlePageChange(totalPages)}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages} // 마지막 페이지인 경우 비활성화
           >
             {">>"}
           </button>
         </Pagination>
         {/* 회원가입 버튼 */}
         {(location.pathname === "/" || location.pathname === "/user") && (
-          <RegisterButton name="Register" onClick={openRegisterModal} />
+          <RegisterButton className="Register" onClick={openRegisterModal} />
         )}
         {/* 회원가입 모달 */}
         <RegisterModal show={showRegisterModal} onClose={closeRegisterModal} />

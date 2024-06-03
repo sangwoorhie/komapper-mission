@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const RegisterModal = ({ show, onClose, onRegister }) => {
+// RegisterModal 컴포넌트 정의, show, onClose를 props로 받음
+const RegisterModal = ({ show, onClose }) => {
+  // 폼 데이터를 관리하는 state
   const [formData, setFormData] = useState({
     userId: "",
     password: "",
@@ -11,14 +13,18 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
     organization: "",
   });
 
-  const handleChange = (e) => {
+  // input 값이 변경될 때 호출되는 함수
+  const handleInputChange = (e) => {
+    // 이벤트가 발생한 input 요소에서 id와 value 추출
     const { id, value } = e.target;
+    // setFormData = formData 상태 업데이트
     setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
+      ...prevData, // 스프레드 연산자 : 기존 상태 객체의 모든 키-값 쌍을 새로운 객체에 복사
+      [id]: value, // 동적 키 할당 : 현재 입력 필드의 id를 키로 하고 value를 값으로 하는 새로운 키-값 쌍을 상태 객체에 추가하거나 업데이트
     }));
   };
 
+  // ID 중복 확인 요청 함수
   const handleCheckDuplicate = async () => {
     const { userId } = formData;
     try {
@@ -29,10 +35,12 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
         },
         body: JSON.stringify({ id: userId }),
       });
+      // 서버 응답 성공시 메시지 반환
       if (response.ok) {
         const result = await response.text();
         alert(result);
       } else {
+        // 서버 응답 실패시 메시지 반환
         const responseData = await response.json();
         throw new Error(responseData.message);
       }
@@ -41,10 +49,12 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
     }
   };
 
+  // 비밀번호 입력 필드 가시성 토글
   const handleTogglePassword = () => {
     const passwordInput = document.getElementById("password");
     const toggleButton = document.getElementById("togglePassword");
 
+    // 비밀번호 입력 필드를 text로 변경하여 비밀번호를 보이게 함
     if (passwordInput.type === "password") {
       passwordInput.type = "text";
       toggleButton.textContent = "Hide";
@@ -54,6 +64,7 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
     }
   };
 
+  // 사용자 등록 요청 서버로 보내는 함수
   const handleRegister = async () => {
     try {
       const createUserDto = {
@@ -65,6 +76,7 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
         organization: formData.organization,
       };
 
+      // 회원가입 API
       const response = await fetch("http://localhost:3000/user/register", {
         method: "POST",
         headers: {
@@ -73,20 +85,22 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
         body: JSON.stringify(createUserDto),
       });
 
-      if (response.ok) {
+      // 서버 응답 메시지 반환
+      if (!response.ok) {
+        const responseData = await response.json();
+        throw new Error(responseData.message);
+      } else if (response.ok) {
         const result = await response.text();
         alert(result);
         onClose();
         window.location.reload();
-      } else {
-        const responseData = await response.json();
-        throw new Error(responseData.message);
       }
     } catch (error) {
       alert(error.message);
     }
   };
 
+  // show가 false면 모달을 렌더링하지 않음
   if (!show) return null;
 
   return (
@@ -94,16 +108,18 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
       <ModalContent>
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <h2>사용자 등록</h2>
+        <br />
+        <br />
         <InputContainer>
           <label htmlFor="userId">ID</label>
           <input
             type="text"
             id="userId"
             value={formData.userId}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="ID를 입력해 주세요."
           />
-          <CheckButton onClick={handleCheckDuplicate}>중복 확인</CheckButton>
+          <CheckButton onClick={handleCheckDuplicate}>중복확인</CheckButton>
         </InputContainer>
         <InputContainer>
           <label htmlFor="password">Password</label>
@@ -111,7 +127,7 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
             type="password"
             id="password"
             value={formData.password}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="비밀번호를 입력해 주세요."
           />
           <ToggleButton id="togglePassword" onClick={handleTogglePassword}>
@@ -124,7 +140,7 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
             type="text"
             id="name"
             value={formData.name}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="이름을 입력해 주세요."
           />
         </InputContainer>
@@ -134,7 +150,7 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
             type="email"
             id="email"
             value={formData.email}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="E-mail 형식에 맞게 입력해 주세요."
           />
         </InputContainer>
@@ -144,7 +160,7 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
             type="tel"
             id="phone"
             value={formData.phone}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="핸드폰 번호를 입력해 주세요."
           />
         </InputContainer>
@@ -154,7 +170,7 @@ const RegisterModal = ({ show, onClose, onRegister }) => {
             type="text"
             id="organization"
             value={formData.organization}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="소속을 입력해 주세요."
           />
         </InputContainer>
@@ -234,7 +250,7 @@ const CheckButton = styled.button`
 `;
 
 const ToggleButton = styled.button`
-  padding: 3px 5px;
+  padding: 4px 14px;
   cursor: pointer;
 `;
 

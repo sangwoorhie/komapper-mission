@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ModifyModal from "./Modify";
 
+// UserDetailModal 컴포넌트 정의, user, onClose를 props로 받음
 const UserDetailModal = ({ user, onClose }) => {
   const [showModifyModal, setShowModifyModal] = useState(false); // 수정 모달 표시 상태
 
-  // 수정 모달을 표시하는 함수
+  // modifyBtn 버튼 클릭시, 수정 모달을 표시
   const handleModifyClick = () => {
     setShowModifyModal(true);
   };
@@ -55,6 +56,7 @@ const UserDetailModal = ({ user, onClose }) => {
             Modify
           </Button>
         </ModalButtons>
+        {/* 수정 모달 조건부 렌더링 : showModifyModal이 true일 때 ModifyModal을 렌더링 +  user와 onClose props를 전달*/}
         {showModifyModal && (
           <ModifyModal user={user} onClose={() => setShowModifyModal(false)} />
         )}

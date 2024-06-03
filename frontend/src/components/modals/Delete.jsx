@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
+// DeleteModal 컴포넌트 정의, show, onClose, onDelete, selectedUsers를 props로 받음
 const DeleteModal = ({ show, onClose, onDelete, selectedUsers }) => {
+  // 삭제 버튼 클릭 시 호출되는 함수, 선택된 사용자 목록을 onDelete 함수에 전달
   const handleDelete = () => {
-    onDelete(selectedUsers); // 선택된 사용자 목록을 onDelete 함수에 전달하여 삭제
+    onDelete(selectedUsers);
   };
 
   return (
+    // 모달의 래퍼, show props에 따라 모달을 보이거나 숨김
     <ModalWrapper show={show}>
       <ModalContent>
         <CloseSpan onClick={onClose}>&times;</CloseSpan>
@@ -20,6 +23,7 @@ const DeleteModal = ({ show, onClose, onDelete, selectedUsers }) => {
           <CancelButton onClick={onClose} id="cancelDeleteBtn">
             Cancel
           </CancelButton>
+          {/* 삭제 버튼 */}
           <DeleteButton onClick={handleDelete} id="confirmDeleteBtn">
             Delete
           </DeleteButton>

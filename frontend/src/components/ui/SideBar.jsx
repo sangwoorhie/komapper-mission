@@ -21,7 +21,7 @@ const SideBar = () => {
         <ul>
           {/* 고정된 첫 번째 사이드바 항목 */}
           <li className="first-sidebar">Mission</li>{" "}
-          {/* / 경로일 경우 또는 /user 경로일 경우 active*/}
+          {/* "/" 경로일 경우 또는 "/user" 경로일 경우 active */}
           <Link to="/user" onClick={() => setActivePath("/user")}>
             <li
               className={`sidebar-item ${isActive(["/user", "/"]) ? "active" : ""}`}
@@ -30,7 +30,7 @@ const SideBar = () => {
               <span>Users</span>
             </li>
           </Link>
-          {/* /log 경로일 경우 active*/}
+          {/* "/log" 경로일 경우 active */}
           <Link to="/log" onClick={() => setActivePath("/log")}>
             <li
               className={`sidebar-item ${activePath === "/log" ? "active" : ""}`}

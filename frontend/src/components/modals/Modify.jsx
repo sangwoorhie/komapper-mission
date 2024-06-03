@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+// ModifyModal 컴포넌트 정의, user, onClose를 props로 받음
 const ModifyModal = ({ user, onClose }) => {
+  // 비밀번호 숨김/보이기 상태를 관리하는 state
   const [originalPasswordVisible, setOriginalPasswordVisible] = useState(false);
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+  // 폼데이터를 관리하는 state (초기 state)
   const [formData, setFormData] = useState({
     originalPassword: "",
     newPassword: "",
@@ -12,22 +15,28 @@ const ModifyModal = ({ user, onClose }) => {
     newOrganization: user.organization,
   });
 
+  // input 값이 변경될 때 호출되는 함수
   const handleInputChange = (e) => {
+    // 이벤트가 발생한 input 요소에서 name과 value 추출
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    // setFormData = formData 상태 업데이트
+    setFormData((prevData) => ({
+      ...prevData, // 스프레드 연산자 : 기존 상태 객체의 모든 키-값 쌍을 새로운 객체에 복사
+      [name]: value, // 동적 키 할당 : 현재 입력 필드의 name을 키로 하고 value를 값으로 하는 새로운 키-값 쌍을 상태 객체에 추가하거나 업데이트
+    }));
   };
 
+  // 기존 비밀번호 가시성을 토글하는 함수
   const handleToggleOriginalPassword = () => {
     setOriginalPasswordVisible(!originalPasswordVisible);
   };
 
+  // 새 비밀번호 가시성을 토글하는 함수
   const handleToggleNewPassword = () => {
     setNewPasswordVisible(!newPasswordVisible);
   };
 
+  // 사용자 정보 수정 시 호출되는 함수
   const handleSubmit = async () => {
     try {
       const {
@@ -52,14 +61,15 @@ const ModifyModal = ({ user, onClose }) => {
         }),
       });
 
-      if (response.ok) {
+      // 서버 응답 성공시 메시지 반환
+      if (!response.ok) {
+        const responseData = await response.json();
+        throw new Error(responseData.message);
+      } else if (response.ok) {
         const result = await response.text();
         alert(result);
         onClose();
-        window.location.reload();
-      } else {
-        const responseData = await response.json();
-        throw new Error(responseData.message); // 백엔드 에러메시지
+        // window.location.reload();
       }
     } catch (error) {
       alert(error.message);
