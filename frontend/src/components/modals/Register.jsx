@@ -66,14 +66,15 @@ const RegisterModal = ({ show, onClose }) => {
 
   // 사용자 등록 요청 서버로 보내는 함수
   const handleRegister = async () => {
+    const { userId, password, name, email, phone, organization } = formData;
     try {
       const createUserDto = {
-        id: formData.userId,
-        password: formData.password,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        organization: formData.organization,
+        id: userId,
+        password: password,
+        name: name,
+        email: email,
+        phone: phone,
+        organization: organization,
       };
 
       // 회원가입 API
@@ -93,11 +94,24 @@ const RegisterModal = ({ show, onClose }) => {
         const result = await response.text();
         alert(result);
         onClose();
-        window.location.reload();
+        // window.location.reload();
       }
     } catch (error) {
       alert(error.message);
     }
+  };
+
+  // 모달을 닫을 때 폼 데이터 초기화
+  const handleClose = () => {
+    setFormData({
+      id: "",
+      password: "",
+      name: "",
+      email: "",
+      phone: "",
+      organization: "",
+    }); // 폼 데이터 초기화
+    onClose(); // 기존 onClose 호출
   };
 
   // show가 false면 모달을 렌더링하지 않음
@@ -106,7 +120,7 @@ const RegisterModal = ({ show, onClose }) => {
   return (
     <Modal>
       <ModalContent>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
+        <CloseButton onClick={handleClose}>&times;</CloseButton>
         <h2>사용자 등록</h2>
         <br />
         <br />
@@ -176,7 +190,7 @@ const RegisterModal = ({ show, onClose }) => {
         </InputContainer>
         <p>※ ID 및 E-mail은 회원가입 후 변경할 수 없습니다.</p>
         <ModalButtons>
-          <CancelButton onClick={onClose}>Cancel</CancelButton>
+          <CancelButton onClick={handleClose}>Cancel</CancelButton>
           <RegisterButton onClick={handleRegister}>Register</RegisterButton>
         </ModalButtons>
       </ModalContent>

@@ -38,27 +38,28 @@ const ModifyModal = ({ user, onClose }) => {
 
   // 사용자 정보 수정 시 호출되는 함수
   const handleSubmit = async () => {
+    const {
+      originalPassword,
+      newPassword,
+      newName,
+      newPhone,
+      newOrganization,
+    } = formData;
     try {
-      const {
-        originalPassword,
-        newPassword,
-        newName,
-        newPhone,
-        newOrganization,
-      } = formData;
+      const modifyUserDto = {
+        password: originalPassword,
+        newPassword: newPassword,
+        name: newName,
+        phone: newPhone,
+        organization: newOrganization,
+      };
       // 정보 수정 요청 보내기
       const response = await fetch(`http://localhost:3000/user/${user.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          password: originalPassword,
-          newPassword: newPassword,
-          name: newName,
-          phone: newPhone,
-          organization: newOrganization,
-        }),
+        body: JSON.stringify(modifyUserDto),
       });
 
       // 서버 응답 성공시 메시지 반환
@@ -76,10 +77,22 @@ const ModifyModal = ({ user, onClose }) => {
     }
   };
 
+  // 모달을 닫을 때 폼 데이터 초기화
+  const handleClose = () => {
+    setFormData({
+      originalPassword: "",
+      newPassword: "",
+      newName: user.name,
+      newPhone: user.phone,
+      newOrganization: user.organization,
+    });
+    onClose();
+  };
+
   return (
     <ModalBackdrop>
       <ModalContent>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
+        <CloseButton onClick={handleClose}>&times;</CloseButton>
         <h2>사용자 정보 수정</h2>
         <br />
         <br />
@@ -145,7 +158,7 @@ const ModifyModal = ({ user, onClose }) => {
           />
         </InputContainer>
         <ModalButtons>
-          <Button onClick={onClose}>Back</Button>
+          <Button onClick={handleClose}>Back</Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </ModalButtons>
       </ModalContent>

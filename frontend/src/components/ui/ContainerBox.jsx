@@ -336,6 +336,7 @@ const ContainerBox = () => {
     </Container>
   );
 };
+
 const Container = styled.article`
   box-sizing: border-box;
   padding: 20px 5%;

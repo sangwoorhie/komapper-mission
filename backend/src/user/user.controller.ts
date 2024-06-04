@@ -8,8 +8,10 @@ import {
   Delete,
   ValidationPipe,
   Query,
+  // UnauthorizedException,
+  // Headers,
   UseGuards,
-  // Req,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,8 +21,12 @@ import { DeleteUsersDto } from './dto/delete-user.dto';
 import { LoginDto } from './dto/login-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from './decorators/get-user.decorator';
-import { User } from './entities/user.entity';
+// import { GetUser } from './decorators/get-user.decorator';
+// import { User } from './entities/user.entity';
+// import { JwtAuthGuard } from './guards/jwt.guard';
+// import { LocalAuthGuard } from './guards/auth.guard';
+// import { GetUser } from './decorators/get-user.decorator';
+// import { User } from './entities/user.entity';
 
 @Controller('user')
 @ApiTags('유저 API')
@@ -30,6 +36,11 @@ export class UserController {
   // 로그인 (토큰 발급 test 성공)
   // POST : http://localhost:3000/user/login
   @Post('/login')
+  // @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: '로그인',
+    description: 'ID와 비밀번호를 받아 로그인한다.',
+  })
   async login(@Body(new ValidationPipe()) loginDto: LoginDto) {
     try {
       return await this.userService.login(loginDto);
@@ -37,6 +48,24 @@ export class UserController {
       throw new Error(`${error.message}`);
     }
   }
+
+  // 로그인 상태확인
+  // GET : http://localhost:3000/user/auth
+  @Get('/auth')
+  @UseGuards(AuthGuard())
+  getCurrentUser(@Req() req: any) {
+    console.log('req', req);
+    return req;
+  }
+
+  // async getCurrentUser(@GetUser() user: User) {
+  //   console.log('user', user);
+  //   if (!user) {
+  //     throw new UnauthorizedException('사용자 정보를 찾을 수 없습니다.');
+  //   }
+  //   const userId = user.id;
+  //   return { userId: userId };
+  // }
 
   // 회원가입 (test 성공)
   // POST : http://localhost:3000/user/register
@@ -126,19 +155,23 @@ export class UserController {
   // 정보수정
   // PATCH : http://localhost:3000/user/id
   @Patch('/:id')
-  @UseGuards(AuthGuard())
+  // @UseGuards(AuthGuard())
   @ApiOperation({
     summary: '유저 정보수정',
     description: 'UpdateUserDto에 있는 내용을 기입하여 유저를 정보수정한다.',
   })
   async updateUser(
-    @GetUser() currentUser: User,
+    // @GetUser() currentUser: User,
     @Param('id')
     id: string,
     @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
   ) {
     try {
-      return await this.userService.updateUser(currentUser, id, updateUserDto);
+      return await this.userService.updateUser(
+        //currentUser,
+        id,
+        updateUserDto,
+      );
     } catch (error) {
       throw new Error(`${error.message}`);
     }
@@ -147,7 +180,7 @@ export class UserController {
   // 다중 회원 삭제 (test 성공)
   // DELETE : http://localhost:3000/user/id
   @Delete()
-  @UseGuards(AuthGuard())
+  // @UseGuards(AuthGuard())
   @ApiOperation({
     summary: '유저 삭제',
     description:

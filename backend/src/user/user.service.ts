@@ -1,5 +1,6 @@
 import { User } from './entities/user.entity';
 import {
+  BadRequestException,
   Injectable,
   UnauthorizedException,
   // NotFoundException,
@@ -25,27 +26,71 @@ export class UserService {
   }
 
   // 로그인
-  async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
+  async login(
+    loginDto: LoginDto,
+  ): Promise<{ accessToken: string; userId: string }> {
     const { id, password } = loginDto;
     const query = `
       SELECT * FROM mission_cst_user WHERE id = $1;
     `;
     const result = await this.pool.query(query, [id]);
     const user = result.rows[0];
+    console.log('user', user);
 
     if (!user) {
       throw new UnauthorizedException('사용자를 찾을 수 없습니다.');
     }
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      const username = user.name;
-      const payload = { username };
+      const name = user.name;
+      const userId = user.id;
+      const payload = { name };
       const accessToken = await this.jwtService.sign(payload);
-      return { accessToken: accessToken };
+      console.log('Login succeed, accessToken:', accessToken);
+      return { accessToken: accessToken, userId: userId };
     } else {
       throw new UnauthorizedException('로그인에 실패하였습니다.');
     }
   }
+
+  async validateUser(id: string, password: string): Promise<any> {
+    const user = await this.getUserById(id);
+    if (!user) {
+      throw new UnauthorizedException('가입된 회원이 아닙니다.');
+    }
+    if (user && (await bcrypt.compare(password, user.password))) {
+      delete user.password;
+      return user;
+    } else {
+      throw new BadRequestException('비밀번호를 확인해주세요.');
+    }
+  }
+
+  // 로그인 상태확인
+  async getCurrentUser(user: User): Promise<{ id: string }> {
+    console.log('user', user);
+    const { id } = user;
+    return { id };
+  }
+
+  // 로그인 상태확인
+  // async getUserFromToken(token: string): Promise<User> {
+  //   try {
+  //     const decoded = this.jwtService.verify(token);
+  //     const username = decoded.username;
+
+  //     const query = `SELECT id, name, email, phone, organization FROM mission_cst_user WHERE name = $1`;
+  //     const result = await this.pool.query(query, [username]);
+
+  //     if (result.rows.length === 0) {
+  //       throw new UnauthorizedException('사용자를 찾을 수 없습니다.');
+  //     }
+
+  //     return result.rows[0];
+  //   } catch (error) {
+  //     throw new UnauthorizedException('토큰이 유효하지 않습니다.');
+  //   }
+  // }
 
   // 회원가입
   async createUser(createUserDto: CreateUserDto) {
@@ -182,13 +227,13 @@ export class UserService {
 
   // 정보수정
   async updateUser(
-    currentUser: User,
+    // currentUser: User,
     id: string,
     updateUserDto: UpdateUserDto,
   ) {
-    if (currentUser.id !== id) {
-      throw new UnauthorizedException('본인의 정보만 수정할 수 있습니다.');
-    }
+    // if (currentUser.id !== id) {
+    //   throw new UnauthorizedException('본인의 정보만 수정할 수 있습니다.');
+    // }
 
     const query1 = `
     SELECT * FROM mission_cst_user WHERE id = $1;
